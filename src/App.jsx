@@ -1,24 +1,33 @@
 import React, { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import LifeSituation from './components/LifeSituation';
+import PersonalImpact from './components/PersonalImpact';
+import ThemenLookup from './components/ThemenLookup';
 import BudgetStream from './components/BudgetStream';
-import Personalizer from './components/Personalizer';
-import ScandalTracker from './components/ScandalTracker';
-import TimeSlider from './components/TimeSlider';
+import BudgetFacts from './components/BudgetFacts';
+import ImpactChains from './components/ImpactChains';
+import PartyCompare from './components/PartyCompare';
+import LobbyTracker from './components/LobbyTracker';
 import NearMeMap from './components/NearMeMap';
+import ScandalTracker from './components/ScandalTracker';
+import PolitikZeugnis from './components/PolitikZeugnis';
+import MdBZeugnis from './components/MdBZeugnis';
+import BudgetSimulator from './components/BudgetSimulator';
+import BriefGenerator from './components/BriefGenerator';
 import VotingInterface from './components/VotingInterface';
-import DonationModal from './components/DonationModal';
+import TaxTicker from './components/TaxTicker';
+import Personalizer from './components/Personalizer';
+import TimeSlider from './components/TimeSlider';
 import CitizensReceipt from './components/CitizensReceipt';
-import CityAdminDashboard from './components/CityAdminDashboard';
 import Icon from './components/Icon';
 
 function App() {
     const [taxAmount, setTaxAmount] = useState(null);
     const [year, setYear] = useState(2025);
-    const [userTier, setUserTier] = useState('citizen'); // 'citizen', 'guardian', 'council'
-    const [showDonation, setShowDonation] = useState(false);
     const [showReceipt, setShowReceipt] = useState(false);
-    const [showAdmin, setShowAdmin] = useState(false);
+    const [lifeSituation, setLifeSituation] = useState(null);
 
     const handleTaxUpdate = (amount) => {
         setTaxAmount(amount);
@@ -26,54 +35,88 @@ function App() {
     };
 
     return (
-        <div className="app-container pb-24 bg-black min-h-screen text-white selection:bg-green-500 selection:text-black">
+        <div className="min-h-screen">
+            <Navbar />
+
+            {/* 1. Hook: "Wo landet dein Steuergeld?" */}
             <Hero />
+
+            {/* 2. Personal: "Wer bist du?" */}
+            <LifeSituation selected={lifeSituation} onSelect={setLifeSituation} />
+
+            {/* 3. Personal: "Was das für DICH bedeutet" (conditionally shown) */}
+            {lifeSituation && <PersonalImpact situation={lifeSituation} />}
+
+            {/* 4. Themen-Lookup: "Was ist dir wichtig?" */}
+            <ThemenLookup />
+
+            {/* 5. Data: Der volle Haushalt */}
             <BudgetStream taxAmount={taxAmount} year={year} />
+
+            {/* 5. Surprise: "Wusstest du?" */}
+            <BudgetFacts />
+
+            {/* 6. Cause & Effect: "Wie Lobby-Geld deinen Alltag beeinflusst" */}
+            <ImpactChains />
+
+            {/* 7. Deep Dive: Parteienvergleich */}
+            <PartyCompare />
+
+            {/* 8. Follow the Money: Lobbyregister */}
+            <LobbyTracker />
+
+            {/* 9. Local: Bundesweite Projekte */}
             <NearMeMap />
+
+            {/* 10. Accountability: Verschwendung */}
             <ScandalTracker />
 
-            <VotingInterface
-                userTier={userTier}
-                onDonate={() => setShowDonation(true)}
-            />
+            {/* 11. Report Card: Versprochen vs. Geliefert */}
+            <PolitikZeugnis />
 
+            {/* 12. Individual: MdB Transparenz-Index */}
+            <MdBZeugnis />
+
+            {/* 12. Play: "Wie würdest du €489 Mrd verteilen?" */}
+            <BudgetSimulator />
+
+            {/* 12. Action: Brief an deinen MdB */}
+            <BriefGenerator />
+
+            {/* 13. Signal: Bürgervotum */}
+            <VotingInterface />
+
+            {/* Utilities */}
+            <TaxTicker />
             <Personalizer onTaxUpdate={handleTaxUpdate} />
             <TimeSlider currentYear={year} onYearChange={setYear} />
 
-            <DonationModal
-                isOpen={showDonation}
-                onClose={() => setShowDonation(false)}
-                onSuccess={(tier) => setUserTier(tier)}
-            />
-
             <AnimatePresence>
                 {showReceipt && (
-                    <CitizensReceipt
-                        taxAmount={taxAmount}
-                        onClose={() => setShowReceipt(false)}
-                    />
+                    <CitizensReceipt taxAmount={taxAmount} onClose={() => setShowReceipt(false)} />
                 )}
             </AnimatePresence>
 
-            <AnimatePresence>
-                {showAdmin && (
-                    <CityAdminDashboard onClose={() => setShowAdmin(false)} />
-                )}
-            </AnimatePresence>
-
-            {/* Enterprise / Gov Login Footer */}
-            <div className="fixed bottom-0 left-0 w-full z-40 bg-black/80 backdrop-blur-md border-t border-gray-800 py-3 px-6 flex justify-between items-center">
-                <div className="text-xs text-gray-500 font-mono">
-                    Public Money Mirror © 2025 • Open Source
+            {/* Footer */}
+            <footer className="border-t border-[var(--color-border)] py-8 px-6 pb-24">
+                <div className="container-main flex flex-col md:flex-row justify-between items-center gap-4">
+                    <span className="text-xs text-[var(--color-text-3)] tracking-wide">
+                        Public Money Mirror &copy; 2025 &middot; Open Source
+                    </span>
+                    <div className="flex items-center gap-4 text-xs text-[var(--color-text-3)]">
+                        <span>Daten: BMF, Lobbyregister, Bundesrechnungshof</span>
+                        <a
+                            href="https://www.bundeshaushalt.de"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 hover:text-[var(--color-text-2)] transition-colors"
+                        >
+                            <Icon name="ExternalLink" size={10} />
+                            bundeshaushalt.de
+                        </a>
+                    </div>
                 </div>
-                <button
-                    onClick={() => setShowAdmin(true)}
-                    className="flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-white transition-colors"
-                >
-                    <Icon name="Building" size={12} />
-                    GOVERNMENT LOGIN
-                </button>
-            </div>
+            </footer>
         </div>
     );
 }

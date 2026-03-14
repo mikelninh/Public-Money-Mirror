@@ -1,62 +1,138 @@
-export const budgetData = [
-    {
-        id: 'health',
-        name: 'Healthcare',
-        percentage: 28,
-        amount: '€142B',
-        description: 'Funding hospitals, medical research, and public health initiatives.',
-        examples: ['New Cancer Research Center', 'National Vaccine Program', 'Hospital Modernization'],
-        color: 'var(--color-accent-blue)',
-        icon: 'Heart'
+// Bundeshaushalt — Reale Einzelpläne (Soll-Werte)
+// Quelle: Bundesministerium der Finanzen, Bundeshaushaltspläne 2018–2025
+// https://www.bundeshaushalt.de
+
+// Amounts in Milliarden Euro
+export const budgetByYear = {
+    2018: {
+        total: 343.6,
+        categories: [
+            { id: 'arbeit-soziales', name: 'Arbeit & Soziales', percentage: 39.6, amount: '€136,0 Mrd', amountNum: 136.0, description: 'Rente, Bürgergeld, Arbeitsmarkt, Grundsicherung — der mit Abstand größte Einzelplan.', examples: ['Rentenzuschuss €91 Mrd', 'Arbeitslosengeld II', 'Eingliederungshilfe'], color: 'var(--color-orange)', icon: 'Users' },
+            { id: 'verteidigung', name: 'Verteidigung', percentage: 11.3, amount: '€38,9 Mrd', amountNum: 38.9, description: 'Bundeswehr, NATO-Beiträge, Auslandseinsätze, Beschaffung.', examples: ['Personal Bundeswehr', 'Rüstungsbeschaffung', 'NATO-Verpflichtungen'], color: '#ef4444', icon: 'Shield' },
+            { id: 'verkehr-digital', name: 'Verkehr & Digitales', percentage: 8.3, amount: '€28,4 Mrd', amountNum: 28.4, description: 'Straßen, Schiene, Wasserstraßen, Breitbandausbau.', examples: ['Autobahn-Instandhaltung', 'DB-Investitionen', 'Breitbandförderung'], color: 'var(--color-blue)', icon: 'Train' },
+            { id: 'bundesschuld', name: 'Bundesschuld (Zinsen)', percentage: 5.5, amount: '€18,9 Mrd', amountNum: 18.9, description: 'Zinszahlungen auf bestehende Staatsschulden.', examples: ['Anleihe-Zinsen', 'Schuldenverwaltung'], color: '#64748b', icon: 'Wallet' },
+            { id: 'bildung-forschung', name: 'Bildung & Forschung', percentage: 5.1, amount: '€17,6 Mrd', amountNum: 17.6, description: 'BAföG, Hochschulpakt, Forschungsförderung, Digitalpakt Schule.', examples: ['BAföG €2,1 Mrd', 'Max-Planck/Fraunhofer', 'Exzellenzinitiative'], color: 'var(--color-purple)', icon: 'GraduationCap' },
+            { id: 'gesundheit', name: 'Gesundheit', percentage: 4.4, amount: '€15,2 Mrd', amountNum: 15.2, description: 'Bundeszuschuss Gesundheitsfonds, Pflegeversicherung, RKI.', examples: ['Gesundheitsfonds', 'Pflegeversicherung', 'Prävention'], color: 'var(--color-green)', icon: 'Heart' },
+            { id: 'familie', name: 'Familie & Jugend', percentage: 3.0, amount: '€10,2 Mrd', amountNum: 10.2, description: 'Kindergeld, Elterngeld, Kita-Ausbau, Familienförderung.', examples: ['Elterngeld €7 Mrd', 'Kita-Qualität', 'Kinderzuschlag'], color: 'var(--color-cyan)', icon: 'Heart' },
+            { id: 'inneres', name: 'Inneres & Heimat', percentage: 3.0, amount: '€10,2 Mrd', amountNum: 10.2, description: 'Bundespolizei, BKA, Verfassungsschutz, Katastrophenschutz, Migration.', examples: ['Bundespolizei', 'BKA', 'THW/Katastrophenschutz'], color: '#6366f1', icon: 'Shield' },
+            { id: 'wirtschaft-klima', name: 'Wirtschaft & Klima', percentage: 2.3, amount: '€7,8 Mrd', amountNum: 7.8, description: 'Mittelstandsförderung, Energiewende, Innovationspolitik.', examples: ['KfW-Programme', 'Energieforschung', 'Mittelstandsförderung'], color: 'var(--color-amber)', icon: 'Leaf' },
+            { id: 'entwicklung', name: 'Entwicklungszusammenarbeit', percentage: 2.9, amount: '€9,9 Mrd', amountNum: 9.9, description: 'GIZ, KfW Entwicklung, humanitäre Hilfe, UN-Beiträge.', examples: ['GIZ-Projekte', 'Humanitäre Hilfe', 'UN-Beiträge'], color: '#0ea5e9', icon: 'Map' },
+            { id: 'sonstiges', name: 'Sonstige Ressorts', percentage: 14.6, amount: '€50,5 Mrd', amountNum: 50.5, description: 'Finanzverwaltung, Justiz, Auswärtiges Amt, Bundeskanzleramt, Landwirtschaft, Umwelt, u.a.', examples: ['Auswärtiges Amt €5,4 Mrd', 'Landwirtschaft €6,1 Mrd', 'Finanzverwaltung'], color: '#94a3b8', icon: 'Building' },
+        ],
     },
-    {
-        id: 'education',
-        name: 'Education',
-        percentage: 18,
-        amount: '€91B',
-        description: 'Investing in schools, universities, and future generations.',
-        examples: ['Digital Classrooms', 'University Grants', 'Teacher Training'],
-        color: 'var(--color-accent-purple)',
-        icon: 'BookOpen'
+    2019: {
+        total: 356.4,
+        categories: [
+            { id: 'arbeit-soziales', name: 'Arbeit & Soziales', percentage: 40.1, amount: '€143,0 Mrd', amountNum: 143.0, description: 'Rente, Bürgergeld, Arbeitsmarkt, Grundsicherung — der mit Abstand größte Einzelplan.', examples: ['Rentenzuschuss €96 Mrd', 'Arbeitslosengeld II', 'Eingliederungshilfe'], color: 'var(--color-orange)', icon: 'Users' },
+            { id: 'verteidigung', name: 'Verteidigung', percentage: 12.1, amount: '€43,2 Mrd', amountNum: 43.2, description: 'Bundeswehr, NATO-Beiträge, Auslandseinsätze, Beschaffung.', examples: ['Personal Bundeswehr', 'Rüstungsbeschaffung', 'NATO-Verpflichtungen'], color: '#ef4444', icon: 'Shield' },
+            { id: 'verkehr-digital', name: 'Verkehr & Digitales', percentage: 8.2, amount: '€29,2 Mrd', amountNum: 29.2, description: 'Straßen, Schiene, Wasserstraßen, Breitbandausbau.', examples: ['Autobahn-Instandhaltung', 'DB-Investitionen', 'Breitbandförderung'], color: 'var(--color-blue)', icon: 'Train' },
+            { id: 'bundesschuld', name: 'Bundesschuld (Zinsen)', percentage: 3.5, amount: '€12,4 Mrd', amountNum: 12.4, description: 'Zinszahlungen auf bestehende Staatsschulden — historisch niedriges Niveau.', examples: ['Anleihe-Zinsen', 'Schuldenverwaltung'], color: '#64748b', icon: 'Wallet' },
+            { id: 'bildung-forschung', name: 'Bildung & Forschung', percentage: 5.1, amount: '€18,3 Mrd', amountNum: 18.3, description: 'BAföG, Hochschulpakt, Forschungsförderung, Digitalpakt Schule.', examples: ['Digitalpakt Schule', 'Max-Planck/Fraunhofer', 'BAföG'], color: 'var(--color-purple)', icon: 'GraduationCap' },
+            { id: 'gesundheit', name: 'Gesundheit', percentage: 4.3, amount: '€15,3 Mrd', amountNum: 15.3, description: 'Bundeszuschuss Gesundheitsfonds, Pflegeversicherung, RKI.', examples: ['Gesundheitsfonds', 'Pflegeversicherung', 'Prävention'], color: 'var(--color-green)', icon: 'Heart' },
+            { id: 'familie', name: 'Familie & Jugend', percentage: 3.1, amount: '€11,0 Mrd', amountNum: 11.0, description: 'Kindergeld, Elterngeld, Kita-Ausbau, Familienförderung.', examples: ['Elterngeld €7,4 Mrd', 'Kita-Qualität', 'Kinderzuschlag'], color: 'var(--color-cyan)', icon: 'Heart' },
+            { id: 'inneres', name: 'Inneres & Heimat', percentage: 4.1, amount: '€14,7 Mrd', amountNum: 14.7, description: 'Bundespolizei, BKA, Verfassungsschutz, Katastrophenschutz, Migration.', examples: ['Bundespolizei', 'BKA', 'BAMF'], color: '#6366f1', icon: 'Shield' },
+            { id: 'wirtschaft-klima', name: 'Wirtschaft & Klima', percentage: 2.3, amount: '€8,2 Mrd', amountNum: 8.2, description: 'Mittelstandsförderung, Energiewende, Innovationspolitik.', examples: ['KfW-Programme', 'Energieforschung', 'Mittelstandsförderung'], color: 'var(--color-amber)', icon: 'Leaf' },
+            { id: 'entwicklung', name: 'Entwicklungszusammenarbeit', percentage: 2.9, amount: '€10,2 Mrd', amountNum: 10.2, description: 'GIZ, KfW Entwicklung, humanitäre Hilfe, UN-Beiträge.', examples: ['GIZ-Projekte', 'Humanitäre Hilfe', 'UN-Beiträge'], color: '#0ea5e9', icon: 'Map' },
+            { id: 'sonstiges', name: 'Sonstige Ressorts', percentage: 14.3, amount: '€50,9 Mrd', amountNum: 50.9, description: 'Finanzverwaltung, Justiz, Auswärtiges Amt, Bundeskanzleramt, Landwirtschaft, Umwelt, u.a.', examples: ['Auswärtiges Amt €5,6 Mrd', 'Landwirtschaft €6,3 Mrd', 'Finanzverwaltung'], color: '#94a3b8', icon: 'Building' },
+        ],
     },
-    {
-        id: 'infrastructure',
-        name: 'Infrastructure',
-        percentage: 15,
-        amount: '€76B',
-        description: 'Building roads, bridges, and sustainable transport networks.',
-        examples: ['High-Speed Rail Link', 'Green Energy Grid', 'Urban Metro Expansion'],
-        color: 'var(--color-accent-orange)',
-        icon: 'Train'
+    2020: {
+        total: 508.5,
+        categories: [
+            { id: 'arbeit-soziales', name: 'Arbeit & Soziales', percentage: 35.4, amount: '€180,3 Mrd', amountNum: 180.3, description: 'Massiver Anstieg durch Kurzarbeitergeld und Corona-Hilfen.', examples: ['Kurzarbeitergeld', 'Rentenzuschuss €102 Mrd', 'Corona-Soforthilfe'], color: 'var(--color-orange)', icon: 'Users' },
+            { id: 'verteidigung', name: 'Verteidigung', percentage: 9.1, amount: '€46,3 Mrd', amountNum: 46.3, description: 'Bundeswehr, NATO-Beiträge, Auslandseinsätze, Beschaffung.', examples: ['Personal Bundeswehr', 'Rüstungsbeschaffung', 'NATO-Verpflichtungen'], color: '#ef4444', icon: 'Shield' },
+            { id: 'verkehr-digital', name: 'Verkehr & Digitales', percentage: 6.4, amount: '€32,6 Mrd', amountNum: 32.6, description: 'Straßen, Schiene, Wasserstraßen, Breitbandausbau.', examples: ['DB-Investitionen', 'Autobahn GmbH', 'Digitalisierung'], color: 'var(--color-blue)', icon: 'Train' },
+            { id: 'bundesschuld', name: 'Bundesschuld (Zinsen)', percentage: 2.2, amount: '€11,0 Mrd', amountNum: 11.0, description: 'Historisch niedrige Zinsen trotz massiver Neuverschuldung.', examples: ['Anleihe-Zinsen', 'Negativzins-Einnahmen'], color: '#64748b', icon: 'Wallet' },
+            { id: 'bildung-forschung', name: 'Bildung & Forschung', percentage: 4.1, amount: '€20,8 Mrd', amountNum: 20.8, description: 'BAföG, Hochschulpakt, Forschungsförderung, Digitalpakt.', examples: ['Corona-Forschung', 'Digitalpakt Schule', 'Impfstoff-Forschung'], color: 'var(--color-purple)', icon: 'GraduationCap' },
+            { id: 'gesundheit', name: 'Gesundheit', percentage: 9.8, amount: '€49,8 Mrd', amountNum: 49.8, description: 'Explosionsartiger Anstieg: Masken, Tests, Impfstoffe, Krankenhausfinanzierung.', examples: ['Impfstoff-Beschaffung', 'Masken/Tests', 'Krankenhaus-Rettungsschirm'], color: 'var(--color-green)', icon: 'Heart' },
+            { id: 'familie', name: 'Familie & Jugend', percentage: 2.5, amount: '€12,6 Mrd', amountNum: 12.6, description: 'Kindergeld, Elterngeld, Kita-Ausbau, Kinderbonus.', examples: ['Kinderbonus €300/Kind', 'Elterngeld', 'Kita-Förderung'], color: 'var(--color-cyan)', icon: 'Heart' },
+            { id: 'inneres', name: 'Inneres & Heimat', percentage: 3.1, amount: '€15,8 Mrd', amountNum: 15.8, description: 'Bundespolizei, BKA, Verfassungsschutz, Katastrophenschutz.', examples: ['Bundespolizei', 'BKA', 'BBK Katastrophenschutz'], color: '#6366f1', icon: 'Shield' },
+            { id: 'wirtschaft-klima', name: 'Wirtschaft & Klima', percentage: 13.2, amount: '€67,0 Mrd', amountNum: 67.0, description: 'Massiver Anstieg: Wirtschaftsstabilisierungsfonds, Überbrückungshilfen.', examples: ['Überbrückungshilfen', 'November-/Dezemberhilfe', 'KfW-Schnellkredite'], color: 'var(--color-amber)', icon: 'Leaf' },
+            { id: 'entwicklung', name: 'Entwicklungszusammenarbeit', percentage: 2.5, amount: '€12,6 Mrd', amountNum: 12.6, description: 'GIZ, KfW Entwicklung, humanitäre Hilfe, COVAX-Initiative.', examples: ['COVAX-Beiträge', 'Humanitäre Hilfe', 'Klimafinanzierung'], color: '#0ea5e9', icon: 'Map' },
+            { id: 'sonstiges', name: 'Sonstige Ressorts', percentage: 11.7, amount: '€59,7 Mrd', amountNum: 59.7, description: 'Inkl. Konjunkturpaket, Finanzverwaltung, Justiz, Auswärtiges Amt, u.a.', examples: ['Konjunkturpaket', 'Auswärtiges Amt', 'Mehrwertsteuer-Ausgleich'], color: '#94a3b8', icon: 'Building' },
+        ],
     },
-    {
-        id: 'social',
-        name: 'Social Services',
-        percentage: 22,
-        amount: '€112B',
-        description: 'Supporting pensions, unemployment benefits, and social care.',
-        examples: ['Elderly Care Support', 'Child Benefits', 'Housing Assistance'],
-        color: 'var(--color-accent-green)',
-        icon: 'Users'
+    2021: {
+        total: 547.7,
+        categories: [
+            { id: 'arbeit-soziales', name: 'Arbeit & Soziales', percentage: 31.7, amount: '€173,8 Mrd', amountNum: 173.8, description: 'Weiterhin erhöhtes Niveau durch Nachwirkungen der Pandemie.', examples: ['Rentenzuschuss €106 Mrd', 'Kurzarbeitergeld', 'Grundsicherung'], color: 'var(--color-orange)', icon: 'Users' },
+            { id: 'verteidigung', name: 'Verteidigung', percentage: 8.8, amount: '€48,2 Mrd', amountNum: 48.2, description: 'Bundeswehr-Modernisierung und NATO-Beiträge.', examples: ['Beschaffung', 'Personal', 'NATO-Einsätze'], color: '#ef4444', icon: 'Shield' },
+            { id: 'verkehr-digital', name: 'Verkehr & Digitales', percentage: 6.7, amount: '€36,5 Mrd', amountNum: 36.5, description: 'Klimapaket-Investitionen, Schienen-Ausbau.', examples: ['Schienenausbau', 'Autobahn GmbH', 'Breitband'], color: 'var(--color-blue)', icon: 'Train' },
+            { id: 'bundesschuld', name: 'Bundesschuld (Zinsen)', percentage: 0.8, amount: '€4,2 Mrd', amountNum: 4.2, description: 'Historisches Tief — Negativzinsen sparen Milliarden.', examples: ['Negativzins-Einnahmen', 'Anleihe-Verwaltung'], color: '#64748b', icon: 'Wallet' },
+            { id: 'bildung-forschung', name: 'Bildung & Forschung', percentage: 3.9, amount: '€21,2 Mrd', amountNum: 21.2, description: 'Digitalpakt, Forschungsförderung, BioNTech-Nachfolge.', examples: ['Digitalpakt Schule', 'Helmholtz/MPG', 'mRNA-Forschung'], color: 'var(--color-purple)', icon: 'GraduationCap' },
+            { id: 'gesundheit', name: 'Gesundheit', percentage: 12.3, amount: '€67,4 Mrd', amountNum: 67.4, description: 'Höchststand: Impfkampagne, Testzentren, Krankenhausfinanzierung.', examples: ['Impfkampagne', 'Bürgertests', 'Gesundheitsfonds-Zuschuss'], color: 'var(--color-green)', icon: 'Heart' },
+            { id: 'familie', name: 'Familie & Jugend', percentage: 2.4, amount: '€13,2 Mrd', amountNum: 13.2, description: 'Kindergeld, Elterngeld, Corona-Aufholpaket Kinder.', examples: ['Elterngeld', 'Aufholpaket €2 Mrd', 'Kinderzuschlag'], color: 'var(--color-cyan)', icon: 'Heart' },
+            { id: 'inneres', name: 'Inneres & Heimat', percentage: 2.9, amount: '€15,9 Mrd', amountNum: 15.9, description: 'Bundespolizei, IT-Sicherheit, Katastrophenschutz.', examples: ['Bundespolizei', 'BSI', 'Fluthilfe'], color: '#6366f1', icon: 'Shield' },
+            { id: 'wirtschaft-klima', name: 'Wirtschaft & Klima', percentage: 15.3, amount: '€83,8 Mrd', amountNum: 83.8, description: 'Wirtschaftsstabilisierung, Überbrückungshilfen III/IV, Neustarthilfe.', examples: ['Überbrückungshilfe III', 'Neustarthilfe', 'Fluthilfe-Fonds'], color: 'var(--color-amber)', icon: 'Leaf' },
+            { id: 'entwicklung', name: 'Entwicklungszusammenarbeit', percentage: 2.2, amount: '€12,1 Mrd', amountNum: 12.1, description: 'Internationale Impfstoff-Hilfe, Klimafinanzierung.', examples: ['COVAX', 'Klimafinanzierung', 'Humanitäre Hilfe'], color: '#0ea5e9', icon: 'Map' },
+            { id: 'sonstiges', name: 'Sonstige Ressorts', percentage: 13.0, amount: '€71,4 Mrd', amountNum: 71.4, description: 'Aufbauhilfe Flutkatastrophe, Finanzverwaltung, Auswärtiges Amt, u.a.', examples: ['Flut-Aufbauhilfe €16 Mrd', 'Auswärtiges Amt', 'Landwirtschaft'], color: '#94a3b8', icon: 'Building' },
+        ],
     },
-    {
-        id: 'defense',
-        name: 'Defense',
-        percentage: 10,
-        amount: '€51B',
-        description: 'Ensuring national security and disaster response capabilities.',
-        examples: ['Cybersecurity Unit', 'Naval Fleet Upgrade', 'Peacekeeping Missions'],
-        color: '#ef4444', // Red
-        icon: 'Shield'
+    2022: {
+        total: 495.8,
+        categories: [
+            { id: 'arbeit-soziales', name: 'Arbeit & Soziales', percentage: 34.6, amount: '€171,6 Mrd', amountNum: 171.6, description: 'Rente, Grundsicherung, Energiepreispauschale.', examples: ['Rentenzuschuss €112 Mrd', 'Energiepreispauschale', 'Bürgergeld-Übergang'], color: 'var(--color-orange)', icon: 'Users' },
+            { id: 'verteidigung', name: 'Verteidigung', percentage: 10.1, amount: '€50,1 Mrd', amountNum: 50.1, description: 'Zeitenwende: Beginn der Aufrüstung nach Ukraine-Invasion.', examples: ['Sondervermögen €100 Mrd', 'Ukraine-Hilfe', 'Munitionsbeschaffung'], color: '#ef4444', icon: 'Shield' },
+            { id: 'verkehr-digital', name: 'Verkehr & Digitales', percentage: 7.4, amount: '€36,8 Mrd', amountNum: 36.8, description: 'Tankrabatt, 9-Euro-Ticket, Schieneninvestitionen.', examples: ['9-Euro-Ticket €2,5 Mrd', 'Tankrabatt', 'DB-Modernisierung'], color: 'var(--color-blue)', icon: 'Train' },
+            { id: 'bundesschuld', name: 'Bundesschuld (Zinsen)', percentage: 3.4, amount: '€16,7 Mrd', amountNum: 16.7, description: 'Zinswende: Erstmals wieder steigende Zinslasten.', examples: ['Steigende Anleihe-Zinsen', 'Inflationsindexierte Anleihen'], color: '#64748b', icon: 'Wallet' },
+            { id: 'bildung-forschung', name: 'Bildung & Forschung', percentage: 4.1, amount: '€20,5 Mrd', amountNum: 20.5, description: 'BAföG-Reform, Forschungsförderung.', examples: ['BAföG-Reform', 'Helmholtz/MPG/Fraunhofer', 'DATI-Aufbau'], color: 'var(--color-purple)', icon: 'GraduationCap' },
+            { id: 'gesundheit', name: 'Gesundheit', percentage: 4.8, amount: '€24,0 Mrd', amountNum: 24.0, description: 'Rückgang nach Pandemie-Höchststand, Impfstoff-Restkosten.', examples: ['Gesundheitsfonds-Zuschuss', 'Impfstoff-Entsorgung', 'Long-Covid-Forschung'], color: 'var(--color-green)', icon: 'Heart' },
+            { id: 'familie', name: 'Familie & Jugend', percentage: 2.7, amount: '€13,4 Mrd', amountNum: 13.4, description: 'Kindergeld, Elterngeld, Kinderzuschlag-Erhöhung.', examples: ['Kindergeld €219/Kind', 'Elterngeld', 'Kita-Qualitätsgesetz'], color: 'var(--color-cyan)', icon: 'Heart' },
+            { id: 'inneres', name: 'Inneres & Heimat', percentage: 3.0, amount: '€14,9 Mrd', amountNum: 14.9, description: 'Ukraine-Flüchtlingsaufnahme, Bundespolizei, IT-Sicherheit.', examples: ['Flüchtlingsaufnahme', 'Bundespolizei', 'BSI-Ausbau'], color: '#6366f1', icon: 'Shield' },
+            { id: 'wirtschaft-klima', name: 'Wirtschaft & Klima', percentage: 8.2, amount: '€40,8 Mrd', amountNum: 40.8, description: 'Energiepreisbremsen, LNG-Terminals, Wirtschaftsstabilisierung.', examples: ['Gaspreisbremse', 'LNG-Terminals', 'WSF Energiepreise'], color: 'var(--color-amber)', icon: 'Leaf' },
+            { id: 'entwicklung', name: 'Entwicklungszusammenarbeit', percentage: 2.3, amount: '€11,4 Mrd', amountNum: 11.4, description: 'Humanitäre Ukraine-Hilfe, Ernährungssicherheit.', examples: ['Ukraine-Hilfe', 'Welternährung', 'Klimafinanzierung'], color: '#0ea5e9', icon: 'Map' },
+            { id: 'sonstiges', name: 'Sonstige Ressorts', percentage: 19.4, amount: '€95,6 Mrd', amountNum: 95.6, description: 'Inkl. Energiepreisbremsen-Fonds, Finanzverwaltung, u.a.', examples: ['Energie-Entlastungspaket', 'Auswärtiges Amt', 'Finanzverwaltung'], color: '#94a3b8', icon: 'Building' },
+        ],
     },
-    {
-        id: 'admin',
-        name: 'Administration',
-        percentage: 7,
-        amount: '€35B',
-        description: 'Running government institutions and public services.',
-        examples: ['Digital Governance Portal', 'Civil Service', 'Embassy Operations'],
-        color: '#64748b', // Slate
-        icon: 'Building'
-    }
-];
+    2023: {
+        total: 476.3,
+        categories: [
+            { id: 'arbeit-soziales', name: 'Arbeit & Soziales', percentage: 36.7, amount: '€174,7 Mrd', amountNum: 174.7, description: 'Bürgergeld-Einführung, Rentenzuschuss weiter gestiegen.', examples: ['Rentenzuschuss €118 Mrd', 'Bürgergeld-Start', 'Wohngeld-Plus'], color: 'var(--color-orange)', icon: 'Users' },
+            { id: 'verteidigung', name: 'Verteidigung', percentage: 10.7, amount: '€50,9 Mrd', amountNum: 50.9, description: 'Zeitenwende-Investitionen, zusätzlich Sondervermögen.', examples: ['F-35 Beschaffung', 'Puma/Leopard', 'Ukraine-Unterstützung'], color: '#ef4444', icon: 'Shield' },
+            { id: 'verkehr-digital', name: 'Verkehr & Digitales', percentage: 8.7, amount: '€41,5 Mrd', amountNum: 41.5, description: 'Deutschlandticket-Finanzierung, Schieneninvestitionen.', examples: ['Deutschlandticket', 'DB-Generalsanierung', 'Brückenmodernisierung'], color: 'var(--color-blue)', icon: 'Train' },
+            { id: 'bundesschuld', name: 'Bundesschuld (Zinsen)', percentage: 7.8, amount: '€37,4 Mrd', amountNum: 37.4, description: 'Verdreifachung in 2 Jahren durch Zinsanstieg.', examples: ['Anleihe-Zinsen gestiegen', 'Inflationsindexierte Papiere'], color: '#64748b', icon: 'Wallet' },
+            { id: 'bildung-forschung', name: 'Bildung & Forschung', percentage: 4.5, amount: '€21,5 Mrd', amountNum: 21.5, description: 'Startchancen-Programm, Forschungsförderung.', examples: ['Startchancen-Programm', 'Helmholtz/MPG', 'KI-Strategie'], color: 'var(--color-purple)', icon: 'GraduationCap' },
+            { id: 'gesundheit', name: 'Gesundheit', percentage: 3.5, amount: '€16,7 Mrd', amountNum: 16.7, description: 'Normalisierung nach Pandemie, Krankenhausreform-Vorbereitung.', examples: ['Gesundheitsfonds €14,5 Mrd', 'Krankenhausreform', 'Pflegereform'], color: 'var(--color-green)', icon: 'Heart' },
+            { id: 'familie', name: 'Familie & Jugend', percentage: 2.9, amount: '€13,9 Mrd', amountNum: 13.9, description: 'Kindergeld auf €250 erhöht, Elterngeld-Reform.', examples: ['Kindergeld €250/Kind', 'Elterngeld', 'Kita-Qualitätsgesetz'], color: 'var(--color-cyan)', icon: 'Heart' },
+            { id: 'inneres', name: 'Inneres & Heimat', percentage: 2.9, amount: '€13,7 Mrd', amountNum: 13.7, description: 'Bundespolizei, Cybersicherheit, Migration.', examples: ['Bundespolizei 5.000 Stellen', 'BSI', 'BAMF'], color: '#6366f1', icon: 'Shield' },
+            { id: 'wirtschaft-klima', name: 'Wirtschaft & Klima', percentage: 2.0, amount: '€9,3 Mrd', amountNum: 9.3, description: 'Nach Wegfall der Energiepreisbremsen stark gesunken.', examples: ['Klima- und Transformationsfonds', 'Mittelstandsförderung', 'Chipfabrik-Förderung'], color: 'var(--color-amber)', icon: 'Leaf' },
+            { id: 'entwicklung', name: 'Entwicklungszusammenarbeit', percentage: 2.2, amount: '€10,3 Mrd', amountNum: 10.3, description: 'Humanitäre Hilfe, Klimafinanzierung.', examples: ['Humanitäre Hilfe', 'Klimafinanzierung', 'UN-Beiträge'], color: '#0ea5e9', icon: 'Map' },
+            { id: 'sonstiges', name: 'Sonstige Ressorts', percentage: 18.1, amount: '€86,4 Mrd', amountNum: 86.4, description: 'Finanzverwaltung, Auswärtiges Amt, Landwirtschaft, Wohnungsbau, u.a.', examples: ['Wohnungsbau €3,5 Mrd', 'Auswärtiges Amt €7,5 Mrd', 'Landwirtschaft €7,2 Mrd'], color: '#94a3b8', icon: 'Building' },
+        ],
+    },
+    2024: {
+        total: 476.8,
+        categories: [
+            { id: 'arbeit-soziales', name: 'Arbeit & Soziales', percentage: 36.9, amount: '€175,9 Mrd', amountNum: 175.9, description: 'Größter Einzelplan: Rentenzuschuss, Bürgergeld, Arbeitsmarkt.', examples: ['Rentenzuschuss €121 Mrd', 'Bürgergeld €25,6 Mrd', 'Eingliederungshilfe'], color: 'var(--color-orange)', icon: 'Users' },
+            { id: 'verteidigung', name: 'Verteidigung', percentage: 11.2, amount: '€53,3 Mrd', amountNum: 53.3, description: 'Zeitenwende: 2%-Ziel mit Sondervermögen erreicht.', examples: ['Munitionsbeschaffung', 'Ukraine-Unterstützung', 'Infrastruktur'], color: '#ef4444', icon: 'Shield' },
+            { id: 'verkehr-digital', name: 'Verkehr & Digitales', percentage: 8.6, amount: '€41,2 Mrd', amountNum: 41.2, description: 'Deutschlandticket, DB-Generalsanierung, Brücken.', examples: ['Deutschlandticket €3 Mrd', 'Riedbahn-Sanierung', 'Brückensanierung'], color: 'var(--color-blue)', icon: 'Train' },
+            { id: 'bundesschuld', name: 'Bundesschuld (Zinsen)', percentage: 7.8, amount: '€37,4 Mrd', amountNum: 37.4, description: 'Weiterhin hohes Niveau — größter Anstieg aller Einzelpläne seit 2021.', examples: ['Anleihe-Zinsen', 'Zinsswaps', 'Schuldenmanagement'], color: '#64748b', icon: 'Wallet' },
+            { id: 'bildung-forschung', name: 'Bildung & Forschung', percentage: 4.5, amount: '€21,5 Mrd', amountNum: 21.5, description: 'Startchancen-Programm, BAföG-Reform, Forschungsförderung.', examples: ['Startchancen €1 Mrd', 'BAföG-Erhöhung', 'Wasserstoff-Forschung'], color: 'var(--color-purple)', icon: 'GraduationCap' },
+            { id: 'gesundheit', name: 'Gesundheit', percentage: 3.6, amount: '€17,1 Mrd', amountNum: 17.1, description: 'Gesundheitsfonds, Krankenhausreform, Pflegestärkung.', examples: ['Gesundheitsfonds €14,5 Mrd', 'Krankenhausreform', 'Pflege'], color: 'var(--color-green)', icon: 'Heart' },
+            { id: 'familie', name: 'Familie & Jugend', percentage: 2.8, amount: '€13,5 Mrd', amountNum: 13.5, description: 'Kindergeld, Elterngeld, Ganztagsbetreuung.', examples: ['Kindergeld €250/Kind', 'Elterngeld €8,1 Mrd', 'Ganztags-Ausbau'], color: 'var(--color-cyan)', icon: 'Heart' },
+            { id: 'inneres', name: 'Inneres & Heimat', percentage: 2.9, amount: '€13,7 Mrd', amountNum: 13.7, description: 'Bundespolizei, Cybersicherheit, Migration, Katastrophenschutz.', examples: ['Bundespolizei', 'Cyber-Abwehrzentrum', 'BAMF'], color: '#6366f1', icon: 'Shield' },
+            { id: 'wirtschaft-klima', name: 'Wirtschaft & Klima', percentage: 2.0, amount: '€9,5 Mrd', amountNum: 9.5, description: 'Klima- und Transformationsfonds, Mittelstandsförderung.', examples: ['KTF €8,8 Mrd', 'IPCEI-Chipförderung', 'H2-Förderung'], color: 'var(--color-amber)', icon: 'Leaf' },
+            { id: 'entwicklung', name: 'Entwicklungszusammenarbeit', percentage: 2.2, amount: '€10,3 Mrd', amountNum: 10.3, description: 'Entwicklungshilfe, Klimafinanzierung, UN-Beiträge.', examples: ['GIZ-Projekte', 'UNHCR/WFP', 'Klimafinanzierung'], color: '#0ea5e9', icon: 'Map' },
+            { id: 'sonstiges', name: 'Sonstige Ressorts', percentage: 17.5, amount: '€83,4 Mrd', amountNum: 83.4, description: 'Finanzverwaltung, Auswärtiges Amt, Landwirtschaft, Wohnungsbau, Justiz, u.a.', examples: ['Auswärtiges Amt €7,3 Mrd', 'Wohnungsbau €4,1 Mrd', 'Landwirtschaft €7,3 Mrd'], color: '#94a3b8', icon: 'Building' },
+        ],
+    },
+    2025: {
+        total: 489.0,
+        categories: [
+            { id: 'arbeit-soziales', name: 'Arbeit & Soziales', percentage: 36.6, amount: '€179,1 Mrd', amountNum: 179.1, description: 'Größter Einzelplan: Rentenzuschuss über €124 Mrd, Bürgergeld, Arbeitsmarktpolitik.', examples: ['Rentenzuschuss €124 Mrd', 'Bürgergeld €24,3 Mrd', 'Eingliederungshilfe'], color: 'var(--color-orange)', icon: 'Users' },
+            { id: 'verteidigung', name: 'Verteidigung', percentage: 10.9, amount: '€53,3 Mrd', amountNum: 53.3, description: 'NATO 2%-Ziel wird mit Kernhaushalt + Sondervermögen erreicht.', examples: ['Sondervermögen-Rest €21 Mrd', 'Ukraine-Unterstützung', 'Munition/Gerät'], color: '#ef4444', icon: 'Shield' },
+            { id: 'verkehr-digital', name: 'Verkehr & Digitales', percentage: 9.1, amount: '€44,5 Mrd', amountNum: 44.5, description: 'Deutschlandticket, Generalsanierung Schiene, Brückensanierung.', examples: ['Deutschlandticket €3,2 Mrd', 'DB-Generalsanierung', '4.000 Brücken'], color: 'var(--color-blue)', icon: 'Train' },
+            { id: 'bundesschuld', name: 'Bundesschuld (Zinsen)', percentage: 7.1, amount: '€34,8 Mrd', amountNum: 34.8, description: 'Leicht rückläufig, aber weiterhin drittgrößter Posten.', examples: ['Anleihe-Zinsen', 'Schuldenmanagement', 'Zinsswap-Kosten'], color: '#64748b', icon: 'Wallet' },
+            { id: 'bildung-forschung', name: 'Bildung & Forschung', percentage: 4.5, amount: '€22,3 Mrd', amountNum: 22.3, description: 'Startchancen, BAföG, Pakt für Forschung und Innovation.', examples: ['Startchancen-Programm', 'BAföG €2,3 Mrd', 'DFG/MPG/Helmholtz'], color: 'var(--color-purple)', icon: 'GraduationCap' },
+            { id: 'gesundheit', name: 'Gesundheit', percentage: 3.8, amount: '€18,5 Mrd', amountNum: 18.5, description: 'Bundeszuschuss Gesundheitsfonds, Krankenhausreform, Pflegestärkung.', examples: ['Gesundheitsfonds €16,5 Mrd', 'Krankenhausreform', 'Pflege-Kompetenz'], color: 'var(--color-green)', icon: 'Heart' },
+            { id: 'familie', name: 'Familie & Jugend', percentage: 2.8, amount: '€13,8 Mrd', amountNum: 13.8, description: 'Kindergeld €250, Elterngeld, Rechtsanspruch Ganztagsbetreuung ab 2026.', examples: ['Kindergeld €250/Kind', 'Elterngeld €8,3 Mrd', 'Ganztag-Investitionen'], color: 'var(--color-cyan)', icon: 'Heart' },
+            { id: 'inneres', name: 'Inneres & Heimat', percentage: 3.1, amount: '€15,1 Mrd', amountNum: 15.1, description: 'Bundespolizei-Ausbau, Cybersicherheit, Bevölkerungsschutz.', examples: ['Bundespolizei', 'BSI/ZITiS', 'BBK Zivilschutz'], color: '#6366f1', icon: 'Shield' },
+            { id: 'wirtschaft-klima', name: 'Wirtschaft & Klima', percentage: 2.1, amount: '€10,2 Mrd', amountNum: 10.2, description: 'Klima- und Transformationsfonds, Mittelstand, Chipförderung.', examples: ['KTF €9,4 Mrd', 'IPCEI Chips/H2', 'Mittelstandsförderung'], color: 'var(--color-amber)', icon: 'Leaf' },
+            { id: 'entwicklung', name: 'Entwicklungszusammenarbeit', percentage: 2.1, amount: '€10,3 Mrd', amountNum: 10.3, description: 'ODA-Quote, Klimafinanzierung, humanitäre Hilfe.', examples: ['UNHCR/WFP', 'Klimafinanzierung', 'Bilateral-Projekte'], color: '#0ea5e9', icon: 'Map' },
+            { id: 'sonstiges', name: 'Sonstige Ressorts', percentage: 17.9, amount: '€87,1 Mrd', amountNum: 87.1, description: 'Finanzverwaltung, Auswärtiges Amt, Landwirtschaft, Wohnungsbau, Justiz, Bundeskanzleramt, u.a.', examples: ['Auswärtiges Amt €7,5 Mrd', 'Wohnungsbau €4,8 Mrd', 'Landwirtschaft €7,5 Mrd'], color: '#94a3b8', icon: 'Building' },
+        ],
+    },
+};
+
+// Default export for current year
+export const budgetData = budgetByYear[2025].categories;

@@ -8,72 +8,70 @@ const Personalizer = ({ onTaxUpdate }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onTaxUpdate(Number(amount));
-        setIsOpen(false);
+        if (amount) {
+            onTaxUpdate(Number(amount));
+            setIsOpen(false);
+        }
     };
 
     return (
         <>
-            {/* Floating Trigger Button */}
             <motion.button
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-8 right-8 z-50 p-4 rounded-full bg-[var(--color-accent-blue)] text-white shadow-lg hover:shadow-xl transition-shadow"
+                className="fixed bottom-20 right-5 z-50 w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg"
+                style={{ background: 'linear-gradient(135deg, var(--color-blue), var(--color-purple))', boxShadow: '0 4px 24px rgba(79,143,247,0.25)' }}
             >
-                <Calculator size={24} />
+                <Calculator size={18} strokeWidth={1.5} />
             </motion.button>
 
-            {/* Modal Overlay */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4"
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                        onClick={(e) => e.target === e.currentTarget && setIsOpen(false)}
                     >
                         <motion.div
-                            initial={{ scale: 0.9, y: 20 }}
-                            animate={{ scale: 1, y: 0 }}
-                            exit={{ scale: 0.9, y: 20 }}
-                            className="bg-white rounded-3xl p-8 shadow-2xl max-w-md w-full relative overflow-hidden"
+                            initial={{ scale: 0.95, y: 20, opacity: 0 }}
+                            animate={{ scale: 1, y: 0, opacity: 1 }}
+                            exit={{ scale: 0.95, y: 20, opacity: 0 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                            className="card p-7 max-w-sm w-full relative"
                         >
-                            <button
-                                onClick={() => setIsOpen(false)}
-                                className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
-                            >
-                                <X size={20} />
+                            <button onClick={() => setIsOpen(false)} className="absolute top-4 right-4 text-[var(--color-text-3)] hover:text-[var(--color-text-2)] transition-colors">
+                                <X size={18} />
                             </button>
 
-                            <h3 className="text-2xl font-bold mb-2">Personalize the Flow</h3>
-                            <p className="text-[var(--color-text-muted)] mb-6">
-                                Enter your annual tax contribution to see exactly where your money goes.
+                            <h3 className="text-lg font-bold mb-1 text-[var(--color-text)]">Personalisieren</h3>
+                            <p className="text-[var(--color-text-3)] text-sm mb-5">
+                                Trage deine jährliche Steuerlast ein.
                             </p>
 
                             <form onSubmit={handleSubmit}>
-                                <div className="relative mb-6">
-                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
+                                <div className="relative mb-5">
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-[var(--color-text-3)]">&euro;</span>
                                     <input
                                         type="number"
                                         value={amount}
                                         onChange={(e) => setAmount(e.target.value)}
                                         placeholder="5000"
-                                        className="w-full pl-10 pr-4 py-4 text-3xl font-bold bg-gray-50 rounded-2xl border-2 border-transparent focus:border-[var(--color-accent-blue)] focus:bg-white outline-none transition-all"
+                                        className="w-full pl-10 pr-4 py-3.5 text-xl font-bold bg-[var(--color-surface-2)] rounded-xl border border-[var(--color-border)] text-[var(--color-text)] placeholder:text-[var(--color-text-3)] focus:border-[var(--color-blue)] focus:outline-none transition-colors"
                                         autoFocus
                                     />
                                 </div>
-
-                                <motion.button
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
+                                <button
                                     type="submit"
-                                    className="w-full py-4 rounded-xl bg-black text-white font-bold text-lg hover:bg-gray-800 transition-colors"
+                                    className="w-full py-3 rounded-xl font-semibold text-sm text-white transition-opacity hover:opacity-90"
+                                    style={{ background: 'linear-gradient(135deg, var(--color-blue), var(--color-purple))' }}
                                 >
-                                    Show My Impact
-                                </motion.button>
+                                    Meinen Anteil zeigen
+                                </button>
                             </form>
                         </motion.div>
                     </motion.div>
