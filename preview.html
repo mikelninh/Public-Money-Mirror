@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Money Mirror (Phase 3)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --color-bg: #ffffff;
+            --color-bg-soft: #f8f9fa;
+            --color-text-main: #1a1a1a;
+            --color-text-muted: #64748b;
+            --color-accent-blue: #3b82f6;
+            --color-accent-green: #10b981;
+            --color-accent-purple: #8b5cf6;
+            --color-accent-orange: #f97316;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 24px;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { motion, AnimatePresence } = window.Motion;
+
+        const Icon = ({ name, size = 24, className = "" }) => {
+            const icons = {
+                Heart: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></svg>,
+                BookOpen: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>,
+                Train: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="16" x="4" y="4" rx="2" /><path d="M4 10h16" /><path d="M12 4v16" /><path d="m8 2 2 2" /><path d="m16 2-2 2" /></svg>,
+                Users: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
+                Shield: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></svg>,
+                Building: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2" ry="2" /><path d="M9 22v-4h6v4" /><path d="M8 6h.01" /><path d="M16 6h.01" /><path d="M8 10h.01" /><path d="M16 10h.01" /><path d="M8 14h.01" /><path d="M16 14h.01" /></svg>,
+                ArrowRight: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>,
+                ArrowDown: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 5v14" /><path d="m19 12-7 7-7-7" /></svg>,
+                Search: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>,
+                Calculator: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="16" x2="16" y1="14" y2="18" /><path d="M16 10h.01" /><path d="M12 10h.01" /><path d="M8 10h.01" /><path d="M12 14h.01" /><path d="M8 14h.01" /><path d="M12 18h.01" /><path d="M8 18h.01" /></svg>,
+                X: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>,
+                AlertTriangle: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>,
+                ExternalLink: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" x2="21" y1="14" y2="3" /></svg>,
+                Map: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" /><line x1="9" x2="9" y1="3" y2="18" /><line x1="15" x2="15" y1="6" y2="21" /></svg>,
+                Navigation: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg>,
+                Layers: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></svg>,
+                Radio: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" /><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" /><circle cx="12" cy="12" r="2" /><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" /><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19" /></svg>,
+                Wallet: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" /><path d="M3 5v14a2 2 0 0 0 2 2h16v-5" /><path d="M18 12a2 2 0 0 0 0 4h4v-4Z" /></svg>,
+                Lock: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>,
+                Box: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" x2="12" y1="22.08" y2="12" /></svg>,
+                Wifi: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M5 12.55a11 11 0 0 1 14.08 0" /><path d="M1.42 9a16 16 0 0 1 21.16 0" /><path d="M8.53 16.11a6 6 0 0 1 6.95 0" /><line x1="12" x2="12.01" y1="20" y2="20" /></svg>,
+                Check: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="20 6 9 17 4 12" /></svg>,
+                Coffee: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M17 8h1a4 4 0 1 1 0 8h-1" /><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" /><line x1="6" x2="6" y1="2" y2="4" /><line x1="10" x2="10" y1="2" y2="4" /><line x1="14" x2="14" y1="2" y2="4" /></svg>,
+                Bike: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="18.5" cy="17.5" r="3.5" /><circle cx="5.5" cy="17.5" r="3.5" /><circle cx="15" cy="5" r="1" /><path d="M12 17.5V14l-3-3 4-3 2 3h2" /></svg>,
+                Circle: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10" /></svg>,
+                Zap: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>,
+                Loader2: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>,
+                PieChart: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></svg>,
+                Activity: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>,
+                Clock: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>,
+                TrendingUp: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>,
+                TrendingDown: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="23 18 13.5 8.5 8.5 13.5 1 6" /><polyline points="17 18 23 18 23 12" /></svg>,
+                Share2: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>,
+                Download: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>,
+                Stethoscope: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M11 2v7a5 5 0 0 1-10 0V2" /><path d="M21 2v7a5 5 0 0 0-10 0V2" /><line x1="11" x2="11" y1="14" y2="2" /><line x1="21" x2="21" y1="14" y2="2" /><path d="M16 14v2a4 4 0 0 1-4 4v0a4 4 0 0 1-4-4v-2" /></svg>,
+                CheckCircle: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+            };
+            return icons[name] || icons.Circle;
+        };
+
+        const budgetData = [
+            { id: 'health', name: 'Healthcare', percentage: 28, amount: '€142B', description: 'Funding hospitals, medical research, and public health initiatives.', examples: ['New Cancer Research Center', 'National Vaccine Program', 'Hospital Modernization'], color: 'var(--color-accent-blue)', icon: 'Heart' },
+            { id: 'education', name: 'Education', percentage: 18, amount: '€91B', description: 'Investing in schools, universities, and future generations.', examples: ['Digital Classrooms', 'University Grants', 'Teacher Training'], color: 'var(--color-accent-purple)', icon: 'BookOpen' },
+            { id: 'infrastructure', name: 'Infrastructure', percentage: 15, amount: '€76B', description: 'Building roads, bridges, and sustainable transport networks.', examples: ['High-Speed Rail Link', 'Green Energy Grid', 'Urban Metro Expansion'], color: 'var(--color-accent-orange)', icon: 'Train' },
+            { id: 'social', name: 'Social Services', percentage: 22, amount: '€112B', description: 'Supporting pensions, unemployment benefits, and social care.', examples: ['Elderly Care Support', 'Child Benefits', 'Housing Assistance'], color: 'var(--color-accent-green)', icon: 'Users' },
+            { id: 'defense', name: 'Defense', percentage: 10, amount: '€51B', description: 'Ensuring national security and disaster response capabilities.', examples: ['Cybersecurity Unit', 'Naval Fleet Upgrade', 'Peacekeeping Missions'], color: '#ef4444', icon: 'Shield' },
+            { id: 'admin', name: 'Administration', percentage: 7, amount: '€35B', description: 'Running government institutions and public services.', examples: ['Digital Governance Portal', 'Civil Service', 'Embassy Operations'], color: '#64748b', icon: 'Building' }
+        ];
+
+        const scandals = [
+            { id: 1, title: "Unfinished Airport Terminal", amount: "€120M", status: "Under Investigation", description: "Construction halted due to contractor dispute. Funds currently frozen.", date: "2023-11" },
+            { id: 2, title: "Digital Health Portal Outage", amount: "€4.5M", status: "Resolved", description: "Server infrastructure failure. Refund issued by vendor.", date: "2024-02" },
+            { id: 3, title: "Bridge Maintenance Overspend", amount: "€12M", status: "Audited", description: "Costs exceeded budget by 40%. Audit confirmed material price surge.", date: "2023-08" }
+        ];
+
+        const localProjects = [
+            { id: 1, title: "Gymnasium Mitte Renovation", type: "Education", amount: "€2.4M", lat: 52.5200, lng: 13.4050 },
+            { id: 2, title: "Radbahn Kreuzberg", type: "Infrastructure", amount: "€450k", lat: 52.4980, lng: 13.4100 },
+            { id: 3, title: "Tiergarten Replanting", type: "Environment", amount: "€120k", lat: 52.5140, lng: 13.3500 },
+            { id: 4, title: "Charité New Wing", type: "Health", amount: "€12M", lat: 52.5250, lng: 13.3700 },
+        ];
+
+        const proposals = [
+            { id: 1, title: "Audit Bundestag Renovation Costs", votes: 1240, status: "Active" },
+            { id: 2, title: "Review A100 Autobahn Expansion", votes: 892, status: "Active" },
+            { id: 3, title: "Digitalization Fund Transparency", votes: 2156, status: "Passed" },
+        ];
+
+        const CategoryCard = ({ category, index, userTax }) => {
+            const personalAmount = userTax ? (userTax * (category.percentage / 100)) : null;
+
+            return (
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1, duration: 0.6 }}
+                    whileHover={{ y: -10, scale: 1.02 }}
+                    className="glass-panel p-6 cursor-pointer group relative overflow-hidden"
+                    style={{ borderTop: `4px solid ${category.color}` }}
+                >
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500"
+                        style={{ background: category.color }} />
+
+                    <div className="flex items-start justify-between mb-4">
+                        <div className="p-3 rounded-xl bg-white/50 backdrop-blur-sm text-white"
+                            style={{ backgroundColor: category.color }}>
+                            <Icon name={category.icon} size={24} />
+                        </div>
+                        <span className="text-2xl font-bold" style={{ color: category.color }}>
+                            {category.percentage}%
+                        </span>
+                    </div>
+
+                    <h3 className="text-xl font-bold mb-2">{category.name}</h3>
+                    <p className="text-[var(--color-text-muted)] text-sm mb-4 min-h-[40px]">
+                        {category.description}
+                    </p>
+
+                    <div className="flex items-center justify-between mt-auto">
+                        <div className="flex flex-col">
+                            <span className="font-mono font-medium text-lg">
+                                {personalAmount ? `€${personalAmount.toFixed(2)}` : category.amount}
+                            </span>
+                            {personalAmount && (
+                                <span className="text-xs text-[var(--color-text-muted)]">your contribution</span>
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+            );
+        };
+
+        const Search = ({ searchTerm, onSearchChange }) => {
+            return (
+                <div className="relative max-w-md mx-auto mb-12">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <Icon name="Search" className="text-gray-400" size={20} />
+                    </div>
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => onSearchChange(e.target.value)}
+                        placeholder="Search for health, roads, schools..."
+                        className="w-full pl-12 pr-4 py-3 rounded-full bg-white border border-gray-200 focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/20 outline-none transition-all shadow-sm"
+                    />
+                </div>
+            );
+        };
+
+        const BudgetStream = ({ taxAmount, year }) => {
+            const [searchTerm, setSearchTerm] = useState('');
+            const yearMultiplier = 1 + ((year - 2025) * 0.05);
+
+            const filteredData = budgetData.map(cat => {
+                const numericAmount = parseInt(cat.amount.replace(/[^0-9]/g, ''));
+                const adjustedAmount = Math.round(numericAmount * yearMultiplier);
+                return { ...cat, amount: `€${adjustedAmount}B` };
+            }).filter(category =>
+                category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                category.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                category.examples.some(ex => ex.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+
+            return (
+                <section className="min-h-screen w-full py-20 px-4 bg-[var(--color-bg-soft)]">
+                    <div className="container mx-auto">
+                        <motion.div
+                            className="text-center mb-12"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                        >
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                                {taxAmount ? `Your ${year} contribution fuels society.` : `In ${year}, your contribution fuels society.`}
+                            </h2>
+                            <p className="text-[var(--color-text-muted)] text-lg max-w-2xl mx-auto mb-8">
+                                {taxAmount ? "Here is exactly how your money is distributed." : "See how every euro is distributed across the nation's most vital sectors."}
+                            </p>
+                            <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+                        </motion.div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredData.map((category, index) => (
+                                <CategoryCard key={category.id} category={category} index={index} userTax={taxAmount} />
+                            ))}
+                        </div>
+
+                        {filteredData.length === 0 && (
+                            <div className="text-center text-gray-500 py-12">No categories found matching "{searchTerm}"</div>
+                        )}
+                    </div>
+                </section>
+            );
+        };
+
+        const NearMeMap = () => {
+            const [isAdminView, setIsAdminView] = useState(false);
+            return (
+                <section className="w-full py-20 px-4 bg-gray-50">
+                    <div className="container mx-auto">
+                        <div className="flex flex-col md:flex-row items-center justify-between mb-8">
+                            <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <h2 className="text-3xl font-bold flex items-center gap-2">
+                                        <Icon name="Map" className="text-[var(--color-accent-blue)]" /> Spending Near You
+                                    </h2>
+                                    <span className="px-2 py-1 rounded-full bg-red-100 text-red-600 text-xs font-bold flex items-center gap-1 animate-pulse">
+                                        <Icon name="Radio" size={12} /> LIVE
+                                    </span>
+                                </div>
+                                <p className="text-gray-600">Real-time project tracking. Currently viewing: <span className="font-bold text-black">Berlin, Germany</span>.</p>
+                            </div>
+                            <div className="flex items-center gap-3 bg-white p-2 rounded-full shadow-sm border border-gray-200 mt-4 md:mt-0">
+                                <span className={`text-sm font-medium ${!isAdminView ? 'text-black' : 'text-gray-400'}`}>Citizen View</span>
+                                <button onClick={() => setIsAdminView(!isAdminView)} className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${isAdminView ? 'bg-[var(--color-accent-purple)]' : 'bg-gray-200'}`}>
+                                    <motion.div className="w-4 h-4 bg-white rounded-full shadow-md" animate={{ x: isAdminView ? 24 : 0 }} />
+                                </button>
+                                <span className={`text-sm font-medium ${isAdminView ? 'text-[var(--color-accent-purple)]' : 'text-gray-400'}`}>City Admin</span>
+                            </div>
+                        </div>
+                        <div className="relative w-full h-[500px] rounded-3xl overflow-hidden shadow-xl bg-slate-100 border border-gray-200 group">
+                            <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+                            <div className="absolute inset-0 opacity-30 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/ec/Berlin_map_city_center.png')] bg-cover bg-center grayscale" />
+                            {localProjects.map((project, i) => (
+                                <motion.div key={project.id} className="absolute cursor-pointer" style={{ top: `${40 + (Math.sin(i * 1.5) * 20)}%`, left: `${50 + (Math.cos(i * 1.5) * 20)}%` }} initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.2 }} whileHover={{ scale: 1.2, zIndex: 10 }}>
+                                    <div className={`relative flex flex-col items-center ${isAdminView ? 'opacity-40' : 'opacity-100'}`}>
+                                        <div className="w-4 h-4 rounded-full bg-[var(--color-accent-blue)] ring-4 ring-white/50 shadow-lg animate-pulse" />
+                                        <div className="mt-2 bg-white px-3 py-1 rounded-lg shadow-lg text-xs font-bold whitespace-nowrap flex flex-col items-center">
+                                            <span>{project.title}</span>
+                                            <span className="text-[var(--color-accent-blue)]">{project.amount}</span>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                            {isAdminView && (
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 pointer-events-none">
+                                    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-red-500/20 blur-[80px] rounded-full" />
+                                    <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-blue-500/20 blur-[80px] rounded-full" />
+                                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur p-4 rounded-xl shadow-lg border border-gray-200">
+                                        <h4 className="font-bold text-sm mb-2 flex items-center gap-2"><Icon name="Layers" size={14} /> Berlin District Efficiency</h4>
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between text-xs"><span>Mitte Budget Utilization</span><span className="font-mono font-bold text-green-600">94%</span></div>
+                                            <div className="w-32 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-green-500 w-[94%]" /></div>
+                                            <div className="flex justify-between text-xs"><span>Kreuzberg Project Delays</span><span className="font-mono font-bold text-red-500">12%</span></div>
+                                            <div className="w-32 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-red-500 w-[12%]" /></div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                            <div className="absolute bottom-6 right-6 flex flex-col gap-2">
+                                <button className="p-2 bg-white rounded-lg shadow-md hover:bg-gray-50 text-gray-600"><Icon name="Navigation" size={20} /></button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const VotingInterface = ({ isGuardian, onDonate }) => {
+            const [isConnected, setIsConnected] = useState(false);
+            const [blocks, setBlocks] = useState([1, 2, 3]);
+            const [votedId, setVotedId] = useState(null);
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setBlocks(prev => [...prev.slice(-4), prev[prev.length - 1] + 1]);
+                }, 3000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const handleVote = (id) => {
+                if (!isConnected) return;
+                setVotedId(id);
+            };
+
+            return (
+                <section className="w-full py-20 px-4 bg-black text-white overflow-hidden relative">
+                    <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+                    <div className="container mx-auto relative z-10">
+                        <div className="flex flex-col md:flex-row items-center justify-between mb-12">
+                            <div>
+                                <div className="flex items-center gap-3 mb-2">
+                                    <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">On-Chain Governance</h2>
+                                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-900/30 border border-green-500/30 text-green-400 text-[10px] font-mono uppercase tracking-wider">
+                                        <Icon name="Wifi" size={10} className="animate-pulse" /> Live Mainnet
+                                    </div>
+                                </div>
+                                <p className="text-gray-400">Guardians decide what we investigate next. Immutable. Transparent.</p>
+                            </div>
+                            <button onClick={() => setIsConnected(!isConnected)} className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all ${isConnected ? 'bg-green-500/20 text-green-400 border border-green-500/50' : 'bg-white text-black hover:bg-gray-200'}`}>
+                                <Icon name="Wallet" size={18} />
+                                {isConnected ? '0x12...8F4' : 'Connect Wallet'}
+                            </button>
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div className="lg:col-span-2 space-y-4">
+                                {proposals.map((prop) => (
+                                    <motion.div key={prop.id} className={`p-6 rounded-2xl border ${votedId === prop.id ? 'border-green-500 bg-green-500/10' : 'border-gray-800 bg-gray-900/50'} backdrop-blur-sm relative overflow-hidden group`} whileHover={{ scale: 1.01 }}>
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div><span className="text-xs font-mono text-gray-500 mb-1 block">PROPOSAL #{prop.id}</span><h3 className="text-xl font-bold">{prop.title}</h3></div>
+                                            <div className="flex items-center gap-2 text-sm font-mono text-gray-400"><Icon name="Box" size={14} /> Block {18492 + prop.id}</div>
+                                        </div>
+                                        <div className="flex items-center justify-between mt-6">
+                                            <div className="w-full max-w-xs">
+                                                <div className="flex justify-between text-xs mb-1 text-gray-400"><span>Votes</span><span>{prop.votes.toLocaleString()}</span></div>
+                                                <div className="h-1 bg-gray-800 rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-blue-500 to-purple-500" style={{ width: `${(prop.votes / 3000) * 100}%` }} /></div>
+                                            </div>
+                                            {isGuardian ? (
+                                                <button onClick={() => handleVote(prop.id)} disabled={votedId !== null} className={`px-4 py-2 rounded-lg font-bold text-sm transition-colors ${votedId === prop.id ? 'bg-green-500 text-black' : 'bg-white text-black hover:bg-gray-200'}`}>{votedId === prop.id ? 'Voted' : 'Vote'}</button>
+                                            ) : (
+                                                <button onClick={onDonate} className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm bg-gray-800 text-gray-400 hover:bg-gray-700 transition-colors"><Icon name="Lock" size={14} /> Unlock</button>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 backdrop-blur-sm">
+                                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Live Ledger</h3>
+                                <div className="relative h-[400px] flex flex-col items-center justify-end gap-4 overflow-hidden">
+                                    <AnimatePresence>
+                                        {blocks.map((block) => (
+                                            <motion.div key={block} initial={{ y: -50, opacity: 0, scale: 0.8 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: 50, opacity: 0 }} className="w-full p-4 rounded-xl bg-gradient-to-br from-gray-800 to-black border border-gray-700 flex items-center justify-between">
+                                                <div className="flex items-center gap-3"><div className="w-8 h-8 rounded bg-blue-500/20 flex items-center justify-center text-blue-400"><Icon name="Box" size={16} /></div><div><div className="text-xs text-gray-500">Block Hash</div><div className="font-mono text-xs text-gray-300">0x8a...9f2</div></div></div><div className="text-xs text-green-400 font-mono">+4 Votes</div>
+                                            </motion.div>
+                                        ))}
+                                    </AnimatePresence>
+                                    <div className="absolute top-0 w-full h-20 bg-gradient-to-b from-black to-transparent z-10" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const DonationModal = ({ isOpen, onClose, onSuccess }) => {
+            const [step, setStep] = useState('select');
+
+            const handleDonate = () => {
+                setStep('processing');
+                setTimeout(() => {
+                    setStep('success');
+                    setTimeout(() => {
+                        onSuccess();
+                        onClose();
+                        setStep('select');
+                    }, 2000);
+                }, 1500);
+            };
+
+            return (
+                <AnimatePresence>
+                    {isOpen && (
+                        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+                            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative">
+                                <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"><Icon name="X" size={20} /></button>
+                                {step === 'select' && (
+                                    <div className="p-8">
+                                        <div className="flex justify-center mb-6"><div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white shadow-lg"><Icon name="Shield" size={32} /></div></div>
+                                        <h3 className="text-2xl font-bold text-center mb-2">Become a Guardian</h3>
+                                        <p className="text-center text-gray-500 mb-8">Support transparency and unlock your right to vote on our next investigation.</p>
+                                        <div className="space-y-3 mb-8">
+                                            <button onClick={handleDonate} className="w-full p-4 rounded-xl border-2 border-gray-100 hover:border-[var(--color-accent-blue)] hover:bg-blue-50 transition-all flex items-center justify-between group"><span className="font-bold">Monthly Patron</span><span className="text-[var(--color-accent-blue)] font-bold">€5 / mo</span></button>
+                                            <button onClick={handleDonate} className="w-full p-4 rounded-xl border-2 border-gray-100 hover:border-[var(--color-accent-purple)] hover:bg-purple-50 transition-all flex items-center justify-between group"><span className="font-bold">One-Time Guardian</span><span className="text-[var(--color-accent-purple)] font-bold">€25</span></button>
+                                        </div>
+                                        <p className="text-xs text-center text-gray-400">Includes "Guardian" NFT Badge & Voting Rights.</p>
+                                    </div>
+                                )}
+                                {step === 'processing' && (
+                                    <div className="p-12 flex flex-col items-center justify-center min-h-[400px]">
+                                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mb-4" />
+                                        <p className="font-medium text-gray-600">Minting Guardian Badge...</p>
+                                    </div>
+                                )}
+                                {step === 'success' && (
+                                    <div className="p-12 flex flex-col items-center justify-center min-h-[400px] bg-green-50">
+                                        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-20 h-20 rounded-full bg-green-500 flex items-center justify-center text-white shadow-xl mb-6"><Icon name="Check" size={40} /></motion.div>
+                                        <h3 className="text-2xl font-bold text-green-800 mb-2">Welcome, Guardian.</h3>
+                                        <p className="text-green-600">Voting rights unlocked.</p>
+                                    </div>
+                                )}
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
+            );
+        };
+
+        const CitizensReceipt = ({ taxAmount, onClose }) => {
+            const [showConfetti, setShowConfetti] = useState(false);
+            if (!taxAmount) return null;
+
+            const impacts = [
+                { id: 'lunch', icon: 'Coffee', label: 'School Lunches Funded', count: Math.floor((taxAmount * 0.18) / 3.50), color: 'text-orange-400', bg: 'bg-orange-400/20' },
+                { id: 'road', icon: 'Bike', label: 'Meters of Bike Lane', count: ((taxAmount * 0.15) / 150).toFixed(1), color: 'text-blue-400', bg: 'bg-blue-400/20' },
+                { id: 'nurse', icon: 'Stethoscope', label: 'Nurse Hours Paid', count: Math.floor((taxAmount * 0.28) / 25), color: 'text-pink-400', bg: 'bg-pink-400/20' }
+            ];
+
+            const handleShare = () => {
+                setShowConfetti(true);
+                setTimeout(() => setShowConfetti(false), 3000);
+            };
+
+            return (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-lg p-4">
+                    <div className="relative w-full max-w-sm">
+                        <button onClick={onClose} className="absolute -top-12 right-0 p-2 text-white/50 hover:text-white transition-colors"><Icon name="X" size={24} /></button>
+                        <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-3xl overflow-hidden shadow-2xl relative">
+                            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[var(--color-accent-purple)]/20 to-transparent blur-2xl" />
+                            <div className="p-8 text-center relative z-10">
+                                <div className="inline-block px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-mono text-gray-400 mb-6">2025 CITIZEN WRAPPED</div>
+                                <h2 className="text-3xl font-bold text-white mb-2">Your Impact</h2>
+                                <p className="text-gray-400 text-sm mb-8">Thanks for fueling society.</p>
+                                <div className="space-y-4 mb-8">
+                                    {impacts.map((item, i) => (
+                                        <motion.div key={item.id} initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1 + 0.2 }} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                                            <div className={`p-3 rounded-xl ${item.bg} ${item.color}`}><Icon name={item.icon} size={20} /></div>
+                                            <div className="text-left"><div className={`text-2xl font-bold text-white`}>{item.count}</div><div className="text-xs text-gray-400 uppercase tracking-wider">{item.label}</div></div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                                <div className="pt-6 border-t border-white/10 flex flex-col gap-3">
+                                    <div className="flex justify-between text-sm text-gray-400 font-mono"><span>TOTAL CONTRIBUTION</span><span className="text-white">€{taxAmount.toLocaleString()}</span></div>
+                                    <div className="flex justify-between text-sm text-gray-400 font-mono"><span>STATUS</span><span className="text-green-400 flex items-center gap-1"><Icon name="Heart" size={12} fill="currentColor" /> HERO</span></div>
+                                </div>
+                            </div>
+                            <div className="p-4 bg-white/5 border-t border-white/10 flex gap-3">
+                                <button onClick={handleShare} className="flex-1 py-3 rounded-xl bg-white text-black font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors"><Icon name="Share2" size={18} /> Share Story</button>
+                                <button className="p-3 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-colors"><Icon name="Download" size={18} /></button>
+                            </div>
+                            <AnimatePresence>
+                                {showConfetti && (
+                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 pointer-events-none flex items-center justify-center bg-black/40 backdrop-blur-[2px] z-50">
+                                        <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white text-black px-6 py-3 rounded-full font-bold shadow-xl">Image Saved! 📸</motion.div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
+                    </div>
+                </motion.div>
+            );
+        };
+
+        const ScandalTracker = () => {
+            return (
+                <section className="w-full py-20 px-4 bg-white">
+                    <div className="container max-w-4xl mx-auto">
+                        <motion.div className="flex items-center gap-3 mb-12" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                            <div className="p-3 rounded-full bg-red-100 text-red-600"><Icon name="AlertTriangle" size={24} /></div>
+                            <h2 className="text-3xl font-bold">Scandal Tracker</h2>
+                        </motion.div>
+                        <div className="space-y-6">
+                            {scandals.map((item, index) => (
+                                <motion.div key={item.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group relative p-6 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-lg transition-all duration-300">
+                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                                        <div><h3 className="text-xl font-bold text-gray-900">{item.title}</h3><span className="text-sm text-gray-500">{item.date}</span></div>
+                                        <div className="flex items-center gap-4">
+                                            <span className="text-xl font-mono font-bold text-red-500">-{item.amount}</span>
+                                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${item.status === 'Resolved' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>{item.status}</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-gray-600 mb-4">{item.description}</p>
+                                    <div className="flex items-center gap-2 text-sm text-[var(--color-accent-blue)] font-medium cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">View Official Report <Icon name="ExternalLink" size={14} /></div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const Hero = () => {
+            return (
+                <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
+                        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-br from-[var(--color-accent-blue)] to-transparent blur-[100px]" />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-tl from-[var(--color-accent-purple)] to-transparent blur-[100px]" />
+                    </div>
+                    <div className="z-10 text-center px-4">
+                        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} className="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-gradient">Where does your money go?</motion.h1>
+                        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }} className="text-xl md:text-2xl text-[var(--color-text-muted)] mb-12 max-w-2xl mx-auto">Let’s follow its journey.</motion.p>
+                        <div className="relative h-64 w-64 mx-auto mb-12 perspective-1000">
+                            <motion.div className="w-48 h-48 mx-auto rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 shadow-2xl flex items-center justify-center relative z-20" animate={{ y: [-10, 10, -10], rotateY: [0, 10, 0, -10, 0], boxShadow: ["0 20px 50px rgba(234, 179, 8, 0.3)", "0 10px 30px rgba(234, 179, 8, 0.2)", "0 20px 50px rgba(234, 179, 8, 0.3)"] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}>
+                                <div className="absolute inset-1 rounded-full border-2 border-yellow-200 opacity-50" />
+                                <span className="text-6xl font-bold text-white drop-shadow-md">€</span>
+                                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
+                            </motion.div>
+                            <motion.div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-4 bg-black/10 rounded-[100%] blur-md" animate={{ scale: [1, 0.8, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
+                        </div>
+                    </div>
+                    <motion.div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[var(--color-text-muted)] flex flex-col items-center gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }}>
+                        <span className="text-sm font-medium tracking-widest uppercase">Scroll to split</span>
+                        <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 2, repeat: Infinity }}><Icon name="ArrowDown" size={20} /></motion.div>
+                    </motion.div>
+                </section>
+            );
+        };
+
+        const TimeSlider = ({ currentYear, onYearChange }) => {
+            const years = [2020, 2021, 2022, 2023, 2024, 2025];
+            return (
+                <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 glass-panel px-6 py-3 flex items-center gap-4">
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Timeline</span>
+                    <div className="flex items-center gap-2">
+                        {years.map((year) => (
+                            <button key={year} onClick={() => onYearChange(year)} className={`relative px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${currentYear === year ? 'text-black font-bold' : 'text-gray-400 hover:text-gray-600'}`}>
+                                {currentYear === year && <motion.div layoutId="activeYear" className="absolute inset-0 bg-gray-200 rounded-lg -z-10" transition={{ type: "spring", stiffness: 300, damping: 30 }} />}
+                                {year}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const Personalizer = ({ onTaxUpdate }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [amount, setAmount] = useState('');
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                onTaxUpdate(Number(amount));
+                setIsOpen(false);
+            };
+
+            return (
+                <React.Fragment>
+                    <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.95 }} onClick={() => setIsOpen(true)} className="fixed bottom-8 right-8 z-50 p-4 rounded-full bg-[var(--color-accent-blue)] text-white shadow-lg hover:shadow-xl transition-shadow">
+                        <Icon name="Calculator" size={24} />
+                    </motion.button>
+                    <AnimatePresence>
+                        {isOpen && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4">
+                                <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} className="bg-white rounded-3xl p-8 shadow-2xl max-w-md w-full relative overflow-hidden">
+                                    <button onClick={() => setIsOpen(false)} className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"><Icon name="X" size={20} /></button>
+                                    <h3 className="text-2xl font-bold mb-2">Personalize the Flow</h3>
+                                    <p className="text-[var(--color-text-muted)] mb-6">Enter your annual tax contribution to see exactly where your money goes.</p>
+                                    <form onSubmit={handleSubmit}>
+                                        <div className="relative mb-6">
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
+                                            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="5000" className="w-full pl-10 pr-4 py-4 text-3xl font-bold bg-gray-50 rounded-2xl border-2 border-transparent focus:border-[var(--color-accent-blue)] focus:bg-white outline-none transition-all" autoFocus />
+                                        </div>
+                                        <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" className="w-full py-4 rounded-xl bg-black text-white font-bold text-lg hover:bg-gray-800 transition-colors">Show My Impact</motion.button>
+                                    </form>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </React.Fragment>
+            );
+        };
+
+        const CityAdminDashboard = ({ onClose }) => {
+            const [isGenerating, setIsGenerating] = useState(false);
+
+            const handleExport = () => {
+                setIsGenerating(true);
+
+                // Generate CSV content
+                const headers = "Metric,Value,Trend\n";
+                const rows = [
+                    "Budget Efficiency,87/100,+2.4%",
+                    "Public Trust Index,64%,+5.1%",
+                    "Active Projects,142,-1.2%",
+                    "Response Time,1.2 Days,+12.5%"
+                ].join("\n");
+
+                const csvContent = "data:text/csv;charset=utf-8," + headers + rows;
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "city_admin_report.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                setTimeout(() => setIsGenerating(false), 2000);
+            };
+
+            const MetricCard = ({ title, value, trend, icon, color }) => (
+                <div className="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                    <div className="flex justify-between items-start mb-4">
+                        <div className={`p-3 rounded-xl ${color} bg-opacity-10 text-${color.split('-')[1]}-600`}>
+                            <Icon name={icon} size={20} />
+                        </div>
+                        <span className={`text-xs font-bold px-2 py-1 rounded-full ${trend.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                            {trend}
+                        </span>
+                    </div>
+                    <h3 className="text-gray-500 text-sm font-medium mb-1">{title}</h3>
+                    <div className="text-2xl font-bold text-gray-900">{value}</div>
+                </div>
+            );
+
+            return (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[80] bg-gray-50 overflow-y-auto">
+                    <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">A</div>
+                            <div><h1 className="text-xl font-bold">City Admin Pro</h1><p className="text-xs text-gray-500">Berlin Municipality • Enterprise License</p></div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <button onClick={handleExport} disabled={isGenerating} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-black text-white font-bold text-sm hover:bg-gray-800 transition-colors disabled:opacity-50">
+                                {isGenerating ? <Icon name="Loader2" className="animate-spin" size={16} /> : <Icon name="Download" size={16} />}
+                                {isGenerating ? 'Generating Report...' : 'Export Report'}
+                            </button>
+                            <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500"><Icon name="X" size={20} /></button>
+                        </div>
+                    </div>
+
+                    <div className="container mx-auto max-w-6xl p-8">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                            <MetricCard title="Budget Efficiency" value="87/100" trend="+2.4%" icon="PieChart" color="bg-blue-500" />
+                            <MetricCard title="Public Trust Index" value="64%" trend="+5.1%" icon="Activity" color="bg-purple-500" />
+                            <MetricCard title="Active Projects" value="142" trend="-1.2%" icon="Building" color="bg-orange-500" />
+                            <MetricCard title="Response Time" value="1.2 Days" trend="+12.5%" icon="Clock" color="bg-green-500" />
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="font-bold text-lg">Real-Time Allocation</h3>
+                                    <div className="flex gap-2"><button className="px-3 py-1 text-xs font-bold bg-gray-100 rounded-md">Daily</button><button className="px-3 py-1 text-xs font-bold text-gray-400 hover:bg-gray-50 rounded-md">Weekly</button></div>
+                                </div>
+                                <div className="h-64 flex items-end justify-between gap-2 px-4">
+                                    {[40, 65, 35, 85, 55, 70, 45].map((h, i) => (
+                                        <div key={i} className="w-full bg-blue-50 rounded-t-lg relative group">
+                                            <div className="absolute bottom-0 left-0 right-0 bg-blue-500 rounded-t-lg transition-all duration-500 group-hover:bg-blue-600" style={{ height: `${h}%` }} />
+                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">€{h}M</div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex justify-between mt-4 text-xs text-gray-400 font-mono"><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span></div>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Icon name="Zap" className="text-yellow-500" size={18} /> Daily Briefing</h3>
+                                    <div className="space-y-4">
+                                        <div className="flex gap-3 items-start">
+                                            <div className="w-2 h-2 rounded-full bg-red-500 mt-2" />
+                                            <div><h4 className="text-sm font-bold">Budget Alert: Education</h4><p className="text-xs text-gray-500">Spending velocity 15% above forecast in Mitte district.</p></div>
+                                        </div>
+                                        <div className="flex gap-3 items-start">
+                                            <div className="w-2 h-2 rounded-full bg-green-500 mt-2" />
+                                            <div><h4 className="text-sm font-bold">Project Completed</h4><p className="text-xs text-gray-500">Tiergarten Replanting finished 2 days early.</p></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl p-6 text-white shadow-lg">
+                                    <h3 className="font-bold text-lg mb-2">AI Insights</h3>
+                                    <p className="text-sm text-gray-400 mb-4">Based on current trends, reallocating 5% from Administration to Infrastructure could improve citizen satisfaction by 12%.</p>
+                                    <button className="w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm font-bold transition-colors">View Simulation</button>
+                                </div>
+                            </div>
+                            <p className="text-gray-600 mb-4">{item.description}</p>
+                            <div className="flex items-center gap-2 text-sm text-[var(--color-accent-blue)] font-medium cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">View Official Report <Icon name="ExternalLink" size={14} /></div>
+                        </motion.div>
+                            ))}
+                    </div>
+                </div>
+                </section >
+            );
+        };
+
+        const Hero = () => {
+            return (
+                <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
+                        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-br from-[var(--color-accent-blue)] to-transparent blur-[100px]" />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-tl from-[var(--color-accent-purple)] to-transparent blur-[100px]" />
+                    </div>
+                    <div className="z-10 text-center px-4">
+                        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} className="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-gradient">Where does your money go?</motion.h1>
+                        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }} className="text-xl md:text-2xl text-[var(--color-text-muted)] mb-12 max-w-2xl mx-auto">Let’s follow its journey.</motion.p>
+                        <div className="relative h-64 w-64 mx-auto mb-12 perspective-1000">
+                            <motion.div className="w-48 h-48 mx-auto rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 shadow-2xl flex items-center justify-center relative z-20" animate={{ y: [-10, 10, -10], rotateY: [0, 10, 0, -10, 0], boxShadow: ["0 20px 50px rgba(234, 179, 8, 0.3)", "0 10px 30px rgba(234, 179, 8, 0.2)", "0 20px 50px rgba(234, 179, 8, 0.3)"] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}>
+                                <div className="absolute inset-1 rounded-full border-2 border-yellow-200 opacity-50" />
+                                <span className="text-6xl font-bold text-white drop-shadow-md">€</span>
+                                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
+                            </motion.div>
+                            <motion.div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-4 bg-black/10 rounded-[100%] blur-md" animate={{ scale: [1, 0.8, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
+                        </div>
+                    </div>
+                    <motion.div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[var(--color-text-muted)] flex flex-col items-center gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }}>
+                        <span className="text-sm font-medium tracking-widest uppercase">Scroll to split</span>
+                        <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 2, repeat: Infinity }}><Icon name="ArrowDown" size={20} /></motion.div>
+                    </motion.div>
+                </section>
+            );
+        };
+
+        const TimeSlider = ({ currentYear, onYearChange }) => {
+            const years = [2020, 2021, 2022, 2023, 2024, 2025];
+            return (
+                <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 glass-panel px-6 py-3 flex items-center gap-4">
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Timeline</span>
+                    <div className="flex items-center gap-2">
+                        {years.map((year) => (
+                            <button key={year} onClick={() => onYearChange(year)} className={`relative px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${currentYear === year ? 'text-black font-bold' : 'text-gray-400 hover:text-gray-600'}`}>
+                                {currentYear === year && <motion.div layoutId="activeYear" className="absolute inset-0 bg-gray-200 rounded-lg -z-10" transition={{ type: "spring", stiffness: 300, damping: 30 }} />}
+                                {year}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const Personalizer = ({ onTaxUpdate }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [amount, setAmount] = useState('');
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                onTaxUpdate(Number(amount));
+                setIsOpen(false);
+            };
+
+            return (
+                <React.Fragment>
+                    <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.95 }} onClick={() => setIsOpen(true)} className="fixed bottom-8 right-8 z-50 p-4 rounded-full bg-[var(--color-accent-blue)] text-white shadow-lg hover:shadow-xl transition-shadow">
+                        <Icon name="Calculator" size={24} />
+                    </motion.button>
+                    <AnimatePresence>
+                        {isOpen && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4">
+                                <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} className="bg-white rounded-3xl p-8 shadow-2xl max-w-md w-full relative overflow-hidden">
+                                    <button onClick={() => setIsOpen(false)} className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"><Icon name="X" size={20} /></button>
+                                    <h3 className="text-2xl font-bold mb-2">Personalize the Flow</h3>
+                                    <p className="text-[var(--color-text-muted)] mb-6">Enter your annual tax contribution to see exactly where your money goes.</p>
+                                    <form onSubmit={handleSubmit}>
+                                        <div className="relative mb-6">
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
+                                            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="5000" className="w-full pl-10 pr-4 py-4 text-3xl font-bold bg-gray-50 rounded-2xl border-2 border-transparent focus:border-[var(--color-accent-blue)] focus:bg-white outline-none transition-all" autoFocus />
+                                        </div>
+                                        <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" className="w-full py-4 rounded-xl bg-black text-white font-bold text-lg hover:bg-gray-800 transition-colors">Show My Impact</motion.button>
+                                    </form>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </React.Fragment>
+            );
+        };
+
+        const CityAdminDashboard = ({ onClose }) => {
+            const [isGenerating, setIsGenerating] = useState(false);
+
+            const handleExport = () => {
+                setIsGenerating(true);
+
+                // Generate CSV content
+                const headers = "Metric,Value,Trend\n";
+                const rows = [
+                    "Budget Efficiency,87/100,+2.4%",
+                    "Public Trust Index,64%,+5.1%",
+                    "Active Projects,142,-1.2%",
+                    "Response Time,1.2 Days,+12.5%"
+                ].join("\n");
+
+                const csvContent = "data:text/csv;charset=utf-8," + headers + rows;
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "city_admin_report.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                setTimeout(() => setIsGenerating(false), 2000);
+            };
+
+            const MetricCard = ({ title, value, trend, icon, color }) => (
+                <div className="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                    <div className="flex justify-between items-start mb-4">
+                        <div className={`p-3 rounded-xl ${color} bg-opacity-10 text-${color.split('-')[1]}-600`}>
+                            <Icon name={icon} size={20} />
+                        </div>
+                        <span className={`text-xs font-bold px-2 py-1 rounded-full ${trend.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                            {trend}
+                        </span>
+                    </div>
+                    <h3 className="text-gray-500 text-sm font-medium mb-1">{title}</h3>
+                    <div className="text-2xl font-bold text-gray-900">{value}</div>
+                </div>
+            );
+
+            return (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[80] bg-gray-50 overflow-y-auto">
+                    <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">A</div>
+                            <div><h1 className="text-xl font-bold">City Admin Pro</h1><p className="text-xs text-gray-500">Berlin Municipality • Enterprise License</p></div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <button onClick={handleExport} disabled={isGenerating} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-black text-white font-bold text-sm hover:bg-gray-800 transition-colors disabled:opacity-50">
+                                {isGenerating ? <Icon name="Loader2" className="animate-spin" size={16} /> : <Icon name="Download" size={16} />}
+                                {isGenerating ? 'Generating Report...' : 'Export Report'}
+                            </button>
+                            <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500"><Icon name="X" size={20} /></button>
+                        </div>
+                    </div>
+
+                    <div className="container mx-auto max-w-6xl p-8">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                            <MetricCard title="Budget Efficiency" value="87/100" trend="+2.4%" icon="PieChart" color="bg-blue-500" />
+                            <MetricCard title="Public Trust Index" value="64%" trend="+5.1%" icon="Activity" color="bg-purple-500" />
+                            <MetricCard title="Active Projects" value="142" trend="-1.2%" icon="Building" color="bg-orange-500" />
+                            <MetricCard title="Response Time" value="1.2 Days" trend="+12.5%" icon="Clock" color="bg-green-500" />
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="font-bold text-lg">Real-Time Allocation</h3>
+                                    <div className="flex gap-2"><button className="px-3 py-1 text-xs font-bold bg-gray-100 rounded-md">Daily</button><button className="px-3 py-1 text-xs font-bold text-gray-400 hover:bg-gray-50 rounded-md">Weekly</button></div>
+                                </div>
+                                <div className="h-64 flex items-end justify-between gap-2 px-4">
+                                    {[40, 65, 35, 85, 55, 70, 45].map((h, i) => (
+                                        <div key={i} className="w-full bg-blue-50 rounded-t-lg relative group">
+                                            <div className="absolute bottom-0 left-0 right-0 bg-blue-500 rounded-t-lg transition-all duration-500 group-hover:bg-blue-600" style={{ height: `${h}%` }} />
+                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">€{h}M</div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex justify-between mt-4 text-xs text-gray-400 font-mono"><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span></div>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Icon name="Zap" className="text-yellow-500" size={18} /> Daily Briefing</h3>
+                                    <div className="space-y-4">
+                                        <div className="flex gap-3 items-start">
+                                            <div className="w-2 h-2 rounded-full bg-red-500 mt-2" />
+                                            <div><h4 className="text-sm font-bold">Budget Alert: Education</h4><p className="text-xs text-gray-500">Spending velocity 15% above forecast in Mitte district.</p></div>
+                                        </div>
+                                        <div className="flex gap-3 items-start">
+                                            <div className="w-2 h-2 rounded-full bg-green-500 mt-2" />
+                                            <div><h4 className="text-sm font-bold">Project Completed</h4><p className="text-xs text-gray-500">Tiergarten Replanting finished 2 days early.</p></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl p-6 text-white shadow-lg">
+                                    <h3 className="font-bold text-lg mb-2">AI Insights</h3>
+                                    <p className="text-sm text-gray-400 mb-4">Based on current trends, reallocating 5% from Administration to Infrastructure could improve citizen satisfaction by 12%.</p>
+                                    <button className="w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm font-bold transition-colors">View Simulation</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+            );
+        };
+
+        const App = () => {
+            const [taxAmount, setTaxAmount] = useState(null);
+            const [year, setYear] = useState(2025);
+            const [isGuardian, setIsGuardian] = useState(false);
+            const [showDonation, setShowDonation] = useState(false);
+            const [showReceipt, setShowReceipt] = useState(false);
+            const [showAdmin, setShowAdmin] = useState(false);
+
+            const handleTaxUpdate = (amount) => {
+                setTaxAmount(amount);
+                setShowReceipt(true);
+            };
+
+            return (
+                <div className="app-container pb-24">
+                    <Hero />
+                    <BudgetStream taxAmount={taxAmount} year={year} />
+                    <NearMeMap />
+                    <ScandalTracker />
+                    <VotingInterface
+                        isGuardian={isGuardian}
+                        onDonate={() => setShowDonation(true)}
+                    />
+                    <Personalizer onTaxUpdate={handleTaxUpdate} />
+                    <TimeSlider currentYear={year} onYearChange={setYear} />
+
+                    <DonationModal
+                        isOpen={showDonation}
+                        onClose={() => setShowDonation(false)}
+                        onSuccess={() => setIsGuardian(true)}
+                    />
+
+                    <AnimatePresence>
+                        {showReceipt && (
+                            <CitizensReceipt
+                                taxAmount={taxAmount}
+                                onClose={() => setShowReceipt(false)}
+                            />
+                        )}
+                    </AnimatePresence>
+
+                    <AnimatePresence>
+                        {showAdmin && (
+                            <CityAdminDashboard onClose={() => setShowAdmin(false)} />
+                        )}
+                    </AnimatePresence>
+
+                    <button
+                        onClick={() => setShowAdmin(true)}
+                        className="fixed top-4 right-4 z-40 p-2 rounded-full bg-black/5 hover:bg-black/10 transition-colors text-xs font-bold text-gray-400"
+                    >
+                        ADMIN
+                    </button>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+
+        // INSERT_APP_HERE
+
+    </script>
+</body>
+
+</html>
