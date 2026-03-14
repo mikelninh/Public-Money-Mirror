@@ -1,221 +1,138 @@
 # Public Money Mirror
 
-**Follow the flow. Every euro has a story.**
+**Wo landet dein Steuergeld? Wer entscheidet das? Was kannst du tun?**
 
-Public Money Mirror identifies savings and anomalies in public spending, powers success-fee recoveries for governments, and offers enterprise/API licenses and freemium consumer subscriptions.
+Public Money Mirror macht den deutschen Bundeshaushalt (€489 Mrd) verständlich, persönlich und handlungsfähig. Nicht noch ein Daten-Dashboard — ein Demokratie-Werkzeug.
+
+## Was kann PMM?
+
+### Persönlich
+- **Lebenssituation-Filter** — Elternteil, Student:in, Rentner:in, Angestellt, Selbstständig, Arbeitsuchend. Der ganze Haushalt aus DEINER Perspektive.
+- **Themen-Lookup** — Tippe "Tierschutz" und sieh sofort: wer zuständig ist, wie viel Budget es gibt, was versprochen wurde, welche Lobby-Kräfte wirken, welches Land es besser macht.
+- **Live-Steuerzähler** — €15.497 pro Sekunde gibt der Bund aus. Sieh in Echtzeit zu.
+
+### Transparenz
+- **Bundeshaushalt 2018-2025** — Echte Einzelpläne vom BMF, Live-API-Anbindung an bundeshaushalt.de
+- **Lobbyregister** — Wer gibt wie viel aus, um die Politik zu beeinflussen? Live-Daten vom Bundestag.
+- **Wirkungsketten** — Lobby → Partei → Haushalt → Dein Leben. 4 konkrete Ketten: Warum dein Zug Verspätung hat, warum dein Krankenkassenbeitrag steigt.
+- **Verschwendungstracker** — 7 dokumentierte Fälle, €25+ Mrd Schaden, mit Quellen und Links.
+
+### Bewertung
+- **Politik-Zeugnis** — Koalitionsvertrag-Versprechen vs. Realität. Note 1-6, mit transparenter Methodik. "So verbessert ihr eure Note" — direkt an die Politik.
+- **MdB Transparenz-Index** — 28 Abgeordnete, 5 Faktoren, 0-100 Punkte + Schulnote. Anwesenheit, Erreichbarkeit, Nebeneinkünfte, Aktivität, Transparenz.
+- **Parteienvergleich** — Matrix, Radar-Chart, Dot-Plot, Mini-Wahlkompass mit 6 Fragen.
+
+### Lernen
+- **Globale Vorbilder** — Für jedes Problem gibt es ein Land, das eine Lösung hat. 15+ Vorbilder mit konkreten Zahlen: Schweden (Rente), Estland (Bildung), Wien (Wohnen), Dänemark (Klima).
+- **"Wusstest du?"** — Überraschende Budget-Fakten mit Quellen.
+
+### Handeln
+- **Budget-Simulator** — Verschiebe die Regler, sieh was passiert. "↑ Das entspricht 333 Schulneubauten." Teile deinen Entwurf.
+- **MdB-Brief-Generator** — 3 vorformulierte Briefe mit Quellen (Bundesrechnungshof, OECD). MdB-Name eintragen, kopieren, via abgeordnetenwatch.de senden.
+- **Bürger-Vorschläge** — Eigene Ideen einreichen, über die besten abstimmen.
+- **Bürgersignal** — Transparenz-Forderungen von Transparency International, Open Knowledge Foundation. Zeige, was dir wichtig ist.
+
+## Datenquellen
+
+| Quelle | Was | API |
+|--------|-----|-----|
+| [bundeshaushalt.de](https://www.bundeshaushalt.de) | Bundeshaushalt Einzelpläne, Soll/Ist | Live |
+| [Lobbyregister Bundestag](https://www.lobbyregister.bundestag.de) | 6.760+ Organisationen, Ausgaben, Interessen | Live |
+| [Bundesrechnungshof](https://www.bundesrechnungshof.de) | Prüfberichte, Verschwendungsfälle | Statisch |
+| [abgeordnetenwatch.de](https://www.abgeordnetenwatch.de) | MdB-Antwortquoten, Abstimmungsverhalten | Referenz |
+| [OECD](https://data.oecd.org) | Internationale Vergleichsdaten | Referenz |
+| BMF Monatsberichte | Steuereinnahmen, Haushaltsvollzug | Statisch |
+
+## Tech Stack
+
+- **React 18** + **Vite 5** — Frontend
+- **Tailwind CSS 4** — Styling mit Light/Dark Theme
+- **Framer Motion 11** — Animationen
+- **Lucide React** — Icons
+- Keine Backend-Abhängigkeit — läuft komplett im Browser
 
 ## Quick Start
 
-### Prerequisites
-
-- Docker & Docker Compose
-- Python 3.11+ (for local development)
-- Node.js 20+ (for web frontend)
-
-### Development Setup
-
-1. **Clone and setup**:
 ```bash
-git clone <repo-url>
-cd public-money-mirror
-cp .env.sample .env
-# Edit .env with your configuration
+git clone https://github.com/mikelninh/Public-Money-Mirror.git
+cd Public-Money-Mirror
+npm install
+npm run dev
 ```
 
-2. **Start services**:
-```bash
-make dev
-```
+Öffne `http://localhost:5173`.
 
-This starts:
-- Backend API at `http://localhost:8000`
-- Streamlit dashboard at `http://localhost:8501`
-- Next.js public web at `http://localhost:3000`
-- Postgres database at `localhost:5432`
-- Redis at `localhost:6379`
-- Nginx proxy at `http://localhost:80`
-
-3. **Seed data**:
-```bash
-make seed
-```
-
-4. **Generate demo recovery kit**:
-```bash
-make demo_kit
-```
-
-### API Endpoints
-
-#### Health & Auth
-- `GET /health` - Health check
-- `POST /auth/login` - Login (returns JWT)
-- `POST /auth/signup` - Signup
-- `GET /auth/me` - Current user info
-
-#### Data & Insights
-- `GET /cases?limit=&min_score=&min_euro=` - List ranked cases
-- `GET /cases/{id}` - Get case details
-- `GET /cases/{id}/evidence` - Get case evidence
-- `GET /stories/latest?limit=3` - Get latest story cards
-- `GET /benchmarks/unit_price?cpv=&region=&year=` - Get benchmarks
-- `GET /entities/search?q=` - Search entities
-
-#### Recovery & Billing
-- `POST /recovery_kits/{case_id}` - Generate recovery kit
-- `POST /invoices/success_fee` - Create success fee invoice
-
-#### Consumer
-- `GET /alerts` - User's alerts
-- `POST /alerts` - Create alert
-- `GET /premium/status` - Premium subscription status
-
-#### Enterprise/API
-- `GET /api/v1/risk_score?supplier_id=` - Supplier risk score
-- `GET /api/v1/cases/export.csv` - Export cases CSV
-
-### Sample cURL
-
-```bash
-# Login
-curl -X POST http://localhost:8000/auth/login \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=admin@pmm.local&password=admin123"
-
-# Get cases
-curl http://localhost:8000/cases?limit=10&min_score=50
-
-# Get latest stories
-curl http://localhost:8000/stories/latest?limit=3
-
-# Generate recovery kit (requires auth)
-curl -X POST http://localhost:8000/recovery_kits/1 \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{"include_benchmarks": true, "include_alternatives": true}'
-```
-
-### Makefile Commands
-
-- `make dev` - Start development environment
-- `make test` - Run tests
-- `make fmt` - Format code (black, ruff)
-- `make lint` - Lint code (ruff, mypy)
-- `make seed` - Seed synthetic data
-- `make demo_kit` - Generate demo recovery kit
-- `make clean` - Clean up containers
-- `make build` - Build Docker images
-
-### Environment Variables
-
-See `.env.sample` for all configuration options. Key variables:
-
-- `DATABASE_URL` - Postgres connection string
-- `REDIS_URL` - Redis connection string
-- `SECRET_KEY` - JWT secret key
-- `STRIPE_SECRET_KEY` - Stripe secret key
-- `STRIPE_WEBHOOK_SECRET` - Stripe webhook secret
-
-### User Roles
-
-- `admin` - Full access
-- `analyst` - Can create cases, recovery kits, invoices
-- `gov_client` - Read-only + request recovery kits
-- `consumer` - Public site access + premium alerts
-
-### Project Structure
+## Projektstruktur
 
 ```
 src/
-├── backend/          # FastAPI backend
-│   └── app/
-│       ├── models/   # SQLModel ORM models
-│       ├── schemas/  # Pydantic schemas
-│       ├── routers/  # API routes
-│       └── services/ # Business logic
-├── etl/              # Prefect ETL flows
-│   └── flows/        # Data ingestion flows
-├── analytics/        # Analytics & ML
-│   ├── features/     # Feature engineering
-│   └── models/       # Case ranking models
-├── frontend_streamlit/  # Operator dashboard
-└── web_public/       # Next.js public site
-
-scripts/              # Utility scripts
-docs/                 # Documentation
-deploy/               # Docker & deployment configs
+├── api/                    # API-Clients
+│   ├── bundeshaushalt.js   # bundeshaushalt.de API
+│   └── lobbyregister.js    # Lobbyregister API
+├── components/             # React-Komponenten
+│   ├── Hero.jsx            # Landing
+│   ├── LifeSituation.jsx   # Lebenssituation-Picker
+│   ├── PersonalImpact.jsx  # Persönlicher Budget-Impact
+│   ├── ThemenLookup.jsx    # Themen-Suche
+│   ├── BudgetStream.jsx    # Haushalt-Übersicht (Live API)
+│   ├── BudgetFacts.jsx     # "Wusstest du?"
+│   ├── ImpactChains.jsx    # Lobby → Partei → Budget → Du
+│   ├── PartyCompare.jsx    # Parteienvergleich (4 Tabs)
+│   ├── LobbyTracker.jsx    # Lobbyregister-Auswertung
+│   ├── NearMeMap.jsx       # Bundesweite Projekte
+│   ├── ScandalTracker.jsx  # Verschwendungstracker
+│   ├── PolitikZeugnis.jsx  # Regierungs-Zeugnis
+│   ├── MdBZeugnis.jsx      # MdB Transparenz-Index
+│   ├── VorbilderGlobal.jsx # Internationale Vorbilder + Voting
+│   ├── BudgetSimulator.jsx # "Dein Haushalt" Simulator
+│   ├── BriefGenerator.jsx  # MdB-Brief-Generator
+│   ├── VotingInterface.jsx # Bürgersignal
+│   ├── TaxTicker.jsx       # Live-Steuerzähler
+│   └── ...                 # Theme, Navbar, Utilities
+├── data/                   # Daten-Layer
+│   ├── partyData.js        # 6 Parteien, 6 Kategorien, Quiz
+│   ├── lifeImpact.js       # 6 Lebenssituationen, Wirkungsketten
+│   ├── zeugnis.js          # Koalitionsvertrag-Auswertung
+│   ├── mdbScores.js        # 28 MdBs, 5-Faktoren-Scoring
+│   ├── themen.js           # 15 Policy-Themen mit Vorbildern
+│   └── vorbilder.js        # Globale Vergleiche + Bürger-Vorschläge
+├── data.js                 # Bundeshaushalt 2018-2025 (Fallback)
+└── index.css               # Light/Dark Theme System
 ```
 
-## Features
+## Narrative Architektur
 
-### Anomaly Detection
+Die App erzählt eine Geschichte:
 
-- **Price outliers**: Robust z-score using MAD (Median Absolute Deviation)
-- **Single-bidder risk**: Detects low-competition tenders
-- **Bid rotation**: Collusion heuristic using n-gram entropy
-- **Time overruns**: Planned vs. actual delivery dates
-- **Supplier dependency**: HHI (Herfindahl-Hirschman Index) concentration
+1. **"Wo landet dein Steuergeld?"** — Hook
+2. **"Wer bist du?"** — Personalisierung
+3. **"Was bedeutet das für DICH?"** — Relevanz
+4. **"Was ist dir wichtig?"** — Themen-Deep-Dive
+5. **"So verteilt sich der Haushalt"** — Daten
+6. **"Wusstest du?"** — Überraschung
+7. **"Wie Lobby-Geld deinen Alltag beeinflusst"** — Ursache & Wirkung
+8. **"Wer will was?"** — Parteien
+9. **"Wer bezahlt dafür?"** — Lobbyregister
+10. **"Wo wird gebaut?"** — Lokale Projekte
+11. **"Was geht schief?"** — Accountability
+12. **"Note: 3,4"** — Regierungs-Zeugnis
+13. **"Wie gut machen MdBs ihren Job?"** — Transparenz-Index
+14. **"Andere können das besser"** — Vorbilder + Bürger-Ideen
+15. **"Wie würdest du €489 Mrd verteilen?"** — Simulator
+16. **"Schreib deinem MdB"** — Handlung
+17. **"Was ist dir am wichtigsten?"** — Bürgersignal
 
-### Case Ranking
+## Mitmachen
 
-- Weighted ensemble scoring (0-100)
-- EUR potential estimation with conservative shrinkage
-- Explainability blob with top features and rationale
-- Risk tags for quick categorization
+Issues und PRs willkommen. Besonders gesucht:
 
-### Recovery Kits
+- **Mehr Themen** — Datensätze für weitere Policy-Bereiche
+- **Mehr MdBs** — Scoring für alle 736 Abgeordneten (Bundestag API)
+- **Mehr Vorbilder** — Internationale Vergleiche mit Quellen
+- **Backend** — API für Bürger-Vorschläge, Persistenz, Newsletter
+- **Barrierefreiheit** — WCAG 2.1 AA Compliance
+- **i18n** — Englische Übersetzung
 
-- Benchmark analysis with percentile breakdowns
-- Alternative supplier suggestions
-- Draft renegotiation letters
-- PDF export for government clients
+## Lizenz
 
-### Monetization
-
-1. **Success Fees (B2G)**: 15-25% of realised savings
-2. **Enterprise/API Licenses (B2B)**: Access to risk scores, CSV exports
-3. **Premium Subscriptions (B2C)**: €4.99/month for alerts & dossiers
-
-## Data Sources
-
-- **OpenSpending (Germany)**: Budget aggregates
-- **Bundeshaushalt**: Federal budget CSVs
-- **EU TED**: Public procurement notices (Tenders Electronic Daily)
-
-## Testing
-
-```bash
-make test
-```
-
-Runs pytest with coverage for:
-- Unit tests (anomaly detection, entity resolution)
-- API tests (FastAPI TestClient)
-- Integration tests
-
-## CI/CD
-
-GitHub Actions runs on PR:
-- Tests
-- Linting (ruff, black)
-- Type checking (mypy)
-
-On `main` branch:
-- Builds and pushes Docker images
-
-## Documentation
-
-- `docs/README.md` - General documentation
-- `docs/PILOT_MOU_TEMPLATE.md` - Success-fee pilot MoU template
-- `docs/SUCCESS_FEE_TERMS.md` - Success fee terms & definitions
-- `docs/PRIVACY_SECURITY.md` - Privacy & security controls
-- `docs/ARCHITECTURE.md` - System architecture diagrams
-
-## License
-
-Proprietary - All rights reserved
-
-## Support
-
-For questions or issues, contact: support@publicmoneymirror.com
-# Public-Money-Mirror
+MIT — Offene Daten für eine offene Demokratie.

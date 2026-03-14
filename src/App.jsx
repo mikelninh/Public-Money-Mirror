@@ -14,6 +14,7 @@ import NearMeMap from './components/NearMeMap';
 import ScandalTracker from './components/ScandalTracker';
 import PolitikZeugnis from './components/PolitikZeugnis';
 import MdBZeugnis from './components/MdBZeugnis';
+import VorbilderGlobal from './components/VorbilderGlobal';
 import BudgetSimulator from './components/BudgetSimulator';
 import BriefGenerator from './components/BriefGenerator';
 import VotingInterface from './components/VotingInterface';
@@ -77,7 +78,10 @@ function App() {
             {/* 12. Individual: MdB Transparenz-Index */}
             <MdBZeugnis />
 
-            {/* 12. Play: "Wie würdest du €489 Mrd verteilen?" */}
+            {/* Globale Vorbilder + Bürger-Vorschläge */}
+            <VorbilderGlobal />
+
+            {/* Play: "Wie würdest du €489 Mrd verteilen?" */}
             <BudgetSimulator />
 
             {/* 12. Action: Brief an deinen MdB */}
