@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, ChevronDown, Search, ArrowUpDown, Info, TrendingUp, ExternalLink } from 'lucide-react';
+import { UserCheck, ChevronDown, Search, ArrowUpDown, Info, TrendingUp, ExternalLink, Wifi, WifiOff } from 'lucide-react';
 import { scoreFactors, scoreToNote, sampleMdBs } from '../data/mdbScores';
 import { noteColors } from '../data/zeugnis';
+import { fetchAndScoreMdBs } from '../api/bundestag';
 import Icon from './Icon';
 
 const NoteDisplay = ({ note, size = 'normal' }) => {
@@ -38,15 +39,42 @@ const partyColors = {
 
 const MdBZeugnis = () => {
     const [expanded, setExpanded] = useState(null);
-    const [sortBy, setSortBy] = useState('score'); // 'score' | 'name' | 'partei'
+    const [sortBy, setSortBy] = useState('score');
     const [searchTerm, setSearchTerm] = useState('');
     const [showMethodik, setShowMethodik] = useState(false);
+    const [liveMdBs, setLiveMdBs] = useState([]);
+    const [isLive, setIsLive] = useState(false);
+    const [loadingLive, setLoadingLive] = useState(true);
 
-    const enrichedMdBs = sampleMdBs.map(mdb => {
+    // Try live API, fallback to static
+    useEffect(() => {
+        let cancelled = false;
+        fetchAndScoreMdBs(50).then(result => {
+            if (cancelled) return;
+            if (result && result.members.length > 0) {
+                setLiveMdBs(result.members);
+                setIsLive(true);
+            }
+            setLoadingLive(false);
+        });
+        return () => { cancelled = true; };
+    }, []);
+
+    const staticMdBs = sampleMdBs.map(mdb => {
         const total = Object.values(mdb.scores).reduce((a, b) => a + b, 0);
         const note = scoreToNote(total);
         return { ...mdb, total, note };
     });
+
+    const liveScoredMdBs = liveMdBs.map(mdb => ({
+        ...mdb,
+        note: scoreToNote(mdb.total),
+    }));
+
+    // Merge: show static data + any live data that's not already in static
+    const enrichedMdBs = isLive
+        ? [...staticMdBs, ...liveScoredMdBs.filter(l => !staticMdBs.some(s => s.name === l.name))]
+        : staticMdBs;
 
     const sorted = [...enrichedMdBs].sort((a, b) => {
         if (sortBy === 'score') return b.total - a.total;
@@ -75,6 +103,14 @@ const MdBZeugnis = () => {
                             <UserCheck size={16} strokeWidth={1.5} />
                         </div>
                         <span className="text-xs font-medium text-[var(--color-text-3)] uppercase tracking-widest">MdB Transparenz-Index</span>
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium border ${
+                            isLive
+                                ? 'text-[var(--color-green)] border-[var(--color-green)]/20 bg-[var(--color-green)]/5'
+                                : 'text-[var(--color-text-3)] border-[var(--color-border)] bg-[var(--color-surface)]'
+                        }`}>
+                            {isLive ? <Wifi size={9} /> : <WifiOff size={9} />}
+                            {isLive ? `Live (${enrichedMdBs.length})` : `${enrichedMdBs.length} MdBs`}
+                        </span>
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold text-gradient-heading mb-2">
                         Wie gut machen Abgeordnete ihren Job?

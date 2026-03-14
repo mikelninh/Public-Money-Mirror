@@ -1,28 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import LifeSituation from './components/LifeSituation';
-import PersonalImpact from './components/PersonalImpact';
-import ThemenLookup from './components/ThemenLookup';
-import BudgetStream from './components/BudgetStream';
-import BudgetFacts from './components/BudgetFacts';
-import ImpactChains from './components/ImpactChains';
-import PartyCompare from './components/PartyCompare';
-import LobbyTracker from './components/LobbyTracker';
-import NearMeMap from './components/NearMeMap';
-import ScandalTracker from './components/ScandalTracker';
-import PolitikZeugnis from './components/PolitikZeugnis';
-import MdBZeugnis from './components/MdBZeugnis';
-import VorbilderGlobal from './components/VorbilderGlobal';
-import BudgetSimulator from './components/BudgetSimulator';
-import BriefGenerator from './components/BriefGenerator';
-import VotingInterface from './components/VotingInterface';
-import TaxTicker from './components/TaxTicker';
-import Personalizer from './components/Personalizer';
-import TimeSlider from './components/TimeSlider';
-import CitizensReceipt from './components/CitizensReceipt';
 import Icon from './components/Icon';
+
+// Lazy-load heavy sections for performance
+const PersonalImpact = lazy(() => import('./components/PersonalImpact'));
+const ThemenLookup = lazy(() => import('./components/ThemenLookup'));
+const BudgetStream = lazy(() => import('./components/BudgetStream'));
+const BudgetFacts = lazy(() => import('./components/BudgetFacts'));
+const ImpactChains = lazy(() => import('./components/ImpactChains'));
+const PartyCompare = lazy(() => import('./components/PartyCompare'));
+const LobbyTracker = lazy(() => import('./components/LobbyTracker'));
+const NearMeMap = lazy(() => import('./components/NearMeMap'));
+const ScandalTracker = lazy(() => import('./components/ScandalTracker'));
+const PolitikZeugnis = lazy(() => import('./components/PolitikZeugnis'));
+const MdBZeugnis = lazy(() => import('./components/MdBZeugnis'));
+const VorbilderGlobal = lazy(() => import('./components/VorbilderGlobal'));
+const BudgetSimulator = lazy(() => import('./components/BudgetSimulator'));
+const BriefGenerator = lazy(() => import('./components/BriefGenerator'));
+const VotingInterface = lazy(() => import('./components/VotingInterface'));
+const TaxTicker = lazy(() => import('./components/TaxTicker'));
+const Personalizer = lazy(() => import('./components/Personalizer'));
+const TimeSlider = lazy(() => import('./components/TimeSlider'));
+const CitizensReceipt = lazy(() => import('./components/CitizensReceipt'));
+
+const SectionLoader = () => (
+    <div className="flex items-center justify-center py-24">
+        <div className="w-5 h-5 border-2 border-[var(--color-blue)] border-t-transparent rounded-full animate-spin" />
+    </div>
+);
 
 function App() {
     const [taxAmount, setTaxAmount] = useState(null);
@@ -38,74 +46,42 @@ function App() {
     return (
         <div className="min-h-screen">
             <Navbar />
-
-            {/* 1. Hook: "Wo landet dein Steuergeld?" */}
             <Hero />
-
-            {/* 2. Personal: "Wer bist du?" */}
             <LifeSituation selected={lifeSituation} onSelect={setLifeSituation} />
 
-            {/* 3. Personal: "Was das für DICH bedeutet" (conditionally shown) */}
-            {lifeSituation && <PersonalImpact situation={lifeSituation} />}
+            <Suspense fallback={<SectionLoader />}>
+                {lifeSituation && <PersonalImpact situation={lifeSituation} />}
+                <ThemenLookup />
+                <BudgetStream taxAmount={taxAmount} year={year} />
+                <BudgetFacts />
+                <ImpactChains />
+                <PartyCompare />
+                <LobbyTracker />
+                <NearMeMap />
+                <ScandalTracker />
+                <PolitikZeugnis />
+                <MdBZeugnis />
+                <VorbilderGlobal />
+                <BudgetSimulator />
+                <BriefGenerator />
+                <VotingInterface />
 
-            {/* 4. Themen-Lookup: "Was ist dir wichtig?" */}
-            <ThemenLookup />
+                <TaxTicker />
+                <Personalizer onTaxUpdate={handleTaxUpdate} />
+                <TimeSlider currentYear={year} onYearChange={setYear} />
 
-            {/* 5. Data: Der volle Haushalt */}
-            <BudgetStream taxAmount={taxAmount} year={year} />
-
-            {/* 5. Surprise: "Wusstest du?" */}
-            <BudgetFacts />
-
-            {/* 6. Cause & Effect: "Wie Lobby-Geld deinen Alltag beeinflusst" */}
-            <ImpactChains />
-
-            {/* 7. Deep Dive: Parteienvergleich */}
-            <PartyCompare />
-
-            {/* 8. Follow the Money: Lobbyregister */}
-            <LobbyTracker />
-
-            {/* 9. Local: Bundesweite Projekte */}
-            <NearMeMap />
-
-            {/* 10. Accountability: Verschwendung */}
-            <ScandalTracker />
-
-            {/* 11. Report Card: Versprochen vs. Geliefert */}
-            <PolitikZeugnis />
-
-            {/* 12. Individual: MdB Transparenz-Index */}
-            <MdBZeugnis />
-
-            {/* Globale Vorbilder + Bürger-Vorschläge */}
-            <VorbilderGlobal />
-
-            {/* Play: "Wie würdest du €489 Mrd verteilen?" */}
-            <BudgetSimulator />
-
-            {/* 12. Action: Brief an deinen MdB */}
-            <BriefGenerator />
-
-            {/* 13. Signal: Bürgervotum */}
-            <VotingInterface />
-
-            {/* Utilities */}
-            <TaxTicker />
-            <Personalizer onTaxUpdate={handleTaxUpdate} />
-            <TimeSlider currentYear={year} onYearChange={setYear} />
-
-            <AnimatePresence>
-                {showReceipt && (
-                    <CitizensReceipt taxAmount={taxAmount} onClose={() => setShowReceipt(false)} />
-                )}
-            </AnimatePresence>
+                <AnimatePresence>
+                    {showReceipt && (
+                        <CitizensReceipt taxAmount={taxAmount} onClose={() => setShowReceipt(false)} />
+                    )}
+                </AnimatePresence>
+            </Suspense>
 
             {/* Footer */}
             <footer className="border-t border-[var(--color-border)] py-8 px-6 pb-24">
                 <div className="container-main flex flex-col md:flex-row justify-between items-center gap-4">
                     <span className="text-xs text-[var(--color-text-3)] tracking-wide">
-                        Public Money Mirror &copy; 2025 &middot; Open Source
+                        Public Money Mirror &copy; 2025 &middot; Open Source &middot; MIT
                     </span>
                     <div className="flex items-center gap-4 text-xs text-[var(--color-text-3)]">
                         <span>Daten: BMF, Lobbyregister, Bundesrechnungshof</span>
