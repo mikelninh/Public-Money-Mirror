@@ -1,27 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import CategoryCard from './CategoryCard';
 import Search from './Search';
+import { fetchBudgetCategories } from '../api/budget';
 import { budgetData } from '../data';
 
 const BudgetStream = ({ taxAmount, year }) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [categories, setCategories] = useState(budgetData);
+    const [loading, setLoading] = useState(false);
 
-    // Simple multiplier to simulate historical data changes
-    // Base year 2025. 
-    // 2020 = 0.75x, 2025 = 1x
-    const yearMultiplier = 1 + ((year - 2025) * 0.05);
+    useEffect(() => {
+        let cancelled = false;
+        setLoading(true);
 
-    const filteredData = budgetData.map(cat => {
-        // Parse amount string "€142B" -> 142
-        const numericAmount = parseInt(cat.amount.replace(/[^0-9]/g, ''));
-        const adjustedAmount = Math.round(numericAmount * yearMultiplier);
+        fetchBudgetCategories(year)
+            .then(data => {
+                if (!cancelled) setCategories(data);
+            })
+            .catch(() => {
+                // Fallback to hardcoded data with year multiplier
+                if (!cancelled) {
+                    const yearMultiplier = 1 + ((year - 2025) * 0.05);
+                    setCategories(budgetData.map(cat => {
+                        const numericAmount = parseInt(cat.amount.replace(/[^0-9]/g, ''));
+                        const adjustedAmount = Math.round(numericAmount * yearMultiplier);
+                        return { ...cat, amount: `€${adjustedAmount}B` };
+                    }));
+                }
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false);
+            });
 
-        return {
-            ...cat,
-            amount: `€${adjustedAmount}B`
-        };
-    }).filter(category =>
+        return () => { cancelled = true; };
+    }, [year]);
+
+    const filteredData = categories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         category.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         category.examples.some(ex => ex.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -50,18 +65,22 @@ const BudgetStream = ({ taxAmount, year }) => {
                     <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredData.map((category, index) => (
-                        <CategoryCard
-                            key={category.id}
-                            category={category}
-                            index={index}
-                            userTax={taxAmount}
-                        />
-                    ))}
-                </div>
+                {loading ? (
+                    <div className="text-center text-gray-400 py-12">Loading budget data...</div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredData.map((category, index) => (
+                            <CategoryCard
+                                key={category.id}
+                                category={category}
+                                index={index}
+                                userTax={taxAmount}
+                            />
+                        ))}
+                    </div>
+                )}
 
-                {filteredData.length === 0 && (
+                {!loading && filteredData.length === 0 && (
                     <div className="text-center text-gray-500 py-12">
                         No categories found matching "{searchTerm}"
                     </div>
