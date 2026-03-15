@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { lifeSituations } from '../data/lifeImpact';
+import { triggerAchievement } from './DemokratieProfil';
 
 const LifeSituation = ({ selected, onSelect }) => {
     return (
@@ -28,7 +29,7 @@ const LifeSituation = ({ selected, onSelect }) => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.05 }}
-                            onClick={() => onSelect(selected === sit.id ? null : sit.id)}
+                            onClick={() => { onSelect(selected === sit.id ? null : sit.id); triggerAchievement('life-situation'); }}
                             className={`flex flex-col items-center gap-2.5 p-4 rounded-2xl border transition-all ${
                                 selected === sit.id
                                     ? 'border-[var(--color-blue)] bg-[var(--color-blue)]/8 shadow-[0_0_20px_rgba(79,143,247,0.1)]'

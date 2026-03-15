@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import LifeSituation from './components/LifeSituation';
 import FeatureGrid from './components/FeatureGrid';
+import DemokratieProfil from './components/DemokratieProfil';
 import Icon from './components/Icon';
 
 // Lazy-load all deep sections
@@ -72,6 +73,7 @@ function App() {
     return (
         <div className="min-h-screen">
             <Navbar />
+            <DemokratieProfil />
 
             {/* Landing - Always visible, focused, fast */}
             <Hero />
