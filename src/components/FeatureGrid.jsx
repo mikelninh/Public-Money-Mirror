@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BarChart3, Vote, Briefcase, FileText, UserCheck, Globe, Sliders, Mail, MapPin, AlertTriangle, Activity } from 'lucide-react';
+import { BarChart3, Vote, Briefcase, FileText, UserCheck, Globe, Sliders, Mail, MapPin, AlertTriangle, Activity, Eye } from 'lucide-react';
 
 const features = [
     { icon: BarChart3, label: 'Haushalt', desc: '€489 Mrd aufgeschlüsselt', href: '#haushalt', color: 'var(--color-blue)' },
@@ -13,6 +13,7 @@ const features = [
     { icon: Mail, label: 'Aktiv werden', desc: 'Brief an deinen MdB', href: '#mitmachen', color: 'var(--color-green)' },
     { icon: MapPin, label: 'Projekte', desc: '10 Bundesweite Baustellen', href: '#vorort', color: 'var(--color-cyan)' },
     { icon: AlertTriangle, label: 'Verschwendung', desc: '€25+ Mrd dokumentiert', href: '#kontrolle', color: 'var(--color-red)' },
+    { icon: Eye, label: 'Aufgedeckt', desc: 'Lobby × Geld × Macht', href: '#korruption', color: 'var(--color-red)' },
 ];
 
 const FeatureGrid = ({ onExplore }) => {

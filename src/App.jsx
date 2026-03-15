@@ -16,6 +16,7 @@ const PartyCompare = lazy(() => import('./components/PartyCompare'));
 const LobbyTracker = lazy(() => import('./components/LobbyTracker'));
 const NearMeMap = lazy(() => import('./components/NearMeMap'));
 const ScandalTracker = lazy(() => import('./components/ScandalTracker'));
+const KorruptionsTracker = lazy(() => import('./components/KorruptionsTracker'));
 const PolitikZeugnis = lazy(() => import('./components/PolitikZeugnis'));
 const MdBZeugnis = lazy(() => import('./components/MdBZeugnis'));
 const VorbilderGlobal = lazy(() => import('./components/VorbilderGlobal'));
@@ -82,6 +83,7 @@ function App() {
                         <LobbyTracker />
                         <NearMeMap />
                         <ScandalTracker />
+                        <KorruptionsTracker />
                         <PolitikZeugnis />
                         <MdBZeugnis />
                         <VorbilderGlobal />
