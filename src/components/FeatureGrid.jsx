@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BarChart3, Vote, Briefcase, FileText, UserCheck, Globe, Sliders, Mail, MapPin, AlertTriangle, Eye, Megaphone, Signal } from 'lucide-react';
+import { BarChart3, Vote, Briefcase, FileText, UserCheck, Globe, Sliders, Mail, MapPin, AlertTriangle, Eye, Megaphone, Signal, Heart } from 'lucide-react';
 
 const featureCategories = [
     {
@@ -28,6 +28,7 @@ const featureCategories = [
         items: [
             { icon: Globe, label: 'Vorbilder', desc: 'Andere machen es besser', href: '#vorbilder', color: 'var(--color-cyan)' },
             { icon: MapPin, label: 'Projekte', desc: '10 Bundesweite Baustellen', href: '#vorort', color: 'var(--color-cyan)' },
+            { icon: Heart, label: 'Tierrechte', desc: '763 Mio Stimmen', href: '#tierrechte', color: 'var(--color-green)' },
         ],
     },
     {

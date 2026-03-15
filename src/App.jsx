@@ -20,6 +20,7 @@ const KorruptionsTracker = lazy(() => import('./components/KorruptionsTracker'))
 const PolitikZeugnis = lazy(() => import('./components/PolitikZeugnis'));
 const MdBZeugnis = lazy(() => import('./components/MdBZeugnis'));
 const VorbilderGlobal = lazy(() => import('./components/VorbilderGlobal'));
+const TierrechteSektion = lazy(() => import('./components/TierrechteSektion'));
 const BudgetSimulator = lazy(() => import('./components/BudgetSimulator'));
 const Kampagnen = lazy(() => import('./components/Kampagnen'));
 const BriefGenerator = lazy(() => import('./components/BriefGenerator'));
@@ -116,6 +117,7 @@ function App() {
                         <PolitikZeugnis />
                         <MdBZeugnis />
                         <VorbilderGlobal />
+                        <TierrechteSektion />
                         <BudgetSimulator />
                         <Kampagnen />
                         <BriefGenerator />
