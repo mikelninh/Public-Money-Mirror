@@ -2,13 +2,15 @@
 
 **Wo landet dein Steuergeld? Wer entscheidet das? Was kannst du tun?**
 
+> Live: [mikelninh.github.io/Public-Money-Mirror](https://mikelninh.github.io/Public-Money-Mirror/)
+
 Public Money Mirror macht den deutschen Bundeshaushalt (€489 Mrd) verständlich, persönlich und handlungsfähig. Nicht noch ein Daten-Dashboard — ein Demokratie-Werkzeug.
 
 ## Was kann PMM?
 
 ### Persönlich
 - **Lebenssituation-Filter** — Elternteil, Student:in, Rentner:in, Angestellt, Selbstständig, Arbeitsuchend. Der ganze Haushalt aus DEINER Perspektive.
-- **Themen-Lookup** — Tippe "Tierschutz" und sieh sofort: wer zuständig ist, wie viel Budget es gibt, was versprochen wurde, welche Lobby-Kräfte wirken, welches Land es besser macht.
+- **Themen-Lookup mit Kategorien** — 30 Politikthemen in 6 Kategorien (Soziales, Wirtschaft, Umwelt, Staat & Recht, Infrastruktur, Gesellschaft). Jedes Thema zeigt: Zuständigkeit, Budget, Versprechen-Note, Lobby-Kräfte, internationales Vorbild, Aktionsmöglichkeiten.
 - **Live-Steuerzähler** — €15.497 pro Sekunde gibt der Bund aus. Sieh in Echtzeit zu.
 
 ### Transparenz
@@ -126,8 +128,8 @@ Die App erzählt eine Geschichte:
 
 Issues und PRs willkommen. Besonders gesucht:
 
-- **Mehr Themen** — Datensätze für weitere Policy-Bereiche
-- **Mehr MdBs** — Scoring für alle 736 Abgeordneten (Bundestag API)
+- **Mehr Themen** — Aktuell 30, Ziel: alle relevanten Policy-Bereiche
+- **Mehr MdBs** — Aktuell 28 manuell + Live-API. Ziel: alle 736 Abgeordneten automatisch gescored
 - **Mehr Vorbilder** — Internationale Vergleiche mit Quellen
 - **Backend** — API für Bürger-Vorschläge, Persistenz, Newsletter
 - **Barrierefreiheit** — WCAG 2.1 AA Compliance

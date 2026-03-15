@@ -5,19 +5,71 @@ import { themen, searchThemen } from '../data/themen';
 import { noteColors } from '../data/zeugnis';
 import Icon from './Icon';
 
-const QuickTags = ({ onSelect }) => {
-    const tags = ['Tierschutz', 'Bildung', 'Klima', 'Wohnen', 'Gesundheit', 'Digital', 'Ernährung', 'Sicherheit'];
+const categories = [
+    { id: 'alle', label: 'Alle', icon: null },
+    { id: 'soziales', label: 'Soziales', icon: 'Users', themen: ['rente', 'kinderarmut', 'pflege', 'obdachlosigkeit', 'gleichstellung'] },
+    { id: 'wirtschaft', label: 'Wirtschaft', icon: 'Wallet', themen: ['steuern', 'buerokratie', 'landwirtschaft', 'forschung', 'laendlicher-raum'] },
+    { id: 'umwelt', label: 'Umwelt & Klima', icon: 'Leaf', themen: ['klima', 'tierschutz', 'ernaehrung', 'luftqualitaet'] },
+    { id: 'staat', label: 'Staat & Recht', icon: 'Shield', themen: ['sicherheit', 'bundeswehr-beschaffung', 'justiz', 'demokratie', 'cybersicherheit', 'datenschutz'] },
+    { id: 'infrastruktur', label: 'Infrastruktur', icon: 'Train', themen: ['verkehr', 'digitalisierung', 'wohnen'] },
+    { id: 'leben', label: 'Gesellschaft', icon: 'Heart', themen: ['bildung', 'gesundheit', 'drogen', 'sport', 'kultur', 'migration', 'entwicklungshilfe'] },
+];
+
+const CategoryBrowser = ({ onSelect, activeCategory, onCategoryChange }) => {
+    const filteredThemen = activeCategory === 'alle'
+        ? themen
+        : themen.filter(t => {
+            const cat = categories.find(c => c.id === activeCategory);
+            return cat?.themen?.includes(t.id);
+        });
+
     return (
-        <div className="flex flex-wrap gap-2 mt-4">
-            {tags.map(tag => (
-                <button
-                    key={tag}
-                    onClick={() => onSelect(tag.toLowerCase())}
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-border)] text-[var(--color-text-2)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-2)] hover:border-[var(--color-border-hover)] transition-colors"
-                >
-                    {tag}
-                </button>
-            ))}
+        <div className="mt-4">
+            {/* Category tabs */}
+            <div className="flex flex-wrap gap-1.5 mb-5">
+                {categories.map(cat => (
+                    <button
+                        key={cat.id}
+                        onClick={() => onCategoryChange(cat.id)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                            activeCategory === cat.id
+                                ? 'border-[var(--color-blue)] bg-[var(--color-blue)]/8 text-[var(--color-text)]'
+                                : 'border-[var(--color-border)] text-[var(--color-text-3)] hover:text-[var(--color-text-2)] hover:border-[var(--color-border-hover)]'
+                        }`}
+                    >
+                        {cat.icon && <Icon name={cat.icon} size={12} />}
+                        {cat.label}
+                        <span className="text-[10px] opacity-60">
+                            {cat.id === 'alle' ? themen.length : cat.themen?.length}
+                        </span>
+                    </button>
+                ))}
+            </div>
+
+            {/* Topic grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                {filteredThemen.map(t => {
+                    const noteStyle = noteColors[t.versprechen.note] || noteColors[4];
+                    return (
+                        <button
+                            key={t.id}
+                            onClick={() => onSelect(t.name.toLowerCase().split(' ')[0])}
+                            className="flex items-start gap-2 p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-2)] hover:border-[var(--color-border-hover)] transition-all text-left"
+                        >
+                            <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5" style={{ background: t.color + '15', color: t.color }}>
+                                <Icon name={t.icon} size={11} />
+                            </div>
+                            <div className="min-w-0">
+                                <div className="text-[12px] font-medium text-[var(--color-text)] leading-tight truncate">{t.name}</div>
+                                <div className="flex items-center gap-1.5 mt-1">
+                                    <span className={`text-[9px] font-bold ${noteStyle.text}`}>{t.versprechen.note}</span>
+                                    <span className="text-[9px] text-[var(--color-text-3)]">{t.international.flagge}</span>
+                                </div>
+                            </div>
+                        </button>
+                    );
+                })}
+            </div>
         </div>
     );
 };
@@ -223,6 +275,7 @@ const ThemenCard = ({ thema }) => {
 
 const ThemenLookup = () => {
     const [query, setQuery] = useState('');
+    const [activeCategory, setActiveCategory] = useState('alle');
     const results = useMemo(() => searchThemen(query), [query]);
 
     return (
@@ -260,8 +313,14 @@ const ThemenLookup = () => {
                     />
                 </div>
 
-                {/* Quick tags */}
-                {!query && <QuickTags onSelect={setQuery} />}
+                {/* Category browser — shown when not searching */}
+                {!query && (
+                    <CategoryBrowser
+                        onSelect={setQuery}
+                        activeCategory={activeCategory}
+                        onCategoryChange={setActiveCategory}
+                    />
+                )}
 
                 {/* Results */}
                 <div className="mt-6 space-y-4">
