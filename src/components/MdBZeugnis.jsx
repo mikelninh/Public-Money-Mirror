@@ -33,18 +33,27 @@ const ScoreBar = ({ value, max = 20, color }) => {
     );
 };
 
-const ConfidenceBadge = ({ isLive }) => (
-    <span
-        className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium leading-none shrink-0 ${
-            isLive
-                ? 'bg-[var(--color-green)]/10 text-[var(--color-green)] border border-[var(--color-green)]/20'
-                : 'bg-[var(--color-amber)]/10 text-[var(--color-amber)] border border-[var(--color-amber)]/20'
-        }`}
-        title={isLive ? 'Aus Live-API-Daten berechnet' : 'Redaktionell geschätzt'}
-    >
-        {isLive ? '\u{1F4E1} Live' : '\u270F\uFE0F Gesch\u00E4tzt'}
-    </span>
-);
+const ConfidenceBadge = ({ isLive, confidence }) => {
+    if (confidence === 'none') {
+        return (
+            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium leading-none shrink-0 bg-[var(--color-text-3)]/10 text-[var(--color-text-3)] border border-[var(--color-border)]" title="Keine Daten verfügbar">
+                ? Keine Daten
+            </span>
+        );
+    }
+    return (
+        <span
+            className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium leading-none shrink-0 ${
+                isLive
+                    ? 'bg-[var(--color-green)]/10 text-[var(--color-green)] border border-[var(--color-green)]/20'
+                    : 'bg-[var(--color-amber)]/10 text-[var(--color-amber)] border border-[var(--color-amber)]/20'
+            }`}
+            title={isLive ? 'Aus Live-API-Daten berechnet' : 'Redaktionell geschätzt'}
+        >
+            {isLive ? '\u{1F4E1} Live' : '\u270F\uFE0F Gesch\u00E4tzt'}
+        </span>
+    );
+};
 
 const partyColors = {
     'CDU/CSU': '#1a1a1a', 'SPD': '#e3000f', 'Grüne': '#1aa037',
@@ -98,12 +107,22 @@ const MdBZeugnis = () => {
         setSelectedApiProfile(null);
         const detail = await getPolitikerDetail(politician.id);
         if (detail) {
+            const mandateText = detail.hasMandate
+                ? `Mandat: ${detail.mandateInfo?.parliament || 'Parlament'}`
+                : 'Kein aktives Mandat gefunden — Offenlegungspflichten gelten nur für Mandatsträger:innen';
+            const antwortText = detail.antwortRate !== null
+                ? `Antwortquote: ${Math.round(detail.antwortRate * 100)}% (${detail.fragenBeantwortet}/${detail.fragenGesamt} Bürgerfragen)`
+                : `${detail.fragenGesamt} Bürgerfragen gestellt, keine beantwortet`;
+            const nebenText = detail.hasMandate
+                ? `${detail.sideJobCount} gemeldete Nebentätigkeiten${detail.sideJobIncome > 0 ? ` (~€${detail.sideJobIncome.toLocaleString('de-DE')})` : ''}`
+                : 'Nebentätigkeiten: keine Daten (keine Offenlegungspflicht ohne Mandat)';
+
             setSelectedApiProfile({
                 ...detail,
                 note: scoreToNote(detail.total),
                 wahlkreis: detail.beruf || '',
-                rolle: detail.partei,
-                context: `Antwortquote: ${detail.antwortRate !== null ? Math.round(detail.antwortRate * 100) + '%' : 'keine Daten'} (${detail.fragenBeantwortet || 0}/${detail.fragenGesamt || 0} Fragen). ${detail.sideJobCount} Nebentätigkeiten. Geschätztes Nebeneinkommen: €${(detail.sideJobIncome || 0).toLocaleString('de-DE')}.`,
+                rolle: detail.mandateInfo?.parliament || detail.partei,
+                context: `${mandateText}. ${antwortText}. ${nebenText}.`,
             });
         }
         setLoadingProfile(false);
@@ -409,7 +428,7 @@ const MdBZeugnis = () => {
                                                             <span className="text-[11px] font-mono font-medium text-[var(--color-text)] w-12 text-right shrink-0">
                                                                 {val}/{factor.maxPoints}
                                                             </span>
-                                                            <ConfidenceBadge isLive={isFactorLive} />
+                                                            <ConfidenceBadge isLive={isFactorLive} confidence={mdb.factorConfidence?.[factor.id]} />
                                                         </div>
                                                     );
                                                 })}
@@ -532,7 +551,7 @@ const MdBZeugnis = () => {
                                             </div>
                                             <ScoreBar value={val} max={factor.maxPoints} color={pct >= 75 ? 'var(--color-green)' : pct >= 50 ? 'var(--color-amber)' : 'var(--color-red)'} />
                                             <span className="text-[11px] font-mono font-medium text-[var(--color-text)] w-12 text-right shrink-0">{val}/{factor.maxPoints}</span>
-                                            <ConfidenceBadge isLive={isFactorLive} />
+                                            <ConfidenceBadge isLive={isFactorLive} confidence={selectedApiProfile.factorConfidence?.[factor.id]} />
                                         </div>
                                     );
                                 })}

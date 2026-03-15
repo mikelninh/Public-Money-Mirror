@@ -46,10 +46,12 @@ export async function searchPolitiker(query) {
  */
 export async function getPolitikerDetail(id) {
     try {
-        const [profileRes, sidejobsRes] = await Promise.all([
+        const [profileRes, sidejobsRes, mandatesRes] = await Promise.all([
             fetch(`${BASE}/politicians/${id}`, { signal: AbortSignal.timeout(8000) }),
             fetch(`${BASE}/politicians/${id}/sidejobs?pager_limit=100`, { signal: AbortSignal.timeout(8000) }),
+            fetch(`${BASE}/candidacies-mandates?politician=${id}&pager_limit=10`, { signal: AbortSignal.timeout(8000) }),
         ]);
+        const mandates = mandatesRes.ok ? await mandatesRes.json() : null;
 
         const profile = profileRes.ok ? await profileRes.json() : null;
         const sidejobs = sidejobsRes.ok ? await sidejobsRes.json() : null;
@@ -57,6 +59,16 @@ export async function getPolitikerDetail(id) {
         if (!profile?.data) return null;
 
         const p = profile.data;
+
+        // Check for active mandates
+        const mandateList = (mandates?.data || []);
+        const hasMandate = mandateList.length > 0;
+        const latestMandate = mandateList[0];
+        const mandateInfo = latestMandate ? {
+            parliament: latestMandate.parliament?.label || '',
+            period: latestMandate.parliament_period?.label || '',
+            type: latestMandate.mandate_type || latestMandate.type || '',
+        } : null;
 
         // Calculate sidejob income
         let sideJobIncome = 0;
@@ -90,16 +102,31 @@ export async function getPolitikerDetail(id) {
         }
 
         // Nebeneinkünfte (0-20) — inverse of income
-        let nebeneinkuenfte = 20;
-        let nebeneinkuenfteConf = sideJobCount > 0 || sideJobIncome === 0 ? 'high' : 'low';
-        if (sideJobIncome > 250000) nebeneinkuenfte = 0;
-        else if (sideJobIncome > 100000) nebeneinkuenfte = 5;
-        else if (sideJobIncome > 25000) nebeneinkuenfte = 10;
-        else if (sideJobIncome > 0) nebeneinkuenfte = 15;
+        // IMPORTANT: "no sidejobs" is only meaningful if the person has a mandate
+        // (only mandate holders must disclose). No mandate = no disclosure duty = unknown.
+        let nebeneinkuenfte = 10; // default: unknown
+        let nebeneinkuenfteConf = 'none';
+        if (hasMandate && sideJobCount === 0 && sideJobIncome === 0) {
+            // Has mandate + reported zero sidejobs = genuinely clean
+            nebeneinkuenfte = 20;
+            nebeneinkuenfteConf = 'high';
+        } else if (sideJobCount > 0) {
+            // Has reported sidejobs — score based on income
+            nebeneinkuenfteConf = 'high';
+            if (sideJobIncome > 250000) nebeneinkuenfte = 0;
+            else if (sideJobIncome > 100000) nebeneinkuenfte = 5;
+            else if (sideJobIncome > 25000) nebeneinkuenfte = 10;
+            else if (sideJobIncome > 0) nebeneinkuenfte = 15;
+            else nebeneinkuenfte = 18;
+        } else if (!hasMandate) {
+            // No mandate = no disclosure duty = we genuinely don't know
+            nebeneinkuenfte = 10;
+            nebeneinkuenfteConf = 'none';
+        }
 
         // Estimated factors (need Bundestag XML data for accuracy)
-        const anwesenheit = 13;
-        const aktivitaet = 13;
+        const anwesenheit = hasMandate ? 13 : 10;
+        const aktivitaet = hasMandate ? 13 : 10;
         const transparenz = 10;
 
         const scores = {
@@ -119,6 +146,8 @@ export async function getPolitikerDetail(id) {
             geburtsjahr: p.year_of_birth,
             bildung: p.education || '',
             url: p.abgeordnetenwatch_url,
+            hasMandate,
+            mandateInfo,
             fragenGesamt,
             fragenBeantwortet,
             antwortRate,
