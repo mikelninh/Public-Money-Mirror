@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, ChevronDown, ExternalLink, AlertTriangle, ArrowRight, RotateCcw, DollarSign, Users, Clock } from 'lucide-react';
-import { skandale, drehtuer, korrelationen, karenzregeln } from '../data/korruption';
+import { skandale, drehtuer, korrelationen, karenzregeln, parteispenden } from '../data/korruption';
 import Icon from './Icon';
 
 const tabs = [
     { id: 'korrelationen', label: 'Lobby × Politik', icon: Eye },
     { id: 'skandale', label: 'Dokumentierte Fälle', icon: AlertTriangle },
+    { id: 'spenden', label: 'Parteispenden', icon: DollarSign },
     { id: 'drehtuer', label: 'Drehtür', icon: RotateCcw },
     { id: 'karenz', label: 'Karenzzeit', icon: Clock },
 ];
@@ -200,6 +201,64 @@ const KorruptionsTracker = () => {
                                         </AnimatePresence>
                                     </motion.div>
                                 ))}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {/* ── Parteispenden ── */}
+                    {activeTab === 'spenden' && (
+                        <motion.div key="spenden" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
+                            <div className="card p-4 md:p-5 mb-4">
+                                <div className="text-xs text-[var(--color-text-3)] mb-4">Zeitraum: {parteispenden.zeitraum} · Quelle: {parteispenden.quelle}</div>
+                                <div className="space-y-3">
+                                    {parteispenden.gesamtRanking.map((p, i) => {
+                                        const maxBetrag = parteispenden.gesamtRanking[0].betrag;
+                                        const pct = (p.betrag / maxBetrag) * 100;
+                                        return (
+                                            <motion.div
+                                                key={p.partei}
+                                                initial={{ opacity: 0, x: -8 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: i * 0.05 }}
+                                            >
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className="text-sm font-medium text-[var(--color-text)]">{p.partei}</span>
+                                                    <span className="text-sm font-bold font-mono text-[var(--color-text)]">€{(p.betrag / 1e6).toFixed(1)} Mio</span>
+                                                </div>
+                                                <div className="h-2 rounded-full bg-[var(--color-surface-3)] overflow-hidden mb-1.5">
+                                                    <motion.div
+                                                        className="h-full rounded-full bg-[var(--color-purple)]"
+                                                        initial={{ width: 0 }}
+                                                        whileInView={{ width: `${pct}%` }}
+                                                        viewport={{ once: true }}
+                                                        transition={{ duration: 0.5, delay: i * 0.05 }}
+                                                    />
+                                                </div>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {p.topSpender.map((s, si) => (
+                                                        <span key={si} className="text-[10px] text-[var(--color-text-3)] px-2 py-0.5 rounded bg-[var(--color-surface-2)] border border-[var(--color-border)]">{s}</span>
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Probleme */}
+                            <div className="card p-4 md:p-5">
+                                <div className="text-[10px] font-semibold text-[var(--color-red)] uppercase tracking-wider mb-3">Probleme im Spendensystem</div>
+                                <div className="space-y-2">
+                                    {parteispenden.probleme.map((p, i) => (
+                                        <div key={i} className="flex items-start gap-2 text-[12px] text-[var(--color-text-2)]">
+                                            <AlertTriangle size={11} className="text-[var(--color-red)] mt-0.5 shrink-0" />
+                                            <span>{p}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <a href="https://donation.watch/en/germany" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[11px] text-[var(--color-blue)] hover:underline mt-4">
+                                    Aktuelle Spendendaten auf donation.watch <ExternalLink size={9} />
+                                </a>
                             </div>
                         </motion.div>
                     )}

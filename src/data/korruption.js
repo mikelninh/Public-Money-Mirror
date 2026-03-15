@@ -20,7 +20,7 @@ export const skandale = [
         betrag: '€1,2 Mio+ Provisionen',
         beschreibung: 'Mehrere MdBs kassierten Provisionen für die Vermittlung von Masken-Deals zwischen Herstellern und Behörden — mitten in der Pandemie.',
         wasPassierte: 'MdBs nutzten ihre politischen Kontakte, um Masken-Kaufverträge zu vermitteln und dafür sechsstellige Provisionen zu kassieren. Die Masken wurden teilweise überteuert eingekauft.',
-        konsequenzen: 'Strafverfahren gegen Nüßlein (eingestellt nach Geldzahlung €120.000). CDU/CSU führte Verhaltensregeln ein. Transparenzregeln verschärft — aber kein Berufsverbot.',
+        konsequenzen: 'BGH entschied: Keine Strafbarkeit — das Bestechungsgesetz deckt Provisionen für Mandatsträger nicht ab. Die Gesetzeslücke besteht bis heute. CDU/CSU führte Verhaltensregeln ein. Das Lobbyregister wurde 2022 als Reaktion eingeführt.',
         quelle: 'Süddeutsche Zeitung, Spiegel, Staatsanwaltschaft München',
         quelleUrl: 'https://www.sueddeutsche.de/thema/Maskenaffaere',
     },
@@ -236,6 +236,30 @@ export const korrelationen = [
 // ═══════════════════════════════════════════════════════════════
 // 4. KARENZZEIT-TRACKER — Wie lange warten Politiker?
 // ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// 3b. PARTEISPENDEN — Wer bezahlt die Parteien?
+// Quelle: Rechenschaftsberichte (bundestag.de), DonationWatch
+// ═══════════════════════════════════════════════════════════════
+export const parteispenden = {
+    zeitraum: '2022-2025',
+    quelle: 'Bundestag Rechenschaftsberichte, donation.watch',
+    gesamtRanking: [
+        { partei: 'CDU/CSU', betrag: 13060000, topSpender: ['Quandt/Klatten (BMW): €690k', 'Evonik: €385k', 'Südwestmetall: €340k'] },
+        { partei: 'BSW', betrag: 8550000, topSpender: ['Einzelspende €1,5 Mio (Jan 2025)', 'Herkunft teils unklar'] },
+        { partei: 'FDP', betrag: 6400000, topSpender: ['Quandt/Klatten: €300k', 'Deutsche Vermögensberatung: €210k'] },
+        { partei: 'AfD', betrag: 5310000, topSpender: ['Großspende €1,5 Mio (Jan 2025)', 'Mittelstandsvereinigung'] },
+        { partei: 'SPD', betrag: 3200000, topSpender: ['Metall-Arbeitgeber: €250k', 'Deutsche Bank: €180k'] },
+        { partei: 'Grüne', betrag: 1800000, topSpender: ['Kleinspenden dominieren', 'Windkraft-Branche: €120k'] },
+        { partei: 'Linke', betrag: 620000, topSpender: ['Fast ausschließlich Kleinspenden'] },
+    ],
+    probleme: [
+        'Spenden unter €10.000/Jahr werden nicht veröffentlicht — die Mehrzahl bleibt im Dunkeln.',
+        'Großspenden-Schwelle lag bis 2024 bei €50.000 — darunter: keine sofortige Offenlegung.',
+        'Splitting: Ein Unternehmer spendete €120.000 an die CSU — aufgeteilt auf 5 Firmen, um unter der Grenze zu bleiben.',
+        'Rechenschaftsberichte erscheinen mit 1,5 Jahren Verzögerung — dann ist die Legislatur fast vorbei.',
+    ],
+};
+
 export const karenzregeln = {
     aktuell: 'Bundesminister und parlamentarische Staatssekretäre unterliegen einer Karenzzeit von 12-18 Monaten. MdBs: keine Karenzzeit.',
     probleme: [
