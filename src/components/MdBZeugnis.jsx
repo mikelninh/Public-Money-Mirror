@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, ChevronDown, Search, ArrowUpDown, Info, TrendingUp, ExternalLink, Wifi, WifiOff } from 'lucide-react';
+import { UserCheck, ChevronDown, Search, ArrowUpDown, Info, TrendingUp, ExternalLink, Wifi, WifiOff, RefreshCw } from 'lucide-react';
 import { scoreFactors, scoreToNote, sampleMdBs } from '../data/mdbScores';
 import { noteColors } from '../data/zeugnis';
 import { fetchAndScoreMdBs } from '../api/bundestag';
@@ -32,9 +32,35 @@ const ScoreBar = ({ value, max = 20, color }) => {
     );
 };
 
+const ConfidenceBadge = ({ isLive }) => (
+    <span
+        className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium leading-none shrink-0 ${
+            isLive
+                ? 'bg-[var(--color-green)]/10 text-[var(--color-green)] border border-[var(--color-green)]/20'
+                : 'bg-[var(--color-amber)]/10 text-[var(--color-amber)] border border-[var(--color-amber)]/20'
+        }`}
+        title={isLive ? 'Aus Live-API-Daten berechnet' : 'Redaktionell geschätzt'}
+    >
+        {isLive ? '\u{1F4E1} Live' : '\u270F\uFE0F Gesch\u00E4tzt'}
+    </span>
+);
+
 const partyColors = {
     'CDU/CSU': '#1a1a1a', 'SPD': '#e3000f', 'Grüne': '#1aa037',
     'FDP': '#ffed00', 'AfD': '#009ee0', 'Linke': '#be3075', 'BSW': '#8B1A4A', 'CSU': '#008ac5',
+};
+
+const formatTimestamp = (isoString) => {
+    if (!isoString) return null;
+    try {
+        const d = new Date(isoString);
+        return d.toLocaleString('de-DE', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit',
+        });
+    } catch {
+        return null;
+    }
 };
 
 const MdBZeugnis = () => {
@@ -45,8 +71,25 @@ const MdBZeugnis = () => {
     const [liveMdBs, setLiveMdBs] = useState([]);
     const [isLive, setIsLive] = useState(false);
     const [loadingLive, setLoadingLive] = useState(true);
+    const [lastUpdated, setLastUpdated] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
 
-    // Try live API, fallback to static
+    const loadLiveData = useCallback(async () => {
+        setRefreshing(true);
+        try {
+            const result = await fetchAndScoreMdBs(50);
+            if (result && result.members.length > 0) {
+                setLiveMdBs(result.members);
+                setIsLive(true);
+                setLastUpdated(result.lastUpdated || new Date().toISOString());
+            }
+        } finally {
+            setLoadingLive(false);
+            setRefreshing(false);
+        }
+    }, []);
+
+    // Try live API on mount
     useEffect(() => {
         let cancelled = false;
         fetchAndScoreMdBs(50).then(result => {
@@ -54,6 +97,7 @@ const MdBZeugnis = () => {
             if (result && result.members.length > 0) {
                 setLiveMdBs(result.members);
                 setIsLive(true);
+                setLastUpdated(result.lastUpdated || new Date().toISOString());
             }
             setLoadingLive(false);
         });
@@ -63,7 +107,20 @@ const MdBZeugnis = () => {
     const staticMdBs = sampleMdBs.map(mdb => {
         const total = Object.values(mdb.scores).reduce((a, b) => a + b, 0);
         const note = scoreToNote(total);
-        return { ...mdb, total, note };
+        return {
+            ...mdb,
+            total,
+            note,
+            // All static data factors are editorial estimates
+            liveFactors: [],
+            factorConfidence: {
+                anwesenheit: 'low',
+                erreichbarkeit: 'low',
+                nebeneinkuenfte: 'low',
+                aktivitaet: 'low',
+                transparenz: 'low',
+            },
+        };
     });
 
     const liveScoredMdBs = liveMdBs.map(mdb => ({
@@ -71,12 +128,54 @@ const MdBZeugnis = () => {
         note: scoreToNote(mdb.total),
     }));
 
-    // Merge: show static data + any live data that's not already in static
-    const enrichedMdBs = isLive
-        ? [...staticMdBs, ...liveScoredMdBs.filter(l => !staticMdBs.some(s => s.name === l.name))]
-        : staticMdBs;
+    // Merge: prefer live data for matching names, keep static-only for the rest
+    const mergedMdBs = (() => {
+        const liveByName = new Map(liveScoredMdBs.map(m => [m.name, m]));
+        const merged = [];
 
-    const sorted = [...enrichedMdBs].sort((a, b) => {
+        // For each static MdB, check if there is a live version to merge
+        for (const staticMdb of staticMdBs) {
+            const liveMdb = liveByName.get(staticMdb.name);
+            if (liveMdb) {
+                // Merge: use live scores where available, static for the rest
+                const mergedScores = { ...staticMdb.scores };
+                const mergedConfidence = { ...staticMdb.factorConfidence };
+                const mergedLiveFactors = [...(staticMdb.liveFactors || [])];
+
+                for (const factorId of (liveMdb.liveFactors || [])) {
+                    mergedScores[factorId] = liveMdb.scores[factorId];
+                    mergedConfidence[factorId] = 'high';
+                    if (!mergedLiveFactors.includes(factorId)) {
+                        mergedLiveFactors.push(factorId);
+                    }
+                }
+
+                const total = Object.values(mergedScores).reduce((a, b) => a + b, 0);
+                merged.push({
+                    ...staticMdb,
+                    scores: mergedScores,
+                    total,
+                    note: scoreToNote(total),
+                    liveFactors: mergedLiveFactors,
+                    factorConfidence: mergedConfidence,
+                    context: liveMdb.context || staticMdb.context,
+                    profileUrl: liveMdb.profileUrl || staticMdb.profileUrl,
+                });
+                liveByName.delete(staticMdb.name);
+            } else {
+                merged.push(staticMdb);
+            }
+        }
+
+        // Add any live-only MdBs not in static data
+        for (const liveMdb of liveByName.values()) {
+            merged.push(liveMdb);
+        }
+
+        return merged;
+    })();
+
+    const sorted = [...mergedMdBs].sort((a, b) => {
         if (sortBy === 'score') return b.total - a.total;
         if (sortBy === 'name') return a.name.localeCompare(b.name);
         if (sortBy === 'partei') return a.partei.localeCompare(b.partei);
@@ -109,7 +208,7 @@ const MdBZeugnis = () => {
                                 : 'text-[var(--color-text-3)] border-[var(--color-border)] bg-[var(--color-surface)]'
                         }`}>
                             {isLive ? <Wifi size={9} /> : <WifiOff size={9} />}
-                            {isLive ? `Live (${enrichedMdBs.length})` : `${enrichedMdBs.length} MdBs`}
+                            {isLive ? `Live (${mergedMdBs.length})` : `${mergedMdBs.length} MdBs`}
                         </span>
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold text-gradient-heading mb-2">
@@ -118,6 +217,44 @@ const MdBZeugnis = () => {
                     <p className="text-[var(--color-text-2)] text-sm max-w-lg">
                         5 Faktoren, 0-100 Punkte, eine Schulnote. Keine Meinung — nur messbare Daten.
                     </p>
+                </motion.div>
+
+                {/* Disclaimer banner */}
+                <motion.div
+                    className="mb-6 p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)]"
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                >
+                    <p className="text-[12px] text-[var(--color-text-2)] leading-relaxed">
+                        Scores basieren auf öffentlichen Daten von{' '}
+                        <a href="https://www.abgeordnetenwatch.de" target="_blank" rel="noopener noreferrer" className="text-[var(--color-blue)] hover:underline">abgeordnetenwatch.de</a>
+                        {' '}und{' '}
+                        <a href="https://www.bundestag.de" target="_blank" rel="noopener noreferrer" className="text-[var(--color-blue)] hover:underline">bundestag.de</a>.
+                        {' '}Faktoren mit <span className="font-semibold">{'\u{1F4E1}'} </span> sind live berechnet,
+                        Faktoren mit <span className="font-semibold">{'\u270F\uFE0F'} </span> sind redaktionell geschätzt.
+                    </p>
+
+                    <div className="flex items-center gap-3 mt-3 flex-wrap">
+                        <button
+                            onClick={loadLiveData}
+                            disabled={refreshing}
+                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                                refreshing
+                                    ? 'bg-[var(--color-surface-2)] text-[var(--color-text-3)] border-[var(--color-border)] cursor-wait'
+                                    : 'bg-[var(--color-blue)]/10 text-[var(--color-blue)] border-[var(--color-blue)]/20 hover:bg-[var(--color-blue)]/20'
+                            }`}
+                        >
+                            <RefreshCw size={11} className={refreshing ? 'animate-spin' : ''} />
+                            {refreshing ? 'Laden...' : 'Daten aktualisieren'}
+                        </button>
+
+                        {lastUpdated && (
+                            <span className="text-[10px] text-[var(--color-text-3)]">
+                                Zuletzt aktualisiert: {formatTimestamp(lastUpdated)}
+                            </span>
+                        )}
+                    </div>
                 </motion.div>
 
                 {/* Controls */}
@@ -157,6 +294,7 @@ const MdBZeugnis = () => {
                         const isOpen = expanded === mdb.name;
                         const noteStyle = noteColors[mdb.note];
                         const pColor = partyColors[mdb.partei] || 'var(--color-text-3)';
+                        const mdbLiveFactors = mdb.liveFactors || [];
 
                         return (
                             <motion.div
@@ -210,6 +348,7 @@ const MdBZeugnis = () => {
                                                 {scoreFactors.map(factor => {
                                                     const val = mdb.scores[factor.id];
                                                     const pct = Math.round((val / factor.maxPoints) * 100);
+                                                    const isFactorLive = mdbLiveFactors.includes(factor.id);
                                                     return (
                                                         <div key={factor.id} className="flex items-center gap-3">
                                                             <div className="w-6 h-6 rounded-md bg-[var(--color-surface-2)] flex items-center justify-center shrink-0">
@@ -222,6 +361,7 @@ const MdBZeugnis = () => {
                                                             <span className="text-[11px] font-mono font-medium text-[var(--color-text)] w-12 text-right shrink-0">
                                                                 {val}/{factor.maxPoints}
                                                             </span>
+                                                            <ConfidenceBadge isLive={isFactorLive} />
                                                         </div>
                                                     );
                                                 })}

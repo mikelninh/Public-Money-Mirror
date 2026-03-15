@@ -3,6 +3,48 @@
 // Docs: https://github.com/bundesAPI/bundeshaushalt-api
 
 const BASE = 'https://bundeshaushalt.de/internalapi/budgetData';
+const CACHE_KEY = 'pmm-budget-cache';
+const CACHE_MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours
+
+/**
+ * Simple localStorage cache with TTL
+ */
+function getCached(year) {
+    try {
+        const raw = localStorage.getItem(`${CACHE_KEY}-${year}`);
+        if (!raw) return null;
+        const cached = JSON.parse(raw);
+        if (Date.now() - cached.timestamp > CACHE_MAX_AGE) return null;
+        return cached.data;
+    } catch { return null; }
+}
+
+function setCache(year, data) {
+    try {
+        localStorage.setItem(`${CACHE_KEY}-${year}`, JSON.stringify({
+            data,
+            timestamp: Date.now(),
+        }));
+    } catch { /* quota exceeded — ignore */ }
+}
+
+/**
+ * Get cache freshness info
+ */
+export function getCacheFreshness(year) {
+    try {
+        const raw = localStorage.getItem(`${CACHE_KEY}-${year}`);
+        if (!raw) return { cached: false, age: null, fresh: false };
+        const cached = JSON.parse(raw);
+        const age = Date.now() - cached.timestamp;
+        return {
+            cached: true,
+            age,
+            fresh: age < CACHE_MAX_AGE,
+            lastUpdated: new Date(cached.timestamp).toLocaleString('de-DE'),
+        };
+    } catch { return { cached: false, age: null, fresh: false }; }
+}
 
 const iconMap = {
     'Arbeit und Soziales': 'Users',
@@ -60,6 +102,10 @@ function formatAmount(value) {
  * Returns data in our app's format, or null if API fails (CORS, network, etc.)
  */
 export async function fetchBundeshaushalt(year = 2025) {
+    // Check cache first
+    const cached = getCached(year);
+    if (cached) return cached;
+
     try {
         const res = await fetch(
             `${BASE}?year=${year}&account=expenses&quota=target&unit=single`,
@@ -111,7 +157,15 @@ export async function fetchBundeshaushalt(year = 2025) {
             });
         }
 
-        return { total: Math.round(totalMrd * 10) / 10, categories, source: 'live' };
+        const result = {
+            total: Math.round(totalMrd * 10) / 10,
+            categories,
+            source: 'live',
+            lastUpdated: data.meta?.modifyDate || new Date().toLocaleDateString('de-DE'),
+            fetchedAt: new Date().toLocaleString('de-DE'),
+        };
+        setCache(year, result);
+        return result;
     } catch {
         return null;
     }

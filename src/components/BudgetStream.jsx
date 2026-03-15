@@ -4,7 +4,8 @@ import { BarChart3, Wifi, WifiOff } from 'lucide-react';
 import CategoryCard from './CategoryCard';
 import Search from './Search';
 import { budgetByYear } from '../data';
-import { fetchBundeshaushalt } from '../api/bundeshaushalt';
+import { fetchBundeshaushalt, getCacheFreshness } from '../api/bundeshaushalt';
+import { RefreshCw } from 'lucide-react';
 
 const BudgetStream = ({ taxAmount, year }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -79,6 +80,16 @@ const BudgetStream = ({ taxAmount, year }) => {
                                     ? `Deine €${taxAmount.toLocaleString('de-DE')} Steuern — aufgeteilt auf ${categories.length} Bereiche.`
                                     : `€${total} Mrd verteilt auf ${categories.length} Bereiche. Quelle: ${isLive ? 'bundeshaushalt.de (Live)' : 'BMF'}.`}
                             </p>
+                            {isLive && liveData?.lastUpdated && (
+                                <p className="text-[10px] text-[var(--color-text-3)] mt-1">
+                                    BMF-Datenstand: {liveData.lastUpdated} · Abgerufen: {liveData.fetchedAt}
+                                </p>
+                            )}
+                            {!isLive && (
+                                <p className="text-[10px] text-[var(--color-text-3)] mt-1">
+                                    Statische Daten (BMF Haushaltsplan {year}). Live-API nicht erreichbar — Daten werden bei Verfügbarkeit automatisch aktualisiert.
+                                </p>
+                            )}
                         </div>
                         <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
                     </div>

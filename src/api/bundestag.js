@@ -99,13 +99,17 @@ export async function fetchMdBProfile(politicianId) {
 
 /**
  * Calculate transparency score from profile data
- * 5 factors × 0-20 = 0-100
+ * 5 factors x 0-20 = 0-100
+ *
+ * Each factor includes a `confidence` level:
+ *   - "high"   — computed from live API data
+ *   - "low"    — estimated / placeholder (requires data not yet available via API)
  */
 export function calculateScore(profile) {
-    // Erreichbarkeit (0-20): based on answer rate
+    // Erreichbarkeit (0-20): based on answer rate — LIVE
     const erreichbarkeit = Math.round(profile.answerRate * 20);
 
-    // Nebeneinkünfte (0-20): inverse of side job income
+    // Nebeneinkünfte (0-20): inverse of side job income — LIVE
     let nebeneinkuenfte = 20;
     if (profile.sideJobIncome > 250000) nebeneinkuenfte = 0;
     else if (profile.sideJobIncome > 100000) nebeneinkuenfte = 5;
@@ -128,12 +132,19 @@ export function calculateScore(profile) {
         total: anwesenheit + erreichbarkeit + nebeneinkuenfte + aktivitaet + transparenz,
         liveFactors: ['erreichbarkeit', 'nebeneinkuenfte'], // which factors are from live data
         estimatedFactors: ['anwesenheit', 'aktivitaet', 'transparenz'], // which are estimated
+        factorConfidence: {
+            anwesenheit: 'low',
+            erreichbarkeit: 'high',
+            nebeneinkuenfte: 'high',
+            aktivitaet: 'low',
+            transparenz: 'low',
+        },
     };
 }
 
 /**
  * Fetch and score a batch of MdBs
- * Returns enriched MdB data with scores
+ * Returns enriched MdB data with scores, confidence levels, and a lastUpdated timestamp
  */
 export async function fetchAndScoreMdBs(limit = 20) {
     const list = await fetchMdBList();
@@ -166,6 +177,7 @@ export async function fetchAndScoreMdBs(limit = 20) {
             context: `Antwortquote: ${Math.round(profile.answerRate * 100)}% (${profile.answeredQuestions}/${profile.totalQuestions} Fragen). ${profile.totalSideJobs} Nebentätigkeiten.`,
             profileUrl: profile.profileUrl,
             liveFactors: scores.liveFactors,
+            factorConfidence: scores.factorConfidence,
         };
     }).filter(Boolean);
 
@@ -173,5 +185,6 @@ export async function fetchAndScoreMdBs(limit = 20) {
         members: scored,
         totalAvailable: list.total,
         source: 'live',
+        lastUpdated: new Date().toISOString(),
     };
 }
