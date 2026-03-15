@@ -4,6 +4,7 @@ import { UserCheck, ChevronDown, Search, ArrowUpDown, Info, TrendingUp, External
 import { scoreFactors, scoreToNote, sampleMdBs } from '../data/mdbScores';
 import { noteColors } from '../data/zeugnis';
 import { fetchAndScoreMdBs } from '../api/bundestag';
+import { searchPolitiker, getPolitikerDetail } from '../api/politikerSuche';
 import Icon from './Icon';
 
 const NoteDisplay = ({ note, size = 'normal' }) => {
@@ -73,6 +74,40 @@ const MdBZeugnis = () => {
     const [loadingLive, setLoadingLive] = useState(true);
     const [lastUpdated, setLastUpdated] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+
+    // Live API search
+    const [apiResults, setApiResults] = useState([]);
+    const [searchingApi, setSearchingApi] = useState(false);
+    const [selectedApiProfile, setSelectedApiProfile] = useState(null);
+    const [loadingProfile, setLoadingProfile] = useState(false);
+
+    // Debounced API search
+    useEffect(() => {
+        if (searchTerm.length < 3) { setApiResults([]); setSelectedApiProfile(null); return; }
+        const timer = setTimeout(async () => {
+            setSearchingApi(true);
+            const results = await searchPolitiker(searchTerm);
+            setApiResults(results);
+            setSearchingApi(false);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchTerm]);
+
+    const handleApiProfileClick = async (politician) => {
+        setLoadingProfile(true);
+        setSelectedApiProfile(null);
+        const detail = await getPolitikerDetail(politician.id);
+        if (detail) {
+            setSelectedApiProfile({
+                ...detail,
+                note: scoreToNote(detail.total),
+                wahlkreis: detail.beruf || '',
+                rolle: detail.partei,
+                context: `Antwortquote: ${detail.antwortRate !== null ? Math.round(detail.antwortRate * 100) + '%' : 'keine Daten'} (${detail.fragenBeantwortet || 0}/${detail.fragenGesamt || 0} Fragen). ${detail.sideJobCount} Nebentätigkeiten. Geschätztes Nebeneinkommen: €${(detail.sideJobIncome || 0).toLocaleString('de-DE')}.`,
+            });
+        }
+        setLoadingProfile(false);
+    };
 
     const loadLiveData = useCallback(async () => {
         setRefreshing(true);
@@ -398,6 +433,125 @@ const MdBZeugnis = () => {
                         );
                     })}
                 </div>
+
+                {/* Live API Search Results */}
+                {searchTerm.length >= 3 && filtered.length === 0 && (
+                    <div className="mb-8">
+                        {searchingApi && (
+                            <div className="flex items-center gap-2 py-8 justify-center text-sm text-[var(--color-text-3)]">
+                                <div className="w-4 h-4 border-2 border-[var(--color-blue)] border-t-transparent rounded-full animate-spin" />
+                                Suche in abgeordnetenwatch.de...
+                            </div>
+                        )}
+
+                        {!searchingApi && apiResults.length > 0 && !selectedApiProfile && (
+                            <div>
+                                <div className="text-xs text-[var(--color-text-3)] mb-3 flex items-center gap-1.5">
+                                    <Wifi size={10} className="text-[var(--color-green)]" />
+                                    {apiResults.length} Ergebnis(se) von abgeordnetenwatch.de
+                                </div>
+                                <div className="space-y-2">
+                                    {apiResults.map(p => (
+                                        <button
+                                            key={p.id}
+                                            onClick={() => handleApiProfileClick(p)}
+                                            className="card w-full p-4 flex items-center gap-3 text-left hover:bg-[var(--color-surface)] transition-colors"
+                                        >
+                                            <div className="flex-1 min-w-0">
+                                                <div className="text-sm font-semibold text-[var(--color-text)]">{p.name}</div>
+                                                <div className="text-[11px] text-[var(--color-text-3)]">{p.partei} · {p.beruf || 'Politiker:in'} · Jg. {p.geburtsjahr || '?'}</div>
+                                            </div>
+                                            <span className="text-[10px] text-[var(--color-blue)] shrink-0">Score berechnen →</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {!searchingApi && apiResults.length === 0 && (
+                            <div className="text-center py-8 text-sm text-[var(--color-text-3)]">
+                                Kein:e Politiker:in gefunden für "{searchTerm}"
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Live-scored profile from API */}
+                {selectedApiProfile && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="card overflow-hidden mb-8 !border-[var(--color-blue)]/20"
+                    >
+                        <div className="px-5 py-4 bg-[var(--color-blue)]/5 border-b border-[var(--color-border)] flex items-center gap-2">
+                            <Wifi size={12} className="text-[var(--color-green)]" />
+                            <span className="text-xs font-medium text-[var(--color-text-2)]">Live-Score von abgeordnetenwatch.de</span>
+                        </div>
+                        <div className="p-5">
+                            <div className="flex items-start justify-between gap-4 mb-4">
+                                <div>
+                                    <div className="text-lg font-bold text-[var(--color-text)]">{selectedApiProfile.name}</div>
+                                    <div className="text-sm text-[var(--color-text-3)]">{selectedApiProfile.partei} · {selectedApiProfile.beruf}</div>
+                                    {selectedApiProfile.bildung && <div className="text-[11px] text-[var(--color-text-3)] mt-0.5">{selectedApiProfile.bildung}</div>}
+                                </div>
+                                <div className="text-center shrink-0">
+                                    <NoteDisplay note={selectedApiProfile.note} size="large" />
+                                    <div className="text-[10px] text-[var(--color-text-3)] mt-1 font-mono">{selectedApiProfile.total}/100</div>
+                                </div>
+                            </div>
+
+                            {/* Score breakdown */}
+                            <div className="space-y-3 mb-4">
+                                {scoreFactors.map(factor => {
+                                    const val = selectedApiProfile.scores[factor.id];
+                                    const pct = Math.round((val / factor.maxPoints) * 100);
+                                    const isFactorLive = (selectedApiProfile.liveFactors || []).includes(factor.id);
+                                    return (
+                                        <div key={factor.id} className="flex items-center gap-3">
+                                            <div className="w-6 h-6 rounded-md bg-[var(--color-surface-2)] flex items-center justify-center shrink-0">
+                                                <Icon name={factor.icon} size={11} className="text-[var(--color-text-3)]" />
+                                            </div>
+                                            <div className="w-24 shrink-0">
+                                                <span className="text-[11px] text-[var(--color-text-2)]">{factor.name}</span>
+                                            </div>
+                                            <ScoreBar value={val} max={factor.maxPoints} color={pct >= 75 ? 'var(--color-green)' : pct >= 50 ? 'var(--color-amber)' : 'var(--color-red)'} />
+                                            <span className="text-[11px] font-mono font-medium text-[var(--color-text)] w-12 text-right shrink-0">{val}/{factor.maxPoints}</span>
+                                            <ConfidenceBadge isLive={isFactorLive} />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <div className="p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] mb-3">
+                                <p className="text-[12px] text-[var(--color-text-2)]">{selectedApiProfile.context}</p>
+                            </div>
+
+                            {selectedApiProfile.sideJobList?.length > 0 && (
+                                <div className="mb-3">
+                                    <div className="text-[10px] font-semibold text-[var(--color-text-3)] uppercase tracking-wider mb-2">Nebentätigkeiten</div>
+                                    <div className="space-y-1">
+                                        {selectedApiProfile.sideJobList.map((sj, i) => (
+                                            <div key={i} className="text-[11px] text-[var(--color-text-2)] px-2 py-1 rounded bg-[var(--color-surface-2)] border border-[var(--color-border)]">
+                                                {sj.label} {sj.income > 0 && <span className="text-[var(--color-amber)] font-mono">~€{sj.income.toLocaleString('de-DE')}</span>}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <a href={selectedApiProfile.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-[var(--color-blue)] hover:underline">
+                                Vollständiges Profil auf abgeordnetenwatch.de <ExternalLink size={10} />
+                            </a>
+                        </div>
+                    </motion.div>
+                )}
+
+                {loadingProfile && (
+                    <div className="flex items-center gap-2 py-8 justify-center text-sm text-[var(--color-text-3)] mb-8">
+                        <div className="w-4 h-4 border-2 border-[var(--color-blue)] border-t-transparent rounded-full animate-spin" />
+                        Berechne Score...
+                    </div>
+                )}
 
                 {/* Methodik */}
                 <motion.div
