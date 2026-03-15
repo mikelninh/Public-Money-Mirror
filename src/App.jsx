@@ -21,6 +21,7 @@ const PolitikZeugnis = lazy(() => import('./components/PolitikZeugnis'));
 const MdBZeugnis = lazy(() => import('./components/MdBZeugnis'));
 const VorbilderGlobal = lazy(() => import('./components/VorbilderGlobal'));
 const BudgetSimulator = lazy(() => import('./components/BudgetSimulator'));
+const Kampagnen = lazy(() => import('./components/Kampagnen'));
 const BriefGenerator = lazy(() => import('./components/BriefGenerator'));
 const VotingInterface = lazy(() => import('./components/VotingInterface'));
 const TaxTicker = lazy(() => import('./components/TaxTicker'));
@@ -86,6 +87,7 @@ function App() {
                         <MdBZeugnis />
                         <VorbilderGlobal />
                         <BudgetSimulator />
+                        <Kampagnen />
                         <BriefGenerator />
                         <VotingInterface />
                     </motion.div>

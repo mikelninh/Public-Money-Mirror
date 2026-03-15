@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BarChart3, Vote, Briefcase, FileText, UserCheck, Globe, Sliders, Mail, MapPin, AlertTriangle, Eye } from 'lucide-react';
+import { BarChart3, Vote, Briefcase, FileText, UserCheck, Globe, Sliders, Mail, MapPin, AlertTriangle, Eye, Megaphone } from 'lucide-react';
 
 const features = [
     { icon: BarChart3, label: 'Haushalt', desc: '€489 Mrd aufgeschlüsselt', href: '#haushalt', color: 'var(--color-blue)' },
@@ -11,7 +11,8 @@ const features = [
     { icon: UserCheck, label: 'MdB-Index', desc: '28 Abgeordnete bewertet', href: '#mdb-zeugnis', color: 'var(--color-amber)' },
     { icon: Globe, label: 'Vorbilder', desc: 'Andere machen es besser', href: '#vorbilder', color: 'var(--color-cyan)' },
     { icon: Sliders, label: 'Simulator', desc: 'Dein Haushaltsentwurf', href: '#simulator', color: 'var(--color-green)' },
-    { icon: Mail, label: 'Aktiv werden', desc: 'Brief an deinen MdB', href: '#mitmachen', color: 'var(--color-green)' },
+    { icon: Megaphone, label: 'Kampagnen', desc: 'Gemeinsam Druck machen', href: '#kampagnen', color: 'var(--color-green)' },
+    { icon: Mail, label: 'MdB-Brief', desc: 'Brief an deinen MdB', href: '#mitmachen', color: 'var(--color-green)' },
     { icon: AlertTriangle, label: 'Verschwendung', desc: '€25+ Mrd dokumentiert', href: '#kontrolle', color: 'var(--color-red)' },
     { icon: MapPin, label: 'Projekte', desc: '10 Bundesweite Baustellen', href: '#vorort', color: 'var(--color-cyan)' },
 ];
