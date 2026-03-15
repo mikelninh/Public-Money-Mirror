@@ -22,7 +22,7 @@ const Personalizer = ({ onTaxUpdate }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-20 right-5 z-50 w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg"
+                className="fixed bottom-20 right-3 md:right-5 z-40 w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-lg"
                 style={{ background: 'linear-gradient(135deg, var(--color-blue), var(--color-purple))', boxShadow: '0 4px 24px rgba(79,143,247,0.25)' }}
             >
                 <Calculator size={18} strokeWidth={1.5} />

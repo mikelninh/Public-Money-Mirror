@@ -67,7 +67,7 @@ const ImpactChains = () => {
                                         >
                                             <div className="px-5 pb-5">
                                                 {/* Step indicators */}
-                                                <div className="flex items-center gap-1 mb-5 overflow-x-auto">
+                                                <div className="flex items-center gap-1 mb-5 overflow-x-auto no-scrollbar pb-1">
                                                     {stepLabels.map((label, si) => (
                                                         <React.Fragment key={label}>
                                                             <span className="px-2.5 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider text-[var(--color-text-3)] bg-[var(--color-surface-2)] border border-[var(--color-border)] whitespace-nowrap">

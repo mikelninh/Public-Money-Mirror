@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Sliders, RotateCcw, Share2, Download, AlertTriangle, Check } from 'lucide-react';
 import { budgetByYear } from '../data';
 import Icon from './Icon';
+import ShareCard from './ShareCard';
 
 // What €1 Mrd can buy in each category
 const equivalents = {
@@ -48,6 +49,7 @@ const BudgetSimulator = () => {
         return init;
     });
     const [shared, setShared] = useState(false);
+    const [showShareCard, setShowShareCard] = useState(false);
 
     const adjust = useCallback((id, delta) => {
         setAdjustments(prev => ({ ...prev, [id]: Math.max(-50, Math.min(100, delta)) }));
@@ -161,8 +163,8 @@ const BudgetSimulator = () => {
                             </button>
                         )}
                         {hasChanges && (
-                            <button onClick={shareText} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-white" style={{ background: shared ? 'var(--color-green)' : 'linear-gradient(135deg, var(--color-blue), var(--color-purple))' }}>
-                                {shared ? <><Check size={12} /> Kopiert!</> : <><Share2 size={12} /> Teilen</>}
+                            <button onClick={() => setShowShareCard(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-white" style={{ background: 'linear-gradient(135deg, var(--color-blue), var(--color-purple))' }}>
+                                <Share2 size={12} /> Teilen
                             </button>
                         )}
                     </div>
@@ -246,6 +248,23 @@ const BudgetSimulator = () => {
                     <span className="text-xs font-mono text-[var(--color-text-3)]">€{baseline.find(c => c.id === 'sonstiges')?.amountNum.toFixed(1)} Mrd</span>
                 </div>
             </div>
+
+            <AnimatePresence>
+                {showShareCard && (
+                    <ShareCard
+                        title="Mein Haushaltsentwurf"
+                        subtitle="So würde ich €489 Mrd verteilen"
+                        lines={results
+                            .filter(r => r.pctChange !== 0)
+                            .map(r => ({
+                                label: r.name,
+                                value: `€${r.amountNum.toFixed(1)} → €${r.newAmount.toFixed(1)} Mrd (${r.pctChange > 0 ? '+' : ''}${r.pctChange}%)`,
+                            }))}
+                        accentColor="var(--color-cyan)"
+                        onClose={() => setShowShareCard(false)}
+                    />
+                )}
+            </AnimatePresence>
         </section>
     );
 };

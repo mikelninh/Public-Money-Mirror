@@ -20,7 +20,7 @@ const LifeSituation = ({ selected, onSelect }) => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 max-w-3xl mx-auto">
+                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-2 md:gap-3 max-w-3xl mx-auto">
                     {lifeSituations.map((sit, i) => (
                         <motion.button
                             key={sit.id}

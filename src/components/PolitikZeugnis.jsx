@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, ChevronDown, Share2, Check, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { zeugnisData, noteColors, statusLabels, methodik } from '../data/zeugnis';
 import Icon from './Icon';
+import ShareCard from './ShareCard';
 
 const NoteDisplay = ({ note, size = 'normal' }) => {
     const style = noteColors[note] || noteColors[4];
@@ -17,6 +18,7 @@ const NoteDisplay = ({ note, size = 'normal' }) => {
 const PolitikZeugnis = () => {
     const [expandedSubject, setExpandedSubject] = useState(null);
     const [shared, setShared] = useState(false);
+    const [showShareCard, setShowShareCard] = useState(false);
     const [buergerNoten, setBuergerNoten] = useState(() => {
         const stored = localStorage.getItem('pmm-buergernoten');
         return stored ? JSON.parse(stored) : {};
@@ -55,16 +57,7 @@ const PolitikZeugnis = () => {
     };
 
     const shareZeugnis = () => {
-        const lines = zeugnisData.subjects.map(s => `${s.name}: ${s.averageNote.toFixed(1)}`).join('\n');
-        const text = `Zeugnis der ${zeugnisData.government} (${zeugnisData.period}):\n\n${lines}\n\nGesamtnote: ${overallAvg.toFixed(1)}\n\n→ publicmoneymirror.de`;
-
-        if (navigator.share) {
-            navigator.share({ title: 'Politik-Zeugnis', text });
-        } else {
-            navigator.clipboard.writeText(text);
-            setShared(true);
-            setTimeout(() => setShared(false), 2000);
-        }
+        setShowShareCard(true);
     };
 
     return (
@@ -232,9 +225,9 @@ const PolitikZeugnis = () => {
                         <button
                             onClick={shareZeugnis}
                             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-white"
-                            style={{ background: shared ? 'var(--color-green)' : 'linear-gradient(135deg, var(--color-blue), var(--color-purple))' }}
+                            style={{ background: 'linear-gradient(135deg, var(--color-blue), var(--color-purple))' }}
                         >
-                            {shared ? <><Check size={12} /> Kopiert!</> : <><Share2 size={12} /> Zeugnis teilen</>}
+                            <Share2 size={12} /> Zeugnis als Bild teilen
                         </button>
                     </div>
                 </motion.div>
@@ -331,6 +324,24 @@ const PolitikZeugnis = () => {
                     </AnimatePresence>
                 </motion.div>
             </div>
+
+            <AnimatePresence>
+                {showShareCard && (
+                    <ShareCard
+                        title="Zeugnis: Ampel-Koalition"
+                        subtitle="2021-2025 — Versprochen vs. Geliefert"
+                        lines={[
+                            ...zeugnisData.subjects.map(s => ({
+                                label: s.name,
+                                value: `Note ${s.averageNote.toFixed(1)}`,
+                            })),
+                            { label: 'Gesamtnote', value: overallAvg.toFixed(1) },
+                        ]}
+                        accentColor="var(--color-red)"
+                        onClose={() => setShowShareCard(false)}
+                    />
+                )}
+            </AnimatePresence>
         </section>
     );
 };

@@ -54,7 +54,7 @@ const TaxTicker = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => { setIsOpen(true); setElapsed(0); startRef.current = Date.now(); }}
-                className="fixed bottom-20 left-5 z-50 px-4 py-2.5 rounded-2xl flex items-center gap-2 text-white text-xs font-semibold shadow-lg"
+                className="fixed bottom-20 left-3 md:left-5 z-40 px-3 md:px-4 py-2 md:py-2.5 rounded-2xl flex items-center gap-2 text-white text-[11px] md:text-xs font-semibold shadow-lg"
                 style={{ background: 'linear-gradient(135deg, var(--color-green), var(--color-cyan))', boxShadow: '0 4px 24px rgba(52,211,153,0.25)' }}
             >
                 <Play size={13} fill="currentColor" />
@@ -68,7 +68,7 @@ const TaxTicker = () => {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-20 left-5 z-50 w-[320px] rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-2xl"
+            className="fixed bottom-20 left-3 md:left-5 z-50 w-[calc(100vw-24px)] max-w-[320px] rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-2xl"
             style={{ background: 'var(--color-bg)' }}
         >
             {/* Header */}

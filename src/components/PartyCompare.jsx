@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Vote, Grid3X3, BarChart3, Hexagon, Compass, RotateCcw, Share2 } from 'lucide-react';
 import { parties, categories, stances, quizQuestions } from '../data/partyData';
 import Icon from './Icon';
+import ShareCard from './ShareCard';
 
 const tabs = [
     { id: 'matrix', label: 'Matrix', icon: Grid3X3 },
@@ -278,6 +279,7 @@ const RadarChart = () => {
 const WahlkompassMini = () => {
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState({});
+    const [showShareCard, setShowShareCard] = useState(false);
     const total = quizQuestions.length;
     const isDone = step >= total;
 
@@ -360,10 +362,25 @@ const WahlkompassMini = () => {
                     <button onClick={reset} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-surface-2)] transition-colors">
                         <RotateCcw size={14} /> Nochmal
                     </button>
-                    <button onClick={share} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white" style={{ background: 'linear-gradient(135deg, var(--color-blue), var(--color-purple))' }}>
-                        <Share2 size={14} /> Teilen
+                    <button onClick={() => setShowShareCard(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white" style={{ background: 'linear-gradient(135deg, var(--color-blue), var(--color-purple))' }}>
+                        <Share2 size={14} /> Ergebnis teilen
                     </button>
                 </div>
+
+                <AnimatePresence>
+                    {showShareCard && (
+                        <ShareCard
+                            title="Mein Wahlkompass-Ergebnis"
+                            subtitle="Übereinstimmung mit Partei-Positionen im Haushalt"
+                            lines={results.slice(0, 6).map(r => ({
+                                label: r.name,
+                                value: `${r.match}%`,
+                            }))}
+                            accentColor="var(--color-purple)"
+                            onClose={() => setShowShareCard(false)}
+                        />
+                    )}
+                </AnimatePresence>
             </motion.div>
         );
     }
