@@ -5,11 +5,9 @@ import ThemeToggle from './ThemeToggle';
 
 const links = [
     { label: 'Themen', href: '#themen' },
-    { label: 'Haushalt', href: '#haushalt' },
-    { label: 'Parteien', href: '#parteien' },
-    { label: 'Zeugnis', href: '#zeugnis' },
-    { label: 'Simulator', href: '#simulator' },
-    { label: 'Mitmachen', href: '#mitmachen' },
+    { label: 'Bewerten', href: '#zeugnis' },
+    { label: 'Handeln', href: '#kampagnen' },
+    { label: 'Über uns', href: '#footer' },
 ];
 
 const Navbar = () => {

@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import { ArrowDown, TrendingUp, Users, FileText } from 'lucide-react';
 
 const stats = [
-    { label: "Bundeshaushalt 2025", value: "€489 Mrd", icon: TrendingUp },
-    { label: "Steuerzahler:innen", value: "45,9 Mio", icon: Users },
-    { label: "Themen analysiert", value: "15", icon: FileText },
+    { label: "Bundeshaushalt", value: "€489 Mrd Budget", icon: TrendingUp },
+    { label: "Themen durchleuchtet", value: "30 Themen analysiert", icon: FileText },
+    { label: "Politiker bewertet", value: "28+ Politiker bewertet", icon: Users },
 ];
 
 const Hero = () => {
@@ -56,9 +56,9 @@ const Hero = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.35 }}
-                    className="text-sm md:text-lg text-[var(--color-text-2)] mb-10 md:mb-14 max-w-md mx-auto leading-relaxed font-light px-4"
+                    className="text-sm md:text-lg text-[var(--color-text-2)] mb-10 md:mb-14 max-w-lg mx-auto leading-relaxed font-light px-4"
                 >
-                    €489 Milliarden — persönlich erklärt. Wer entscheidet? Wer profitiert? Was kannst du tun?
+                    &euro;489 Milliarden Bundeshaushalt &mdash; durchleuchtet, bewertet, in deiner Hand.
                 </motion.p>
 
                 {/* Coin - smaller on mobile */}

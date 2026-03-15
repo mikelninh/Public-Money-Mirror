@@ -293,9 +293,14 @@ const ThemenLookup = () => {
                         </div>
                         <span className="text-xs font-medium text-[var(--color-text-3)] uppercase tracking-widest">Dein Thema</span>
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-gradient-heading mb-2">
-                        Was ist dir wichtig?
-                    </h2>
+                    <div className="flex items-center gap-3 mb-2">
+                        <h2 className="text-2xl md:text-3xl font-bold text-gradient-heading">
+                            Was ist dir wichtig?
+                        </h2>
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold bg-[var(--color-blue)]/8 text-[var(--color-blue)] border border-[var(--color-blue)]/15">
+                            {themen.length} Themen
+                        </span>
+                    </div>
                     <p className="text-[var(--color-text-2)] text-sm max-w-lg">
                         Tippe dein Thema ein. Wir zeigen dir: wer zuständig ist, was versprochen wurde, wer Lobby macht, welches Land es besser macht — und was du konkret tun kannst.
                     </p>
@@ -308,7 +313,7 @@ const ThemenLookup = () => {
                         type="text"
                         value={query}
                         onChange={e => setQuery(e.target.value)}
-                        placeholder="z.B. Tierschutz, Bildung, Klima, Wohnen..."
+                        placeholder="Tippe ein Thema: Rente, Klima, Tierschutz, Bildung..."
                         className="w-full pl-12 pr-4 py-4 rounded-2xl text-base bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] placeholder:text-[var(--color-text-3)] focus:border-[var(--color-blue)] focus:outline-none transition-colors"
                     />
                 </div>

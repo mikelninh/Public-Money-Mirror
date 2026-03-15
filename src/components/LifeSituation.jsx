@@ -13,7 +13,7 @@ const LifeSituation = ({ selected, onSelect }) => {
                     viewport={{ once: true }}
                 >
                     <h2 className="text-2xl md:text-3xl font-bold text-gradient-heading mb-3">
-                        Was bedeutet der Haushalt für dich?
+                        Zeig mir, was mich betrifft
                     </h2>
                     <p className="text-[var(--color-text-2)] text-sm max-w-md mx-auto">
                         Wähle deine Lebenssituation — wir zeigen dir, welche Milliarden dich direkt betreffen.
@@ -44,13 +44,21 @@ const LifeSituation = ({ selected, onSelect }) => {
                 </div>
 
                 {!selected && (
-                    <motion.p
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="text-center text-xs text-[var(--color-text-3)] mt-6"
+                        className="text-center mt-6 space-y-2"
                     >
-                        Keine Daten werden gespeichert — alles bleibt in deinem Browser.
-                    </motion.p>
+                        <p className="text-xs text-[var(--color-text-3)]">
+                            Keine Daten werden gespeichert — alles bleibt in deinem Browser.
+                        </p>
+                        <a
+                            href="#themen"
+                            className="inline-block text-xs text-[var(--color-text-3)] hover:text-[var(--color-text-2)] transition-colors underline underline-offset-2 decoration-dotted"
+                        >
+                            Überspringen
+                        </a>
+                    </motion.div>
                 )}
             </div>
         </section>

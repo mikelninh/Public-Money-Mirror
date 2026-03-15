@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -41,6 +41,8 @@ function App() {
     const [showReceipt, setShowReceipt] = useState(false);
     const [lifeSituation, setLifeSituation] = useState(null);
     const [showDeepDive, setShowDeepDive] = useState(false);
+    const deepDiveRef = useRef(null);
+    const shouldScrollRef = useRef(false);
 
     const handleTaxUpdate = (amount) => {
         setTaxAmount(amount);
@@ -48,14 +50,29 @@ function App() {
     };
 
     const handleExplore = () => {
-        setShowDeepDive(true);
+        if (!showDeepDive) {
+            shouldScrollRef.current = true;
+            setShowDeepDive(true);
+        }
     };
+
+    // Auto-scroll to the deep dive section when it first appears
+    useEffect(() => {
+        if (showDeepDive && shouldScrollRef.current && deepDiveRef.current) {
+            // Small delay to let React render the sections
+            const timer = setTimeout(() => {
+                deepDiveRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                shouldScrollRef.current = false;
+            }, 150);
+            return () => clearTimeout(timer);
+        }
+    }, [showDeepDive]);
 
     return (
         <div className="min-h-screen">
             <Navbar />
 
-            {/* ═══ LANDING ═══ Always visible, focused, fast */}
+            {/* Landing - Always visible, focused, fast */}
             <Hero />
             <LifeSituation selected={lifeSituation} onSelect={setLifeSituation} />
 
@@ -64,10 +81,23 @@ function App() {
                 <ThemenLookup />
             </Suspense>
 
-            {/* Feature grid — always visible as navigation */}
+            {/* Feature grid - always visible as navigation */}
             <FeatureGrid onExplore={handleExplore} />
 
-            {/* ═══ DEEP DIVE ═══ Revealed on demand */}
+            {/* Section divider between Landing and Deep Dive */}
+            {showDeepDive && (
+                <div className="container-main py-2" ref={deepDiveRef}>
+                    <div className="flex items-center gap-4">
+                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--color-border)] to-transparent" />
+                        <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-[var(--color-text-3)] shrink-0">
+                            Tiefere Einblicke
+                        </span>
+                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--color-border)] to-transparent" />
+                    </div>
+                </div>
+            )}
+
+            {/* Deep Dive - Revealed on demand */}
             {showDeepDive && (
                 <Suspense fallback={<SectionLoader />}>
                     <motion.div
@@ -94,7 +124,7 @@ function App() {
                 </Suspense>
             )}
 
-            {/* ═══ UTILITIES ═══ Always available */}
+            {/* Utilities - Always available */}
             <Suspense fallback={null}>
                 {showDeepDive && (
                     <>
@@ -111,7 +141,7 @@ function App() {
             </Suspense>
 
             {/* Footer */}
-            <footer className="border-t border-[var(--color-border)] py-6 md:py-8 px-4 md:px-6 pb-20 md:pb-24">
+            <footer id="footer" className="border-t border-[var(--color-border)] py-6 md:py-8 px-4 md:px-6 pb-20 md:pb-24">
                 <div className="container-main flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
                     <span className="text-[10px] md:text-xs text-[var(--color-text-3)] tracking-wide">
                         Public Money Mirror &copy; 2025 &middot; Open Source &middot; MIT
