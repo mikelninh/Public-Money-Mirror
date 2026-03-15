@@ -619,6 +619,624 @@ export const themen = [
             quelle: 'EU eGovernment Benchmark 2024, OECD Digital Government Index 2023, Danish Agency for Digital Government',
         },
     },
+    // ── ADDITIONAL TOPICS ─────────────────────────────────────────────
+    {
+        id: 'drogen',
+        keywords: ['drogen', 'sucht', 'cannabis', 'legalisierung', 'suchtpolitik', 'suchtprävention', 'entkriminalisierung', 'alkohol', 'rausch', 'abhängigkeit'],
+        name: 'Drogen & Suchtpolitik',
+        icon: 'Heart',
+        color: 'var(--color-purple)',
+        zustaendig: {
+            ministerium: 'Bundesministerium für Gesundheit (BMG)',
+            minister: 'BMG-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Gesundheit',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a14',
+        },
+        budget: {
+            ressort: '€18,5 Mrd (BMG gesamt)',
+            anteil: '~€190 Mio für Suchtprävention und Drogenpolitik (Bundeszentrale für gesundheitliche Aufklärung + Programme)',
+            vergleich: 'Deutschland gibt ~€2,30 pro Einwohner:in für Suchtprävention aus. Portugal investiert €14 pro Kopf — und hat damit die Drogentoten um 80% gesenkt.',
+        },
+        versprechen: {
+            text: 'Cannabis kontrolliert legalisieren, Suchtprävention stärken, Drug-Checking-Angebote ausbauen, Substitutionstherapie erleichtern',
+            status: 'Cannabis-Gesetz (CanG) April 2024 in Kraft — aber stark verwässert: kein regulierter Verkauf, nur Eigenanbau und Cannabis-Clubs. Drug-Checking nur in wenigen Städten.',
+            note: 3,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Deutscher Hanfverband', ausgaben: '€140.000/Jahr', lobbyisten: 2 },
+                { name: 'Deutsche AIDS-Hilfe', ausgaben: '€280.000/Jahr', lobbyisten: 3 },
+                { name: 'Akzept e.V. (Suchthilfe)', ausgaben: '€60.000/Jahr', lobbyisten: 1 },
+            ],
+            dagegen: [
+                { name: 'Deutsche Polizeigewerkschaft (DPolG)', ausgaben: '€380.000/Jahr', lobbyisten: 3 },
+                { name: 'Drogenbeauftragte der Länder (institutionell)', ausgaben: '—', lobbyisten: 0 },
+            ],
+            fazit: 'Suchtpolitik wird stärker durch Moralpolitik und Wahlkampf bestimmt als durch evidenzbasierte Lobbyarbeit. Polizeigewerkschaften haben überproportionalen Einfluss.',
+        },
+        international: {
+            vorbild: 'Portugal',
+            flagge: '🇵🇹',
+            wasBeimVorbild: 'Portugal hat 2001 den Besitz aller Drogen entkriminalisiert (nicht legalisiert). Konsum wird als Gesundheitsproblem behandelt, nicht als Straftat. Ergebnis: Drogentote von 80 (2001) auf 16 (2017) gesunken, HIV-Neuinfektionen unter Drogennutzern um 95% reduziert. Statt Polizei entscheiden "Dissuasion Commissions" (Sozialarbeiter, Psychologen, Juristen) über Therapieangebote.',
+            wasWirLernen: 'Entkriminalisierung senkt Drogentote und HIV-Raten — Bestrafung tut das nicht. Deutschland hat ~2.200 Drogentote/Jahr (Rekord). Statt Kriminalisierung: Ausbau von Substitution, Drug-Checking, Konsumräumen und niedrigschwelligen Therapieangeboten.',
+            quelle: 'EMCDDA European Drug Report 2024, SICAD (Portugiesische Drogenbeobachtungsstelle)',
+        },
+    },
+    {
+        id: 'bundeswehr-beschaffung',
+        keywords: ['beschaffung', 'rüstung', 'sondervermögen', 'wehrtechnik', 'rüstungsprojekte', 'baainbw', 'puma', 'eurofighter', 'drohne', 'verteidigungsindustrie'],
+        name: 'Bundeswehr-Beschaffung',
+        icon: 'Shield',
+        color: '#ef4444',
+        zustaendig: {
+            ministerium: 'Bundesministerium der Verteidigung (BMVg) + BAAINBw (Beschaffungsamt)',
+            minister: 'BMVg-Minister:in (neue Regierung)',
+            ausschuss: 'Verteidigungsausschuss',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a12',
+        },
+        budget: {
+            ressort: '€53,3 Mrd (Verteidigung 2025) + Sondervermögen',
+            anteil: '~€25 Mrd für Rüstungsinvestitionen und Beschaffung — Sondervermögen (€100 Mrd, 2022) zu ~80% verplant',
+            vergleich: 'Das BAAINBw hat 11.000 Mitarbeiter:innen für Beschaffung. Schweden (FMV) schafft vergleichbare Ergebnisse mit 1.800 Mitarbeiter:innen. Puma-Schützenpanzer: geplant €3,1 Mrd, tatsächlich €5,9 Mrd.',
+        },
+        versprechen: {
+            text: 'Sondervermögen €100 Mrd für Bundeswehr-Modernisierung, Beschaffung beschleunigen, NATO-Fähigkeitsziele erreichen bis 2029',
+            status: 'Sondervermögen zu 80% gebunden, aber viele Projekte mit massiven Verzögerungen. Beschaffungsreform angekündigt, kaum umgesetzt. F-35-Kauf: Lieferung erst ab 2027.',
+            note: 4,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'BDSV (Sicherheits- und Verteidigungsindustrie)', ausgaben: '€1,5 Mio/Jahr', lobbyisten: 8 },
+                { name: 'Rheinmetall', ausgaben: '€980.000/Jahr', lobbyisten: 6 },
+                { name: 'Airbus Defence', ausgaben: '€1,2 Mio/Jahr', lobbyisten: 7 },
+            ],
+            dagegen: [
+                { name: 'IPPNW (Ärzte gegen Atomkrieg)', ausgaben: '€90.000/Jahr', lobbyisten: 1 },
+                { name: 'DFG-VK (Friedensgesellschaft)', ausgaben: '€40.000/Jahr', lobbyisten: 1 },
+            ],
+            fazit: 'Die Rüstungsindustrie hat direkten Zugang zu BMVg und Beschaffungsamt. Drehtür-Effekt: Generäle wechseln regelmäßig in die Rüstungsindustrie. Friedensorganisationen sind finanziell marginal.',
+        },
+        international: {
+            vorbild: 'Schweden',
+            flagge: '🇸🇪',
+            wasBeimVorbild: 'Schwedens FMV (Försvarets materielverk) beschafft effizient mit dem "Saab-Modell": Enge Zusammenarbeit zwischen Staat und nationaler Industrie, aber mit strikten Vertragsstrafen bei Verzögerungen. Gripen-Kampfjet: Entwicklung und Beschaffung in 7 Jahren (Eurofighter: 25+ Jahre). Betriebskosten Gripen: ~€4.700/Flugstunde (Eurofighter: ~€14.000). Schlüssel: Klare Anforderungen, keine nachträglichen Änderungen, iterative Entwicklung.',
+            wasWirLernen: 'Beschaffungsamt (BAAINBw) radikal reformieren: Weniger Bürokratie, mehr technische Kompetenz. Vertragsstrafen durchsetzen statt Kostenexplosionen akzeptieren. Anforderungen einfrieren — das ständige Ändern von Spezifikationen ist Haupttreiber für Verzögerungen und Kostensteigerungen.',
+            quelle: 'Swedish FMV Annual Report 2024, IISS Military Balance 2024, Bundesrechnungshof Sonderbericht Rüstungsprojekte 2023',
+        },
+    },
+    {
+        id: 'datenschutz',
+        keywords: ['datenschutz', 'privatsphäre', 'dsgvo', 'überwachung', 'vorratsdatenspeicherung', 'tracking', 'cookies', 'bfdi', 'datensicherheit', 'staatstrojaner'],
+        name: 'Datenschutz & Privatsphäre',
+        icon: 'Shield',
+        color: 'var(--color-blue)',
+        zustaendig: {
+            ministerium: 'Bundesministerium des Innern (BMI) + Bundesbeauftragte:r für Datenschutz (BfDI)',
+            minister: 'BMI-Minister:in + BfDI (neue Regierung)',
+            ausschuss: 'Ausschuss für Inneres und Heimat + Ausschuss für Digitales',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a04',
+        },
+        budget: {
+            ressort: '€15,1 Mrd (BMI gesamt)',
+            anteil: '~€38 Mio für den BfDI (Bundesbeauftragte:r für Datenschutz) — mit nur 330 Stellen für die Aufsicht über 83 Mio Bürger:innen und tausende Unternehmen',
+            vergleich: 'Irische Datenschutzbehörde (DPC): €26 Mio Budget bei 5 Mio Einwohnern. Deutsche BfDI: €38 Mio bei 83 Mio Einwohnern. Pro Kopf gibt Irland 5x mehr aus — und ist trotzdem zu schwach für Big-Tech-Aufsicht.',
+        },
+        versprechen: {
+            text: 'DSGVO konsequent durchsetzen, Vorratsdatenspeicherung durch Quick-Freeze ersetzen, Chatkontrolle verhindern, KI-Verordnung umsetzen',
+            status: 'Quick-Freeze beschlossen (2024), Chatkontrolle auf EU-Ebene blockiert. DSGVO-Durchsetzung weiterhin schwach: BfDI hat 2023 nur €1,4 Mio Bußgelder verhängt. KI-Verordnung in nationaler Umsetzung.',
+            note: 3,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Chaos Computer Club (CCC)', ausgaben: '€60.000/Jahr', lobbyisten: 2 },
+                { name: 'Digitalcourage', ausgaben: '€120.000/Jahr', lobbyisten: 2 },
+                { name: 'Gesellschaft für Freiheitsrechte (GFF)', ausgaben: '€350.000/Jahr', lobbyisten: 3 },
+            ],
+            dagegen: [
+                { name: 'Bitkom (will DSGVO-Lockerungen)', ausgaben: '€3,8 Mio/Jahr', lobbyisten: 22 },
+                { name: 'BDI (gegen "Überregulierung")', ausgaben: '€8,9 Mio/Jahr', lobbyisten: 42 },
+                { name: 'Sicherheitsbehörden (institutionell, für Überwachung)', ausgaben: '—', lobbyisten: 0 },
+            ],
+            fazit: 'Datenschutz-NGOs sind finanziell minimal aufgestellt. Industrie will weniger Regulierung, Sicherheitsbehörden wollen mehr Überwachung — Bürgerrechte geraten von zwei Seiten unter Druck.',
+        },
+        international: {
+            vorbild: 'Estland',
+            flagge: '🇪🇪',
+            wasBeimVorbild: 'Estland zeigt, dass Digitalisierung und Datenschutz kein Widerspruch sein müssen. X-Road: Jeder Datenzugriff durch Behörden wird protokolliert und ist für Bürger:innen einsehbar. "Data Tracker" zeigt in Echtzeit, welche Behörde welche Daten abgerufen hat. Unrechtmäßiger Zugriff wird automatisch gemeldet und ist strafbar. Prinzip: Der Staat muss sich vor den Bürger:innen rechtfertigen — nicht umgekehrt.',
+            wasWirLernen: 'Transparenzpflicht für Behördenzugriffe: Bürger:innen müssen sehen können, wer ihre Daten abruft. DSGVO-Durchsetzung stärken: BfDI braucht mehr Personal und höhere Bußgelder. Datensparsamkeit als Designprinzip für alle staatlichen IT-Systeme.',
+            quelle: 'e-Estonia.com, Estonian Data Protection Inspectorate, EU Fundamental Rights Agency 2024',
+        },
+    },
+    {
+        id: 'landwirtschaft',
+        keywords: ['landwirtschaft', 'bauern', 'agrar', 'agrarsubventionen', 'höfesterben', 'gap', 'eu-agrar', 'pestizide', 'glyphosat', 'subventionen'],
+        name: 'Landwirtschaft & Agrarwende',
+        icon: 'Leaf',
+        color: 'var(--color-green)',
+        zustaendig: {
+            ministerium: 'Bundesministerium für Ernährung und Landwirtschaft (BMEL)',
+            minister: 'BMEL-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Ernährung und Landwirtschaft',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a10',
+        },
+        budget: {
+            ressort: '€7,5 Mrd (BMEL gesamt)',
+            anteil: '€6,3 Mrd EU-Agrarsubventionen (GAP) für Deutschland + nationale Kofinanzierung. 80% der Direktzahlungen gehen an 20% der Betriebe — die größten.',
+            vergleich: 'Ein durchschnittlicher deutscher Hof erhält ~€30.000/Jahr EU-Subventionen. Davon fließen ~€270/Hektar als Flächenprämie — unabhängig davon, was oder wie produziert wird.',
+        },
+        versprechen: {
+            text: '30% Bio-Landwirtschaft bis 2030, Pflanzenschutzmittel reduzieren, Höfesterben stoppen, Tierhaltungskennzeichnung einführen',
+            status: 'Bio-Anteil 2024: 11,2% (Ziel 30%). Tierhaltungskennzeichnung beschlossen aber nur für Schwein und nur für frisches Fleisch. Bauernproteste 2024 nach Agrardiesel-Streichung. Höfesterben geht weiter: -3% Betriebe/Jahr.',
+            note: 4,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'BÖLW (Bio-Branche)', ausgaben: '€280.000/Jahr', lobbyisten: 3 },
+                { name: 'AbL (Arbeitsgemeinschaft bäuerliche Landwirtschaft)', ausgaben: '€180.000/Jahr', lobbyisten: 2 },
+            ],
+            dagegen: [
+                { name: 'Deutscher Bauernverband (DBV)', ausgaben: '€5,7 Mio/Jahr', lobbyisten: 22 },
+                { name: 'Industrieverband Agrar (Pflanzenschutz)', ausgaben: '€1,8 Mio/Jahr', lobbyisten: 8 },
+                { name: 'DRV (Raiffeisenverband)', ausgaben: '€1,3 Mio/Jahr', lobbyisten: 6 },
+            ],
+            fazit: 'Der Deutsche Bauernverband vertritt v.a. große Betriebe und Agrarindustrie, nicht Kleinbauern. Bio-Verbände haben einen Bruchteil des Budgets. EU-Subventionen belohnen Fläche statt Nachhaltigkeit.',
+        },
+        international: {
+            vorbild: 'Niederlande',
+            flagge: '🇳🇱',
+            wasBeimVorbild: 'Die Niederlande sind nach den USA der zweitgrößte Agrarexporteur der Welt — auf einem Bruchteil der Fläche. Schlüssel: Wageningen University als Innovationshub, Gewächshaus-Technologie (90% weniger Wasser, 95% weniger Pestizide als Freilandanbau), Precision Farming mit Drohnen und Sensoren. Aber: Auch die Niederlande kämpfen mit Stickstoff-Krise und Bauernprotesten.',
+            wasWirLernen: 'Forschung und Praxis enger verzahnen (Deutschland hat 50+ Agrar-Forschungsinstitute, aber die Innovation kommt nicht auf dem Feld an). Subventionen an Nachhaltigkeit koppeln statt an Fläche. Technologie nutzen, um mit weniger Fläche mehr zu produzieren — und den Rest der Natur zurückgeben.',
+            quelle: 'Wageningen University & Research, CBS Netherlands, OECD Agricultural Policy Monitoring 2024',
+        },
+    },
+    {
+        id: 'gleichstellung',
+        keywords: ['gleichstellung', 'gleichberechtigung', 'gender', 'pay gap', 'lohnlücke', 'frauenquote', 'elternzeit', 'feminismus', 'diskriminierung', 'gendergerechtigkeit'],
+        name: 'Gleichstellung & Gender',
+        icon: 'Users',
+        color: 'var(--color-purple)',
+        zustaendig: {
+            ministerium: 'Bundesministerium für Familie, Senioren, Frauen und Jugend (BMFSFJ)',
+            minister: 'BMFSFJ-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Familie, Senioren, Frauen und Jugend',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a13',
+        },
+        budget: {
+            ressort: '€13,2 Mrd (BMFSFJ gesamt)',
+            anteil: '~€240 Mio für Gleichstellungspolitik, Frauenhäuser und Gewaltschutz — €8,4 Mrd für Elterngeld',
+            vergleich: 'Deutschland: Gender Pay Gap 18% (unbereinigt). EU-Schnitt: 13%. Island: 10,2%. Schweden: 11,2%. Beim bereinigten GPG (gleicher Job, gleiche Qualifikation) liegt Deutschland bei 6%.',
+        },
+        versprechen: {
+            text: 'Entgelttransparenz stärken, Frauenquote in Vorständen ausbauen, Gewaltschutz verbessern, Ehegattensplitting reformieren',
+            status: 'Frauenquote für Vorstände (börsennotiert, >2.000 Mitarbeiter) umgesetzt. Entgelttransparenzgesetz wirkungslos — kaum Auskunftsansprüche. Ehegattensplitting: nicht angetastet. Frauenhäuser unterfinanziert (fehlen ~14.000 Plätze laut Istanbul-Konvention).',
+            note: 4,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Deutscher Frauenrat', ausgaben: '€180.000/Jahr', lobbyisten: 2 },
+                { name: 'UN Women Deutschland', ausgaben: '€90.000/Jahr', lobbyisten: 1 },
+            ],
+            dagegen: [
+                { name: 'BDA (gegen Lohntransparenz-Pflichten)', ausgaben: '€4,2 Mio/Jahr', lobbyisten: 18 },
+                { name: 'Familienunternehmer e.V. (gegen Quotenregelungen)', ausgaben: '€1,4 Mio/Jahr', lobbyisten: 6 },
+            ],
+            fazit: 'Gleichstellungs-Lobby ist extrem schwach finanziert. Das Ehegattensplitting kostet den Staat €22 Mrd/Jahr und begünstigt Alleinverdiener-Ehen — kein politischer Akteur traut sich an die Reform.',
+        },
+        international: {
+            vorbild: 'Island',
+            flagge: '🇮🇸',
+            wasBeimVorbild: 'Island ist seit 15 Jahren Platz 1 im Global Gender Gap Index. Schlüsselmaßnahmen: Equal Pay Certification seit 2018 — Unternehmen mit 25+ Mitarbeitern MÜSSEN nachweisen, dass sie gleich bezahlen, sonst drohen Bußgelder. Elternzeit: 12 Monate, davon 6 Monate für jeden Elternteil (nicht übertragbar). Frauenquote im Parlament: 48% (ohne gesetzliche Quote — durch Parteilisten). Seit 1975 Streiktag der Frauen ("kvennafrí") als kulturelles Erbe.',
+            wasWirLernen: 'Lohntransparenz muss verpflichtend und mit Sanktionen versehen sein — das deutsche Entgelttransparenzgesetz hat keine Zähne. Elternzeit-Monate nicht übertragbar machen: In Island nutzen 90% der Väter Elternzeit, in Deutschland 26%. Ehegattensplitting abschaffen und durch Individualbesteuerung mit Kinderbonus ersetzen.',
+            quelle: 'World Economic Forum Global Gender Gap Report 2024, Statistics Iceland, OECD Gender Data Portal',
+        },
+    },
+    {
+        id: 'sport',
+        keywords: ['sport', 'sportförderung', 'bewegung', 'olympia', 'breitensport', 'sportvereine', 'spitzensport', 'bewegungsmangel', 'dosb', 'fitness'],
+        name: 'Sport & Bewegung',
+        icon: 'Activity',
+        color: 'var(--color-cyan)',
+        zustaendig: {
+            ministerium: 'Bundesministerium des Innern und für Heimat (BMI) — Abteilung Sport',
+            minister: 'BMI-Minister:in (neue Regierung)',
+            ausschuss: 'Sportausschuss',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a05',
+        },
+        budget: {
+            ressort: '€15,1 Mrd (BMI gesamt)',
+            anteil: '~€335 Mio für Sportförderung (Spitzensport + DOSB-Förderung) + €400 Mio Sportstättensanierung (Investitionspakt)',
+            vergleich: 'Deutschland gibt ~€4 pro Einwohner:in für Sportförderung aus. Großbritannien: €12 (UK Sport + Sport England). Resultat: UK hat bei Olympia 2024 mehr Medaillen pro Kopf geholt.',
+        },
+        versprechen: {
+            text: 'Sportfördergesetz verabschieden, Sportstätten sanieren (Sanierungsstau €31 Mrd), Bewegungsförderung in Schulen, Olympia-Bewerbung prüfen',
+            status: 'Sportfördergesetz gescheitert (Streit um Unabhängigkeit des Sports). Investitionspakt Sportstätten: nur €400 Mio bei €31 Mrd Sanierungsstau. 80% der Kinder erreichen nicht die WHO-Empfehlung von 60 Min. Bewegung/Tag.',
+            note: 5,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'DOSB (Deutscher Olympischer Sportbund)', ausgaben: '€890.000/Jahr', lobbyisten: 6 },
+                { name: 'DFB (Deutscher Fußball-Bund)', ausgaben: '€520.000/Jahr', lobbyisten: 4 },
+            ],
+            dagegen: [
+                { name: 'Kommunale Spitzenverbände (keine Mittel für Sportstätten)', ausgaben: '€2,1 Mio/Jahr', lobbyisten: 10 },
+            ],
+            fazit: 'Sport hat keine starke politische Lobby, weil er als "Freizeitthema" gilt. Der Sanierungsstau bei Sportstätten (€31 Mrd) zeigt jahrzehntelanges Versagen. Bewegungsmangel kostet das Gesundheitssystem ~€5 Mrd/Jahr.',
+        },
+        international: {
+            vorbild: 'Finnland',
+            flagge: '🇫🇮',
+            wasBeimVorbild: 'Finnlands Programm "Schools on the Move" (Liikkuva koulu) seit 2010: Jede Schulstunde enthält Bewegungspausen, aktive Pausengestaltung, Schulwege zu Fuß/Rad. 90% aller Schulen machen mit. Ergebnis: Finnische Kinder bewegen sich durchschnittlich 68 Min/Tag (deutsche: 41 Min). Finnland gibt €52 pro Einwohner:in für Breitensport aus (ehrenamtliche Strukturen, kommunale Sportstätten kostenlos nutzbar).',
+            wasWirLernen: 'Bewegung in den Schulalltag integrieren statt nur auf den Vereinssport zu setzen. Sportstätten kommunal finanzieren und kostenlos zugänglich machen. Prävention rechnet sich: €1 für Bewegungsförderung spart €3-5 im Gesundheitssystem.',
+            quelle: 'Finnish Schools on the Move Programme, WHO Physical Activity Report 2024, OECD Health Statistics',
+        },
+    },
+    {
+        id: 'kultur',
+        keywords: ['kultur', 'medien', 'öffentlich-rechtlich', 'rundfunk', 'kulturförderung', 'theater', 'museum', 'musik', 'film', 'kreativwirtschaft'],
+        name: 'Kultur & Medien',
+        icon: 'Map',
+        color: 'var(--color-orange)',
+        zustaendig: {
+            ministerium: 'Beauftragter der Bundesregierung für Kultur und Medien (BKM)',
+            minister: 'BKM-Staatsminister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Kultur und Medien',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a22',
+        },
+        budget: {
+            ressort: '€2,2 Mrd (BKM gesamt)',
+            anteil: '~€2,2 Mrd für Kulturförderung, Filmförderung, Gedenkstätten, Provenienzforschung. ÖRR separat: ~€8,6 Mrd Rundfunkbeitrag (€18,36/Monat)',
+            vergleich: 'Deutschland gibt ~€160 pro Einwohner:in für öffentliche Kulturförderung aus (alle Ebenen). Frankreich: €240. Aber Deutschland hat die dichteste Theaterlandschaft der Welt: 140 Staats- und Stadttheater.',
+        },
+        versprechen: {
+            text: 'ÖRR reformieren, Kulturförderung stärken, Kreativwirtschaft als Wirtschaftsfaktor anerkennen, soziale Absicherung von Soloselbständigen in Kulturberufen verbessern',
+            status: 'ÖRR-Reform nach Schlesinger-Skandal gestartet, aber langsam. Kulturpass für 18-Jährige (€200) eingeführt, geringe Nutzung. Soloselbständige in Kultur: weiterhin prekär, KSK unterfinanziert.',
+            note: 4,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Deutscher Kulturrat', ausgaben: '€320.000/Jahr', lobbyisten: 3 },
+                { name: 'Deutscher Bühnenverein', ausgaben: '€180.000/Jahr', lobbyisten: 2 },
+            ],
+            dagegen: [
+                { name: 'Verlegerverbände (BDZV, VDZ)', ausgaben: '€1,9 Mio/Jahr', lobbyisten: 10 },
+                { name: 'VAUNET (private Medien — gegen ÖRR-Expansion)', ausgaben: '€640.000/Jahr', lobbyisten: 4 },
+            ],
+            fazit: 'Kultur hat wenig politisches Gewicht — Kulturschaffende sind schlecht organisiert und oft prekär beschäftigt. Die ÖRR-Debatte wird von Medienmacht und Länderpolitik dominiert.',
+        },
+        international: {
+            vorbild: 'Südkorea',
+            flagge: '🇰🇷',
+            wasBeimVorbild: 'Südkorea hat Kultur systematisch zur Exportindustrie gemacht ("K-Culture"): Staatliche Förderung über KOCCA (Korea Creative Content Agency) mit €800 Mio/Jahr Budget. Ergebnis: K-Pop, K-Drama, K-Film (Parasite: Oscar), K-Games generieren €12 Mrd Exportumsatz/Jahr. Kulturexporte stieg seit 2000 um 2.000%. Aber auch: massive Kulturförderung im Inland — 43% der Koreaner:innen besuchen mindestens 1x/Monat eine Kulturveranstaltung.',
+            wasWirLernen: 'Kultur als Wirtschaftsfaktor ernst nehmen (deutsche Kreativwirtschaft: €175 Mrd Bruttowertschöpfung — größer als Chemie oder Maschinenbau). Kulturexportförderung ausbauen: Goethe-Institut hat nur €437 Mio Budget für globale Kulturarbeit. Kreativwirtschaft und klassische Kultur nicht gegeneinander ausspielen.',
+            quelle: 'KOCCA Korea Creative Content Agency, UNESCO Cultural Statistics 2024, BKM Kulturwirtschaftsbericht',
+        },
+    },
+    {
+        id: 'justiz',
+        keywords: ['justiz', 'rechtsstaat', 'gerichte', 'verfahrensdauer', 'richter', 'staatsanwalt', 'rechtsprechung', 'justizdigitalisierung', 'rechtsschutz', 'prozesse'],
+        name: 'Justiz & Rechtsstaat',
+        icon: 'Shield',
+        color: 'var(--color-blue)',
+        zustaendig: {
+            ministerium: 'Bundesministerium der Justiz (BMJ)',
+            minister: 'BMJ-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Recht',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a06',
+        },
+        budget: {
+            ressort: '€1,1 Mrd (BMJ Bund)',
+            anteil: '~€14,5 Mrd Gesamtausgaben für Justiz (Bund + Länder). Davon ~€800 Mio für IT-Modernisierung geplant bis 2026 — tatsächlich umgesetzt: Bruchteil.',
+            vergleich: 'Durchschnittliche Verfahrensdauer Zivilprozess: Deutschland 8,1 Monate. Dänemark: 4,3 Monate. Estland: 4,9 Monate (digital). Ein Verwaltungsgerichtsverfahren dauert in Deutschland im Schnitt 18,4 Monate.',
+        },
+        versprechen: {
+            text: 'Justiz digitalisieren (e-Akte, Videoverhandlungen), Verfahren beschleunigen, Paktus für den Rechtsstaat fortführen, mehr Richter:innen und Staatsanwält:innen einstellen',
+            status: 'Elektronische Akte (beA) für Anwälte verpflichtend, aber technisch fehlerhaft. Videoverhandlungen seit Corona möglich, kaum genutzt. Richtermangel: ~3.000 Stellen unbesetzt bundesweit. Verfahrensdauer steigt.',
+            note: 4,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Deutscher Richterbund', ausgaben: '€280.000/Jahr', lobbyisten: 3 },
+                { name: 'Deutscher Anwaltverein (DAV)', ausgaben: '€960.000/Jahr', lobbyisten: 6 },
+            ],
+            dagegen: [
+                { name: 'BDI/BDA (gegen strengere Regulierung)', ausgaben: '€13,1 Mio/Jahr', lobbyisten: 60 },
+            ],
+            fazit: 'Die Justiz hat keine mächtige Lobby — sie soll unabhängig sein. Ergebnis: Gerichte werden chronisch unterfinanziert, während Wirtschaftslobby stärkere Regulierung bremst.',
+        },
+        international: {
+            vorbild: 'Estland',
+            flagge: '🇪🇪',
+            wasBeimVorbild: 'Estlands e-Court-System: Alle Gerichtsverfahren digital — Klageschrift bis Urteil. Akten online einsehbar für alle Beteiligten. KI-unterstützte Urteilsvorschläge bei Bagatellsachen unter €7.000 (Richter:in entscheidet final). Durchschnittliche Verfahrensdauer Zivilsachen: 4,9 Monate (sinkend). Elektronische Zustellung spart 2 Wochen pro Verfahrensschritt.',
+            wasWirLernen: 'E-Akte konsequent einführen — nicht als Parallelsystem zum Papier, sondern als Ersatz. KI für Standardfälle nutzen (Mahnverfahren, Verkehrsordnungswidrigkeiten) und Richter:innen für komplexe Fälle freisetzen. Videoverhandlungen als Standard, nicht als Ausnahme.',
+            quelle: 'Estonian Ministry of Justice, EU Justice Scoreboard 2024, CEPEJ Report on European Judicial Systems',
+        },
+    },
+    {
+        id: 'obdachlosigkeit',
+        keywords: ['obdachlosigkeit', 'wohnungslosigkeit', 'housing first', 'obdachlose', 'straße', 'notunterkunft', 'wohnungslose', 'social housing', 'sozialhilfe'],
+        name: 'Obdachlosigkeit & Wohnungslosigkeit',
+        icon: 'Building',
+        color: '#ef4444',
+        zustaendig: {
+            ministerium: 'Bundesministerium für Wohnen, Stadtentwicklung und Bauwesen (BMWSB) + BMAS',
+            minister: 'BMWSB-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Wohnen, Stadtentwicklung, Bauwesen und Kommunen',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a24',
+        },
+        budget: {
+            ressort: '€4,8 Mrd (BMWSB gesamt)',
+            anteil: '~€150 Mio Bundesmittel direkt für Wohnungslosenhilfe — Hauptlast tragen Kommunen und Wohlfahrtsverbände. Geschätzte Gesamtkosten Wohnungslosigkeit: €4-6 Mrd/Jahr (Notunterkünfte, Gesundheit, Polizei, Justiz).',
+            vergleich: 'Deutschland: ~263.000 wohnungslose Menschen (2024, erste offizielle Statistik). Finnland: ~3.600 (bei 5,5 Mio Einwohnern). Umgerechnet auf die Bevölkerung hat Deutschland 5x mehr Wohnungslose als Finnland.',
+        },
+        versprechen: {
+            text: 'Nationaler Aktionsplan gegen Wohnungslosigkeit, Wohnungslosigkeit bis 2030 überwinden, Housing-First-Projekte fördern',
+            status: 'Nationaler Aktionsplan 2024 beschlossen — aber ohne verbindliche Ziele und ohne ausreichende Finanzierung. Housing-First-Modellprojekte in wenigen Städten (Berlin, Düsseldorf, Hamburg), kein flächendeckender Ansatz.',
+            note: 5,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'BAG Wohnungslosenhilfe', ausgaben: '€120.000/Jahr', lobbyisten: 2 },
+                { name: 'Diakonie Deutschland', ausgaben: '€1,8 Mio/Jahr', lobbyisten: 9 },
+                { name: 'Caritas Deutschland', ausgaben: '€1,6 Mio/Jahr', lobbyisten: 8 },
+            ],
+            dagegen: [
+                { name: 'ZIA (Immobilienwirtschaft — gegen Belegungsrechte)', ausgaben: '€2,1 Mio/Jahr', lobbyisten: 14 },
+            ],
+            fazit: 'Wohnungslose haben keine eigene Lobby — sie sind politisch unsichtbar. Wohlfahrtsverbände übernehmen die Fürsprache, aber ihr Fokus ist breit gestreut.',
+        },
+        international: {
+            vorbild: 'Finnland',
+            flagge: '🇫🇮',
+            wasBeimVorbild: 'Finnland ist das einzige EU-Land, in dem Obdachlosigkeit seit 2008 kontinuierlich sinkt. Schlüssel: Housing First als nationale Strategie — nicht als Modellprojekt. Jeder Wohnungslose bekommt ZUERST eine eigene Wohnung, DANN Unterstützung (Suchtberatung, Schuldenberatung, Jobvermittlung). Obdachlosenunterkünfte wurden in normale Mietwohnungen umgewandelt. Kosten: ~€15.000/Person/Jahr. Zum Vergleich: Obdachlosigkeit auf der Straße kostet ~€40.000/Person/Jahr (Krankenhaus, Polizei, Notunterkünfte).',
+            wasWirLernen: 'Housing First funktioniert und spart Geld: 80% der Housing-First-Teilnehmer:innen in Finnland behalten ihre Wohnung langfristig. Deutschland muss von Modellprojekten zur nationalen Strategie übergehen. Obdachlosenunterkünfte sind teurer und weniger wirksam als Wohnungen.',
+            quelle: 'Y-Foundation Finland, ARA (Housing Finance and Development Centre of Finland) 2024, FEANTSA Homelessness Report 2024',
+        },
+    },
+    {
+        id: 'forschung',
+        keywords: ['forschung', 'innovation', 'patente', 'ausgründungen', 'startups', 'transfer', 'spin-off', 'wissenschaft', 'technologie', 'hightech'],
+        name: 'Forschung & Innovation',
+        icon: 'Zap',
+        color: 'var(--color-purple)',
+        zustaendig: {
+            ministerium: 'Bundesministerium für Bildung und Forschung (BMBF)',
+            minister: 'BMBF-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Bildung, Forschung und Technikfolgenabschätzung',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a18',
+        },
+        budget: {
+            ressort: '€22,3 Mrd (BMBF gesamt)',
+            anteil: '~€14 Mrd für Forschungsförderung (DFG, Max-Planck, Fraunhofer, Helmholtz, Leibniz). Deutschland gibt 3,1% des BIP für Forschung aus — Ziel: 3,5%.',
+            vergleich: 'Israel gibt 5,6% des BIP für F&E aus, Südkorea 4,9%, Deutschland 3,1%. Ergebnis: Israel hat 96 Unicorns bei 9 Mio Einwohnern. Deutschland: 30 bei 83 Mio.',
+        },
+        versprechen: {
+            text: 'F&E-Ausgaben auf 3,5% BIP steigern, DATI (Agentur für Transfer und Innovation) gründen, Ausgründungen aus Universitäten fördern, Bürokratie bei Forschungsanträgen abbauen',
+            status: 'DATI-Gründung gescheitert. F&E-Quote stagniert bei 3,1%. Ausgründungen aus Unis leicht gestiegen, aber weit unter Potenzial: ~1.600/Jahr (USA: ~6.000 aus vergleichbar vielen Unis). Forschungszulagengesetz eingeführt, aber zu bürokratisch.',
+            note: 4,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Stifterverband', ausgaben: '€580.000/Jahr', lobbyisten: 4 },
+                { name: 'Bundesverband Deutsche Startups', ausgaben: '€420.000/Jahr', lobbyisten: 4 },
+                { name: 'Allianz der Wissenschaftsorganisationen', ausgaben: '€380.000/Jahr', lobbyisten: 3 },
+            ],
+            dagegen: [
+                { name: 'Keine direkte Gegenlobby — aber Finanzministerium als Bremser (Haushaltsdisziplin)', ausgaben: '—', lobbyisten: 0 },
+            ],
+            fazit: 'Die Forschungslobby ist relativ einig — alle wollen mehr Geld. Das Problem ist nicht Lobby, sondern föderale Zuständigkeiten (Hochschulen = Länder) und ein risikoaverses Gründungsökosystem.',
+        },
+        international: {
+            vorbild: 'Israel',
+            flagge: '🇮🇱',
+            wasBeimVorbild: 'Israel ("Start-up-Nation"): 5,6% des BIP für F&E (weltweit höchster Anteil). 96 Unicorns, mehr Börsen-Listings an der NASDAQ als ganz Europa. Schlüssel: Yozma-Programm (1993) — Staat investierte €100 Mio in Venture-Capital-Fonds und verdoppelte damit privates Kapital. Militärdienst als Innovationsinkubator (Unit 8200 → Cybersecurity-Startups). Innovation Authority: Unbürokratische Förderung, Geld in 60 Tagen. Scheitern ist kein Stigma.',
+            wasWirLernen: 'Staat muss Risikokapital-Markt ankurbeln (HTGF ist zu klein: €900 Mio vs. Israel: €25 Mrd VC-Investitionen/Jahr). Bürokratie bei Gründungen radikal reduzieren: GmbH-Gründung dauert in Deutschland 8 Tage, in Israel 1 Tag. Uni-Professoren müssen gründen dürfen und wollen — Nebentätigkeitsrecht reformieren.',
+            quelle: 'Israel Innovation Authority 2024, IVC Research Center, OECD Science, Technology and Innovation Outlook 2024',
+        },
+    },
+    {
+        id: 'entwicklungshilfe',
+        keywords: ['entwicklungshilfe', 'entwicklungszusammenarbeit', 'oda', 'bmz', 'giz', 'klimafinanzierung', 'hunger', 'armut', 'globaler süden', 'kfw entwicklungsbank'],
+        name: 'Entwicklungszusammenarbeit',
+        icon: 'Map',
+        color: 'var(--color-green)',
+        zustaendig: {
+            ministerium: 'Bundesministerium für wirtschaftliche Zusammenarbeit und Entwicklung (BMZ)',
+            minister: 'BMZ-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für wirtschaftliche Zusammenarbeit und Entwicklung',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a19',
+        },
+        budget: {
+            ressort: '€11,2 Mrd (BMZ 2025)',
+            anteil: 'ODA-Quote Deutschland: 0,79% des BNE (2023). Geplante Kürzungen auf 0,67% bis 2027. UN-Ziel: 0,7%.',
+            vergleich: 'Norwegen: 1,09% des BNE. Schweden: 0,91%. Luxemburg: 1,03%. Deutschland war kurzzeitig über 0,7%, fällt nun zurück. Die absoluten Zahlen sind hoch (~€34 Mrd inkl. Flüchtlingskosten im Inland), aber ein Drittel wird für Flüchtlingsunterbringung im Inland angerechnet.',
+        },
+        versprechen: {
+            text: 'ODA-Quote bei 0,7% halten, feministische Entwicklungspolitik umsetzen, Klimafinanzierung für den Globalen Süden stärken, neue Partnerschaften auf Augenhöhe',
+            status: 'ODA-Quote sinkt (Kürzungen 2025/26). Feministische Entwicklungspolitik-Strategie veröffentlicht, aber bei Haushaltskürzungen als erstes gestrichen. Klimafinanzierungszusage (€6 Mrd/Jahr) nicht vollständig eingehalten.',
+            note: 4,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'VENRO (Dachverband Entwicklungspolitik)', ausgaben: '€480.000/Jahr', lobbyisten: 4 },
+                { name: 'ONE (Kampagnenorganisation)', ausgaben: '€1,2 Mio/Jahr', lobbyisten: 5 },
+                { name: 'Brot für die Welt', ausgaben: '€620.000/Jahr', lobbyisten: 4 },
+            ],
+            dagegen: [
+                { name: 'Bund der Steuerzahler (gegen höhere Ausgaben)', ausgaben: '€1,6 Mio/Jahr', lobbyisten: 7 },
+            ],
+            fazit: 'Entwicklungshilfe hat wenig innenpolitische Lobby — die Empfänger:innen können in Deutschland nicht wählen. Bei Haushaltszwängen wird Entwicklungsetat als erstes gekürzt.',
+        },
+        international: {
+            vorbild: 'Norwegen',
+            flagge: '🇳🇴',
+            wasBeimVorbild: 'Norwegen gibt konstant über 1% des BNE für Entwicklungszusammenarbeit aus — seit Jahrzehnten. Schlüssel: Parteiübergreifender Konsens, dass Entwicklungshilfe nationales Interesse ist. Norwegischer Staatsfonds (€1,6 Billionen) schließt Unternehmen aus, die Menschenrechte oder Umweltstandards verletzen. NORAD (norwegische Entwicklungsagentur) ist bekannt für hohe Wirksamkeit und Transparenz. Fokus: Energie, Klima, Meeresressourcen — Bereiche, in denen Norwegen Expertise hat.',
+            wasWirLernen: 'ODA-Quote gesetzlich verankern statt sie jährlich zur Haushaltsdisposition zu stellen. Entwicklungszusammenarbeit an deutsche Stärken koppeln (erneuerbare Energien, Berufsbildung, Ingenieurwesen). Transparenz: Jeder Euro muss nachvollziehbar sein — das stärkt die öffentliche Akzeptanz.',
+            quelle: 'OECD DAC Peer Review Norway 2024, NORAD Results Report, ONE DATA Report',
+        },
+    },
+    {
+        id: 'demokratie',
+        keywords: ['demokratie', 'wahlrecht', 'wahlbeteiligung', 'bürgerbeteiligung', 'bürgerrat', 'volksabstimmung', 'transparenz', 'lobbyregister', 'parteien', 'parlament'],
+        name: 'Demokratie & Wahlrecht',
+        icon: 'Users',
+        color: 'var(--color-blue)',
+        zustaendig: {
+            ministerium: 'Bundesministerium des Innern und für Heimat (BMI) + Bundestag (Geschäftsordnung)',
+            minister: 'BMI-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Inneres und Heimat + Wahlprüfungsausschuss',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a04',
+        },
+        budget: {
+            ressort: '€15,1 Mrd (BMI gesamt)',
+            anteil: '~€120 Mio für Demokratieförderung (Bundesprogramme) + ~€180 Mio Parteienfinanzierung + Wahlkosten (~€120 Mio pro Bundestagswahl)',
+            vergleich: 'Wahlbeteiligung Bundestagswahl 2021: 76,6%. Schweiz (mit direkter Demokratie): 45% bei Wahlen, aber 40-60% bei Volksabstimmungen — Partizipation verteilt sich auf mehr Kanäle.',
+        },
+        versprechen: {
+            text: 'Wahlrechtsreform (Bundestag verkleinern), Lobbyregister stärken, Demokratiefördergesetz, Wahlalter 16, Bürgerräte etablieren',
+            status: 'Wahlrechtsreform 2023 beschlossen: Bundestag auf 630 Sitze begrenzt (von 736). Lobbyregister eingeführt, aber ohne legislative Fußspur. Demokratiefördergesetz gescheitert. Wahlalter 16 bei Europawahl umgesetzt.',
+            note: 3,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Mehr Demokratie e.V.', ausgaben: '€380.000/Jahr', lobbyisten: 4 },
+                { name: 'Transparency International Deutschland', ausgaben: '€480.000/Jahr', lobbyisten: 4 },
+                { name: 'abgeordnetenwatch.de', ausgaben: '€220.000/Jahr', lobbyisten: 2 },
+            ],
+            dagegen: [
+                { name: 'Etablierte Parteien (institutionell — gegen Verkleinerung)', ausgaben: '—', lobbyisten: 0 },
+            ],
+            fazit: 'Demokratie-NGOs sind gut organisiert, aber finanziell schwach. Die größten Widerstände gegen Demokratiereformen kommen aus den Parteien selbst, die von bestehenden Strukturen profitieren.',
+        },
+        international: {
+            vorbild: 'Schweiz',
+            flagge: '🇨🇭',
+            wasBeimVorbild: 'Die Schweiz praktiziert direkte Demokratie seit 1848: Bürger:innen stimmen 4x/Jahr über Sachfragen ab (Volksinitiativen, Referenden). ~600 eidgenössische Abstimmungen seit 1848. Ergebnis: Höchstes Vertrauen in staatliche Institutionen in Europa (72%). Föderalismus funktioniert: 26 Kantone mit weitgehender Autonomie. Konkordanzdemokratie: Alle großen Parteien sind in der Regierung — kein Oppositionsprinzip.',
+            wasWirLernen: 'Bürgerräte sind ein erster Schritt, aber unverbindlich — sie brauchen institutionelle Verankerung. Volksabstimmungen auf Bundesebene einführen (mit Quoren, um Populismus zu bremsen). Lobbyregister mit legislativer Fußspur: Wer hat welches Gesetz beeinflusst? Transparenz bei Parteispenden verschärfen — Großspenden ab €10.000 sofort veröffentlichen.',
+            quelle: 'Swiss Federal Chancellery, OECD Trust in Government Survey 2024, Mehr Demokratie e.V.',
+        },
+    },
+    {
+        id: 'cybersicherheit',
+        keywords: ['cybersicherheit', 'it-sicherheit', 'hacker', 'cyberangriff', 'bsi', 'ransomware', 'kritische infrastruktur', 'kritis', 'cyberattacke', 'informationssicherheit'],
+        name: 'Cybersicherheit',
+        icon: 'Zap',
+        color: '#ef4444',
+        zustaendig: {
+            ministerium: 'Bundesamt für Sicherheit in der Informationstechnik (BSI) im Geschäftsbereich des BMI',
+            minister: 'BMI-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Inneres und Heimat + Ausschuss für Digitales',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a04',
+        },
+        budget: {
+            ressort: '€15,1 Mrd (BMI gesamt)',
+            anteil: '~€220 Mio BSI-Budget (2025). Zum Vergleich: USA (CISA): €3,1 Mrd. UK (NCSC): €340 Mio. Deutschland ist Europas größte Volkswirtschaft, aber das BSI hat weniger Budget als die britische Cyberbehörde.',
+            vergleich: 'Geschätzte Schäden durch Cyberangriffe in Deutschland: €148 Mrd/Jahr (Bitkom 2024). BSI-Budget: €220 Mio. Verhältnis Schutzinvestition zu Schaden: 1:673.',
+        },
+        versprechen: {
+            text: 'BSI unabhängig machen, IT-Sicherheitsgesetz 3.0, KRITIS-Schutz stärken, aktive Cyberabwehr ermöglichen, Schwachstellenmanagement einführen',
+            status: 'BSI weiterhin dem BMI unterstellt (nicht unabhängig). IT-Sicherheitsgesetz 2.0 beschlossen, 3.0 nicht verabschiedet. KRITIS-Dachgesetz gescheitert. Aktive Cyberabwehr (Hackback) verfassungsrechtlich umstritten.',
+            note: 4,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Bitkom (IT-Sicherheitsbranche)', ausgaben: '€3,8 Mio/Jahr', lobbyisten: 22 },
+                { name: 'eco — Verband der Internetwirtschaft', ausgaben: '€840.000/Jahr', lobbyisten: 5 },
+                { name: 'TeleTrusT (IT-Sicherheitsverband)', ausgaben: '€280.000/Jahr', lobbyisten: 3 },
+            ],
+            dagegen: [
+                { name: 'Nachrichtendienste (institutionell — wollen Schwachstellen für Überwachung behalten)', ausgaben: '—', lobbyisten: 0 },
+            ],
+            fazit: 'IT-Sicherheitslobby und Nachrichtendienste haben gegensätzliche Interessen: BSI will Schwachstellen schließen, BND/Verfassungsschutz will sie für Überwachung nutzen. Dieses "Schwachstellen-Dilemma" ist ungelöst.',
+        },
+        international: {
+            vorbild: 'Israel',
+            flagge: '🇮🇱',
+            wasBeimVorbild: 'Israel hat ein weltführendes Cyber-Ökosystem: Unit 8200 (militärischer Nachrichtendienst) bildet jährlich ~1.000 Cybersicherheits-Experten aus, die nach dem Militärdienst Startups gründen. ~500 Cybersecurity-Firmen bei 9 Mio Einwohnern. Israel National Cyber Directorate (INCD): Unabhängige Behörde mit direktem Zugang zum Premierminister. CERT-IL reagiert durchschnittlich in 15 Minuten auf gemeldete Vorfälle.',
+            wasWirLernen: 'BSI unabhängig machen — solange es dem BMI untersteht, bleiben Interessenkonflikte (BMI will auch überwachen können). Cybersicherheits-Ausbildung massiv ausbauen: Deutschland fehlen ~40.000 IT-Sicherheitsfachkräfte. Schwachstellen-Disclosure-Programm: Sicherheitslücken melden und schließen, nicht horten.',
+            quelle: 'Israel National Cyber Directorate, BSI Lagebericht 2024, Bitkom Studienbericht Wirtschaftsschutz 2024',
+        },
+    },
+    {
+        id: 'luftqualitaet',
+        keywords: ['luftqualität', 'feinstaub', 'stickoxid', 'lärm', 'verkehrslärm', 'emissionen', 'umweltzone', 'fahrverbot', 'luftverschmutzung', 'fluglärm'],
+        name: 'Luftqualität & Lärm',
+        icon: 'Leaf',
+        color: 'var(--color-cyan)',
+        zustaendig: {
+            ministerium: 'Bundesministerium für Umwelt, Naturschutz, nukleare Sicherheit und Verbraucherschutz (BMUV)',
+            minister: 'BMUV-Minister:in (neue Regierung)',
+            ausschuss: 'Ausschuss für Umwelt, Naturschutz, nukleare Sicherheit und Verbraucherschutz',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a16',
+        },
+        budget: {
+            ressort: '€2,6 Mrd (BMUV gesamt)',
+            anteil: '~€180 Mio für Luftreinhaltung und Lärmschutz (Förderprogramme saubere Luft + Lärmschutzmaßnahmen)',
+            vergleich: 'Luftverschmutzung verursacht in Deutschland ~70.000 vorzeitige Todesfälle/Jahr (European Environment Agency). Gesundheitskosten: geschätzte €44 Mrd/Jahr. Budget für Gegenmaßnahmen: €180 Mio.',
+        },
+        versprechen: {
+            text: 'WHO-Grenzwerte für Luftqualität einhalten, Lärmaktionspläne umsetzen, Diesel-Fahrverbote vermeiden durch technische Nachrüstung, EU-Luftqualitätsrichtlinie umsetzen',
+            status: 'Stickoxid-Grenzwerte in den meisten Städten eingehalten (nach Dieselskandal und Fahrverboten). ABER: Neue WHO-Grenzwerte (2021) werden in fast keiner deutschen Stadt eingehalten. Lärmschutz: 13 Mio Deutsche von gesundheitsschädlichem Verkehrslärm betroffen.',
+            note: 4,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Deutsche Umwelthilfe (DUH)', ausgaben: '€480.000/Jahr', lobbyisten: 4 },
+                { name: 'BUND (Naturschutz)', ausgaben: '€1,3 Mio/Jahr', lobbyisten: 7 },
+            ],
+            dagegen: [
+                { name: 'VDA (Automobilindustrie)', ausgaben: '€12,4 Mio/Jahr', lobbyisten: 46 },
+                { name: 'BDI (Industrie)', ausgaben: '€8,9 Mio/Jahr', lobbyisten: 42 },
+            ],
+            fazit: 'Die DUH hat durch Klagen mehr erreicht als durch Lobbyarbeit — sie hat Diesel-Fahrverbote vor Gericht erstritten. Die Autolobby gibt 25x mehr aus als Umweltverbände.',
+        },
+        international: {
+            vorbild: 'Norwegen',
+            flagge: '🇳🇴',
+            wasBeimVorbild: 'Norwegens Null-Emissions-Zonen: Oslo hat die Innenstadt für Privatverkehr gesperrt und Parkplätze in Parks, Spielplätze und Radwege umgewandelt. E-Auto-Anteil an Neuzulassungen: 82% (2024). Ergebnis: NO₂-Werte in Oslo um 36% gesunken seit 2017, Lärmpegel in der Innenstadt um 3 dB reduziert. Bergen: Mautsystem mit Umweltdifferenzierung — Verbrenner zahlen 4x mehr als E-Autos.',
+            wasWirLernen: 'Emissionszonen konsequent umsetzen statt ständig aufweichen. Elektromobilität als Luftreinhaltemaßnahme fördern — nicht nur als Klimapolitik. Lärmschutz als Gesundheitspolitik begreifen: Verkehrslärm erhöht Herzinfarkt-Risiko um 8% pro 10 dB.',
+            quelle: 'Norwegian Environment Agency 2024, European Environment Agency Air Quality Report 2024, City of Oslo Climate Budget',
+        },
+    },
+    {
+        id: 'laendlicher-raum',
+        keywords: ['ländlicher raum', 'land', 'dorf', 'ärztemangel', 'landarzt', 'öpnv land', 'abwanderung', 'daseinsvorsorge', 'breitband land', 'landleben'],
+        name: 'Ländlicher Raum & Daseinsvorsorge',
+        icon: 'Map',
+        color: 'var(--color-green)',
+        zustaendig: {
+            ministerium: 'Bundesministerium für Ernährung und Landwirtschaft (BMEL) + BMWSB (Raumordnung)',
+            minister: 'BMEL/BMWSB-Minister:innen (neue Regierung)',
+            ausschuss: 'Ausschuss für Ernährung und Landwirtschaft',
+            ausschussUrl: 'https://www.bundestag.de/ausschuesse/a10',
+        },
+        budget: {
+            ressort: '€7,5 Mrd (BMEL gesamt)',
+            anteil: '~€1,1 Mrd für ländliche Entwicklung (GAK — Gemeinschaftsaufgabe Verbesserung der Agrarstruktur und des Küstenschutzes) + ~€620 Mio Bundesprogramm Ländliche Entwicklung',
+            vergleich: '46 Mio Menschen (55% der Bevölkerung) leben in ländlichen Räumen. Aber: 61% aller Landkreise verlieren Einwohner:innen. In 23% der Landkreise gibt es keinen Facharzt innerhalb von 30 Autominuten.',
+        },
+        versprechen: {
+            text: 'Gleichwertige Lebensverhältnisse in Stadt und Land, Breitbandausbau, Ärztemangel auf dem Land bekämpfen, ÖPNV-Anbindung verbessern',
+            status: 'Breitband: 77% der Haushalte mit Glasfaser erreichbar (aber nur 35% in ländlichen Gebieten). Ärztemangel: 4.500 Hausarztsitze unbesetzt. ÖPNV: In 60% der ländlichen Gemeinden fährt weniger als 1 Bus pro Stunde. Deutschlandticket hilft wenig, wenn kein Bus kommt.',
+            note: 5,
+        },
+        lobby: {
+            dafuer: [
+                { name: 'Deutscher Landkreistag', ausgaben: '€980.000/Jahr', lobbyisten: 6 },
+                { name: 'Deutscher Städte- und Gemeindebund', ausgaben: '€1,1 Mio/Jahr', lobbyisten: 7 },
+            ],
+            dagegen: [
+                { name: 'Keine direkte Gegenlobby — aber urbane Fokussierung der Politik als strukturelles Problem', ausgaben: '—', lobbyisten: 0 },
+            ],
+            fazit: 'Ländliche Räume haben eine Stimme durch kommunale Spitzenverbände, aber politische Entscheidungsträger leben und denken urban. 73% der Bundestagsabgeordneten haben ihren Lebensmittelpunkt in einer Großstadt.',
+        },
+        international: {
+            vorbild: 'Japan',
+            flagge: '🇯🇵',
+            wasBeimVorbild: 'Japan kämpft mit extremer Landflucht (Stichwort: "verschwundene Dörfer") und hat das Satoyama-Konzept entwickelt: Traditionelle Kulturlandschaften als Ressource begreifen, nicht als Problem. Konkret: Telework-Visa für Stadtbewohner:innen, die aufs Land ziehen (bis €30.000 Umzugsprämie). Regionale Revitalisierungsagentur mit €8 Mrd/Jahr Budget. "Chiiki Okoshi Kyoryokutai": Programm, das junge Menschen für 1-3 Jahre aufs Land schickt (Gehalt vom Staat), 60% bleiben danach. Telemedizin in 78% der ländlichen Kliniken.',
+            wasWirLernen: 'Umzugsprämien für Fachkräfte aufs Land (nicht nur Landarztprämien, sondern auch für Lehrer:innen, Ingenieur:innen, IT-Fachkräfte). Telemedizin und digitale Gesundheitsversorgung flächendeckend ausrollen. Co-Working-Spaces in ländlichen Gemeinden als Alternative zum Pendeln. Daseinsvorsorge als Pflichtaufgabe gesetzlich verankern.',
+            quelle: 'Japan Ministry of Agriculture, MAFF Satoyama Initiative, OECD Rural Policy Review Japan 2024',
+        },
+    },
 ];
 
 // Search function
