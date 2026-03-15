@@ -63,10 +63,8 @@ function App() {
                 <ThemenLookup />
             </Suspense>
 
-            {/* Feature grid — entry points to deep sections */}
-            {!showDeepDive && (
-                <FeatureGrid onExplore={handleExplore} />
-            )}
+            {/* Feature grid — always visible as navigation */}
+            <FeatureGrid onExplore={handleExplore} />
 
             {/* ═══ DEEP DIVE ═══ Revealed on demand */}
             {showDeepDive && (
