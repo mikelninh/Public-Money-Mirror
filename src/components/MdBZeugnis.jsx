@@ -268,7 +268,20 @@ const MdBZeugnis = () => {
                         <a href="https://www.bundestag.de" target="_blank" rel="noopener noreferrer" className="text-[var(--color-blue)] hover:underline">bundestag.de</a>.
                         {' '}Faktoren mit <span className="font-semibold">{'\u{1F4E1}'} </span> sind live berechnet,
                         Faktoren mit <span className="font-semibold">{'\u270F\uFE0F'} </span> sind redaktionell geschätzt.
+                        Suche nach jedem/jeder Politiker:in in Deutschland — wir berechnen den Score live.
                     </p>
+
+                    <details className="mt-2 text-[12px] text-[var(--color-text-2)]">
+                        <summary className="cursor-pointer text-[var(--color-blue)] font-medium">Was sind Bürgerfragen?</summary>
+                        <div className="mt-2 p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] leading-relaxed">
+                            Auf <a href="https://www.abgeordnetenwatch.de" target="_blank" rel="noopener noreferrer" className="text-[var(--color-blue)] hover:underline">abgeordnetenwatch.de</a> kann
+                            jede:r Bürger:in öffentliche Fragen an Abgeordnete stellen — z.B. "Wie stehen Sie zur Kindergrundsicherung?".
+                            Die Frage und die Antwort (oder Nicht-Antwort) sind <strong>öffentlich sichtbar</strong>.
+                            Wir messen: Wie viele Fragen wurden gestellt, wie viele beantwortet? Das ist der <strong>Erreichbarkeits-Score</strong>.
+                            <br /><br />
+                            <strong>Probier es aus:</strong> Geh auf abgeordnetenwatch.de, such deine:n Abgeordnete:n, und stell eine Frage. Sie müssen sich öffentlich positionieren — oder ihr Schweigen wird dokumentiert.
+                        </div>
+                    </details>
 
                     <div className="flex items-center gap-3 mt-3 flex-wrap">
                         <button
@@ -459,7 +472,10 @@ const MdBZeugnis = () => {
                                         >
                                             <div className="flex-1 min-w-0">
                                                 <div className="text-sm font-semibold text-[var(--color-text)]">{p.name}</div>
-                                                <div className="text-[11px] text-[var(--color-text-3)]">{p.partei} · {p.beruf || 'Politiker:in'} · Jg. {p.geburtsjahr || '?'}</div>
+                                                <div className="text-[11px] text-[var(--color-text-3)]">
+                                                    {p.partei} · {p.beruf || 'Politiker:in'} · Jg. {p.geburtsjahr || '?'}
+                                                    {p.fragenGesamt > 0 && <span className="ml-1">· {p.fragenBeantwortet || 0}/{p.fragenGesamt} Bürgerfragen beantwortet</span>}
+                                                </div>
                                             </div>
                                             <span className="text-[10px] text-[var(--color-blue)] shrink-0">Score berechnen →</span>
                                         </button>
