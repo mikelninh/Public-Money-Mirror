@@ -124,9 +124,36 @@ export async function getPolitikerDetail(id) {
             nebeneinkuenfteConf = 'none';
         }
 
+        // If no mandate: don't score — not enough data
+        if (!hasMandate) {
+            return {
+                id: p.id,
+                name: p.label,
+                partei: p.party?.label || '',
+                beruf: p.occupation || '',
+                geburtsjahr: p.year_of_birth,
+                bildung: p.education || '',
+                url: p.abgeordnetenwatch_url,
+                hasMandate: false,
+                mandateInfo: null,
+                fragenGesamt,
+                fragenBeantwortet,
+                antwortRate,
+                sideJobCount,
+                sideJobIncome,
+                sideJobList,
+                scores: null,
+                total: null,
+                notScoreable: true,
+                reason: 'Kein aktives Mandat gefunden. Der Transparenz-Index bewertet nur Mandatsträger:innen, da nur sie Offenlegungspflichten haben.',
+                liveFactors: [],
+                factorConfidence: {},
+            };
+        }
+
         // Estimated factors (need Bundestag XML data for accuracy)
-        const anwesenheit = hasMandate ? 13 : 10;
-        const aktivitaet = hasMandate ? 13 : 10;
+        const anwesenheit = 13;
+        const aktivitaet = 13;
         const transparenz = 10;
 
         const scores = {

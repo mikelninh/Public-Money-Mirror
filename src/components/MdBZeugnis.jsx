@@ -520,7 +520,9 @@ const MdBZeugnis = () => {
                     >
                         <div className="px-5 py-4 bg-[var(--color-blue)]/5 border-b border-[var(--color-border)] flex items-center gap-2">
                             <Wifi size={12} className="text-[var(--color-green)]" />
-                            <span className="text-xs font-medium text-[var(--color-text-2)]">Live-Score von abgeordnetenwatch.de</span>
+                            <span className="text-xs font-medium text-[var(--color-text-2)]">
+                                {selectedApiProfile.notScoreable ? 'Profil von abgeordnetenwatch.de' : 'Live-Score von abgeordnetenwatch.de'}
+                            </span>
                         </div>
                         <div className="p-5">
                             <div className="flex items-start justify-between gap-4 mb-4">
@@ -529,33 +531,51 @@ const MdBZeugnis = () => {
                                     <div className="text-sm text-[var(--color-text-3)]">{selectedApiProfile.partei} · {selectedApiProfile.beruf}</div>
                                     {selectedApiProfile.bildung && <div className="text-[11px] text-[var(--color-text-3)] mt-0.5">{selectedApiProfile.bildung}</div>}
                                 </div>
-                                <div className="text-center shrink-0">
-                                    <NoteDisplay note={selectedApiProfile.note} size="large" />
-                                    <div className="text-[10px] text-[var(--color-text-3)] mt-1 font-mono">{selectedApiProfile.total}/100</div>
-                                </div>
+                                {selectedApiProfile.notScoreable ? (
+                                    <div className="px-3 py-2 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-border)] text-center shrink-0">
+                                        <div className="text-[10px] text-[var(--color-text-3)]">Nicht bewertbar</div>
+                                        <div className="text-xs font-medium text-[var(--color-text-2)]">Kein Mandat</div>
+                                    </div>
+                                ) : (
+                                    <div className="text-center shrink-0">
+                                        <NoteDisplay note={selectedApiProfile.note} size="large" />
+                                        <div className="text-[10px] text-[var(--color-text-3)] mt-1 font-mono">{selectedApiProfile.total}/100</div>
+                                    </div>
+                                )}
                             </div>
 
-                            {/* Score breakdown */}
-                            <div className="space-y-3 mb-4">
-                                {scoreFactors.map(factor => {
-                                    const val = selectedApiProfile.scores[factor.id];
-                                    const pct = Math.round((val / factor.maxPoints) * 100);
-                                    const isFactorLive = (selectedApiProfile.liveFactors || []).includes(factor.id);
-                                    return (
-                                        <div key={factor.id} className="flex items-center gap-3">
-                                            <div className="w-6 h-6 rounded-md bg-[var(--color-surface-2)] flex items-center justify-center shrink-0">
-                                                <Icon name={factor.icon} size={11} className="text-[var(--color-text-3)]" />
+                            {/* Not scoreable explanation */}
+                            {selectedApiProfile.notScoreable && (
+                                <div className="p-3 rounded-xl bg-[var(--color-amber)]/5 border border-[var(--color-amber)]/15 mb-4">
+                                    <p className="text-[12px] text-[var(--color-text-2)]">
+                                        <span className="font-semibold text-[var(--color-amber)]">Warum kein Score?</span> {selectedApiProfile.reason}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Score breakdown — only for scoreable profiles */}
+                            {!selectedApiProfile.notScoreable && selectedApiProfile.scores && (
+                                <div className="space-y-3 mb-4">
+                                    {scoreFactors.map(factor => {
+                                        const val = selectedApiProfile.scores[factor.id];
+                                        const pct = Math.round((val / factor.maxPoints) * 100);
+                                        const isFactorLive = (selectedApiProfile.liveFactors || []).includes(factor.id);
+                                        return (
+                                            <div key={factor.id} className="flex items-center gap-3">
+                                                <div className="w-6 h-6 rounded-md bg-[var(--color-surface-2)] flex items-center justify-center shrink-0">
+                                                    <Icon name={factor.icon} size={11} className="text-[var(--color-text-3)]" />
+                                                </div>
+                                                <div className="w-24 shrink-0">
+                                                    <span className="text-[11px] text-[var(--color-text-2)]">{factor.name}</span>
+                                                </div>
+                                                <ScoreBar value={val} max={factor.maxPoints} color={pct >= 75 ? 'var(--color-green)' : pct >= 50 ? 'var(--color-amber)' : 'var(--color-red)'} />
+                                                <span className="text-[11px] font-mono font-medium text-[var(--color-text)] w-12 text-right shrink-0">{val}/{factor.maxPoints}</span>
+                                                <ConfidenceBadge isLive={isFactorLive} confidence={selectedApiProfile.factorConfidence?.[factor.id]} />
                                             </div>
-                                            <div className="w-24 shrink-0">
-                                                <span className="text-[11px] text-[var(--color-text-2)]">{factor.name}</span>
-                                            </div>
-                                            <ScoreBar value={val} max={factor.maxPoints} color={pct >= 75 ? 'var(--color-green)' : pct >= 50 ? 'var(--color-amber)' : 'var(--color-red)'} />
-                                            <span className="text-[11px] font-mono font-medium text-[var(--color-text)] w-12 text-right shrink-0">{val}/{factor.maxPoints}</span>
-                                            <ConfidenceBadge isLive={isFactorLive} confidence={selectedApiProfile.factorConfidence?.[factor.id]} />
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
 
                             <div className="p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] mb-3">
                                 <p className="text-[12px] text-[var(--color-text-2)]">{selectedApiProfile.context}</p>
