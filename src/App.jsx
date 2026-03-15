@@ -148,7 +148,7 @@ function App() {
             <footer id="footer" className="border-t border-[var(--color-border)] py-6 md:py-8 px-4 md:px-6 pb-20 md:pb-24">
                 <div className="container-main flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
                     <span className="text-[10px] md:text-xs text-[var(--color-text-3)] tracking-wide">
-                        Public Money Mirror &copy; 2025 &middot; Open Source &middot; MIT
+                        Public Money Mirror &copy; 2026 &middot; Open Source &middot; MIT
                     </span>
                     <div className="flex items-center gap-3 md:gap-4 text-[10px] md:text-xs text-[var(--color-text-3)]">
                         <span>Daten: BMF, Lobbyregister, BRH</span>

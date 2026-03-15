@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, X, Star, Flame, ChevronRight, Lightbulb } from 'lucide-react';
-import { achievements, getProfile, getLevel, getDailyFact, trackAction } from '../data/gamification';
+import { achievements, rewards, collectiveMilestones, getProfile, getLevel, getDailyFact, trackAction } from '../data/gamification';
 
 const DemokratieProfil = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -186,6 +186,53 @@ const DemokratieProfil = () => {
                                         </div>
                                     </div>
                                 )}
+
+                                {/* Rewards */}
+                                <div>
+                                    <div className="text-[10px] font-semibold text-[var(--color-text-3)] uppercase tracking-wider mb-2">Belohnungen</div>
+                                    <div className="space-y-1.5">
+                                        {rewards.map(r => {
+                                            const unlocked = profile.points >= r.minPoints;
+                                            return (
+                                                <div key={r.level} className={`flex items-center gap-2.5 p-2.5 rounded-lg border ${
+                                                    unlocked
+                                                        ? 'bg-[var(--color-green)]/5 border-[var(--color-green)]/15'
+                                                        : 'bg-[var(--color-surface)] border-[var(--color-border)] opacity-50'
+                                                }`}>
+                                                    <span className="text-lg">{r.icon}</span>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="text-[11px] font-medium text-[var(--color-text)]">{r.titel}</div>
+                                                        <div className="text-[9px] text-[var(--color-text-3)]">
+                                                            {unlocked ? '✓ Freigeschaltet' : `Ab ${r.minPoints} Punkten (${r.level})`}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/* Collective milestones */}
+                                <div>
+                                    <div className="text-[10px] font-semibold text-[var(--color-text-3)] uppercase tracking-wider mb-2">Gemeinsame Ziele</div>
+                                    <div className="space-y-2">
+                                        {collectiveMilestones.map(m => {
+                                            const pct = Math.min(100, (m.aktuell / m.ziel) * 100);
+                                            return (
+                                                <div key={m.id} className="p-2.5 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
+                                                    <div className="flex justify-between text-[10px] text-[var(--color-text-3)] mb-1">
+                                                        <span>{m.aktuell.toLocaleString('de-DE')} / {m.ziel.toLocaleString('de-DE')} {m.einheit}</span>
+                                                        <span>{Math.round(pct)}%</span>
+                                                    </div>
+                                                    <div className="h-1.5 rounded-full bg-[var(--color-surface-3)] overflow-hidden mb-1.5">
+                                                        <div className="h-full rounded-full bg-[var(--color-purple)]" style={{ width: `${pct}%` }} />
+                                                    </div>
+                                                    <div className="text-[9px] text-[var(--color-text-2)]">🎯 {m.belohnung}</div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
 
                                 {/* Stats */}
                                 <div className="text-center text-[10px] text-[var(--color-text-3)] pt-2 border-t border-[var(--color-border)]">

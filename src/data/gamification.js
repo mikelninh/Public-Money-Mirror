@@ -36,12 +36,63 @@ export const achievements = [
 ];
 
 export const levels = [
-    { name: 'Beobachter:in', minPoints: 0, color: 'var(--color-text-3)' },
-    { name: 'Interessiert', minPoints: 25, color: 'var(--color-blue)' },
-    { name: 'Informiert', minPoints: 75, color: 'var(--color-purple)' },
-    { name: 'Engagiert', minPoints: 150, color: 'var(--color-green)' },
-    { name: 'Aktiv', minPoints: 250, color: 'var(--color-amber)' },
-    { name: 'Demokratie-Held:in', minPoints: 400, color: 'var(--color-red)' },
+    { name: 'Beobachter:in', minPoints: 0, color: 'var(--color-text-3)', reward: null },
+    { name: 'Interessiert', minPoints: 25, color: 'var(--color-blue)', reward: 'Täglicher Fakt freigeschaltet' },
+    { name: 'Informiert', minPoints: 75, color: 'var(--color-purple)', reward: 'Persönlicher Demokratie-Ausweis (teilbar)' },
+    { name: 'Engagiert', minPoints: 150, color: 'var(--color-green)', reward: 'Dein Name auf der Unterstützer:innen-Wand + Detaillierte Analysen' },
+    { name: 'Aktiv', minPoints: 250, color: 'var(--color-amber)', reward: 'Eigene Kampagne erstellen + Early Access neue Features' },
+    { name: 'Demokratie-Held:in', minPoints: 400, color: 'var(--color-red)', reward: 'PMM-Sticker-Pack (kostenlos zugeschickt) + Gründer:innen-Badge' },
+];
+
+// Rewards that unlock at each level
+export const rewards = [
+    {
+        level: 'Interessiert',
+        minPoints: 25,
+        type: 'feature',
+        titel: 'Täglicher Fakt',
+        beschreibung: 'Jeden Tag ein neuer Fakt über den Bundeshaushalt — direkt in deinem Profil.',
+        icon: '💡',
+    },
+    {
+        level: 'Informiert',
+        minPoints: 75,
+        type: 'shareable',
+        titel: 'Demokratie-Ausweis',
+        beschreibung: 'Dein persönlicher Ausweis mit Punktestand, Level, Top-Achievements — als Bild teilbar auf Social Media.',
+        icon: '🪪',
+    },
+    {
+        level: 'Engagiert',
+        minPoints: 150,
+        type: 'community',
+        titel: 'Unterstützer:innen-Wand',
+        beschreibung: 'Dein Name (oder Pseudonym) erscheint auf unserer öffentlichen Unterstützer:innen-Seite. Plus: Zugang zu detaillierten Analysen.',
+        icon: '🏛️',
+    },
+    {
+        level: 'Aktiv',
+        minPoints: 250,
+        type: 'power',
+        titel: 'Kampagnen-Ersteller:in',
+        beschreibung: 'Erstelle eigene Kampagnen mit Forderungen und Briefvorlagen. Andere können sich anschließen.',
+        icon: '📣',
+    },
+    {
+        level: 'Demokratie-Held:in',
+        minPoints: 400,
+        type: 'physical',
+        titel: 'PMM Sticker-Pack',
+        beschreibung: 'Kostenloser Sticker-Pack per Post — "Ich durchleuchte den Bundeshaushalt" + QR-Code zu PMM. Plus: Gründer:innen-Badge in deinem Profil.',
+        icon: '🎖️',
+    },
+];
+
+// Collective milestones — when the community reaches these together
+export const collectiveMilestones = [
+    { id: 'briefe-100', ziel: 100, einheit: 'MdB-Briefe kopiert', aktuell: 47, belohnung: 'Wir veröffentlichen einen Transparenzbericht über die Antwortquote aller kontaktierten MdBs.' },
+    { id: 'kampagne-1000', ziel: 1000, einheit: 'Kampagnen-Unterstützer:innen', aktuell: 312, belohnung: 'Wir reichen eine formelle Petition beim Petitionsausschuss des Bundestags ein.' },
+    { id: 'community-5000', ziel: 5000, einheit: 'Demokratie-Profile erstellt', aktuell: 1, belohnung: 'Wir organisieren ein öffentliches Online-Town-Hall mit einem MdB.' },
 ];
 
 export const dailyFacts = [
