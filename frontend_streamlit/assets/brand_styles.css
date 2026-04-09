@@ -1,0 +1,444 @@
+/**
+ * Brand Design System - Streamlit Implementation
+ * "The Silent Architect of Feeling"
+ */
+
+/* ========================================
+   CSS VARIABLES - Color Palette
+   ======================================== */
+:root {
+  /* Light Foundation */
+  --color-pearl-white: #FAFAFA;
+  --color-sand-drift: #F5F0EB;
+  --color-silver-mist: #E8E8E8;
+  --color-pearl: #F8F8F8;
+  
+  /* Vitality Accents */
+  --color-emerald-truth: #2D8659;
+  --color-blush-gold: #D4AF37;
+  --color-dawn-blue: #4A90E2;
+  --color-soft-sage: #9CAF88;
+  
+  /* Transparency Layers */
+  --glass-light: rgba(255, 255, 255, 0.85);
+  --glass-medium: rgba(255, 255, 255, 0.65);
+  --glass-deep: rgba(250, 250, 250, 0.45);
+  
+  /* Semantic Colors */
+  --color-trust-green: #2D8659;
+  --color-caution-amber: #D4AF37;
+  --color-gentle-red: #C97D7D;
+  --color-truth-blue: #4A90E2;
+  
+  /* Text Colors */
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A4A4A;
+  --text-tertiary: #8A8A8A;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+  --spacing-4xl: 96px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-out;
+  --transition-standard: 300ms ease-out;
+  --transition-slow: 600ms ease-out;
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500;600&display=swap');
+
+/* Base Typography */
+body, .stApp {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--color-pearl-white);
+}
+
+/* Headings with Playfair Display */
+h1, h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+}
+
+h1 {
+  font-size: 48px;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-lg);
+}
+
+h2 {
+  font-size: 36px;
+  line-height: 1.3;
+  margin-bottom: var(--spacing-md);
+}
+
+h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+h3 {
+  font-size: 28px;
+  line-height: 1.4;
+}
+
+h4 {
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+/* Hero Typography */
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -1px;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* ========================================
+   MAIN CONTAINER
+   ======================================== */
+
+.stApp {
+  background: linear-gradient(180deg, var(--color-pearl-white) 0%, var(--color-sand-drift) 100%);
+  min-height: 100vh;
+}
+
+.main .block-container {
+  max-width: 1280px;
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  margin: 0 auto;
+}
+
+/* ========================================
+   CARDS & CONTAINERS
+   ======================================== */
+
+.brand-card {
+  background: var(--color-pearl-white);
+  border: 1px solid var(--color-silver-mist);
+  border-radius: 12px;
+  padding: var(--spacing-xl);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all var(--transition-standard);
+  margin-bottom: var(--spacing-lg);
+}
+
+.brand-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.glass-card {
+  background: var(--glass-light);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: var(--spacing-2xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card {
+  background: var(--color-pearl-white);
+  border-left: 4px solid var(--color-emerald-truth);
+  border-radius: 0 12px 12px 0;
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+/* Primary Button */
+.stButton > button {
+  background-color: var(--color-emerald-truth);
+  color: var(--color-pearl-white);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.stButton > button:hover {
+  background-color: #25694d;
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(45, 134, 89, 0.3);
+}
+
+/* Secondary Button */
+.stButton.secondary > button {
+  background-color: transparent;
+  border: 1.5px solid var(--color-emerald-truth);
+  color: var(--color-emerald-truth);
+}
+
+.stButton.secondary > button:hover {
+  background-color: rgba(45, 134, 89, 0.1);
+}
+
+/* ========================================
+   METRICS & DATA
+   ======================================== */
+
+.stMetric {
+  background: var(--color-pearl-white);
+  border: 1px solid var(--color-silver-mist);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  transition: all var(--transition-standard);
+}
+
+.stMetric:hover {
+  border-color: var(--color-emerald-truth);
+  box-shadow: 0 2px 8px rgba(45, 134, 89, 0.1);
+}
+
+.stMetric label {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.stMetric [data-testid="stMetricValue"] {
+  font-family: 'Inter', sans-serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stMetric [data-testid="stMetricDelta"] {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Positive Delta */
+.stMetric [data-testid="stMetricDelta"]:has([data-delta-value^="+"]) {
+  color: var(--color-emerald-truth);
+}
+
+/* ========================================
+   CHARTS & VISUALIZATIONS
+   ======================================== */
+
+/* Plotly Chart Container */
+.js-plotly-plot {
+  background: transparent !important;
+}
+
+/* ========================================
+   SIDEBAR
+   ======================================== */
+
+[data-testid="stSidebar"] {
+  background: var(--glass-light);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+[data-testid="stSidebar"] .css-1d391kg {
+  background: transparent;
+}
+
+[data-testid="stSidebar"] .element-container {
+  padding: var(--spacing-md);
+}
+
+/* ========================================
+   FORMS & INPUTS
+   ======================================== */
+
+.stSelectbox > div > div,
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input {
+  background-color: var(--color-pearl-white);
+  border: 1px solid var(--color-silver-mist);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  transition: all var(--transition-fast);
+}
+
+.stSelectbox > div > div:focus,
+.stTextInput > div > div > input:focus,
+.stNumberInput > div > div > input:focus {
+  border-color: var(--color-emerald-truth);
+  box-shadow: 0 0 0 3px rgba(45, 134, 89, 0.1);
+  outline: none;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp var(--transition-slow) ease-out;
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.gentle-pulse {
+  animation: gentlePulse 3s ease-in-out infinite;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.text-center {
+  text-align: center;
+}
+
+.text-emerald {
+  color: var(--color-emerald-truth);
+}
+
+.text-dawn-blue {
+  color: var(--color-dawn-blue);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.mb-xl {
+  margin-bottom: var(--spacing-xl);
+}
+
+.mb-2xl {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.mb-3xl {
+  margin-bottom: var(--spacing-3xl);
+}
+
+.breathing-space {
+  padding: var(--spacing-3xl) 0;
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+
+.hero-section {
+  padding: var(--spacing-4xl) 0;
+  text-align: center;
+  background: linear-gradient(180deg, var(--color-pearl-white) 0%, transparent 100%);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 36px;
+  }
+  
+  .hero-subtitle {
+    font-size: 18px;
+  }
+  
+  .main .block-container {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+  
+  h1 {
+    font-size: 32px;
+  }
+  
+  h2 {
+    font-size: 28px;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Focus states */
+*:focus {
+  outline: 2px solid var(--color-emerald-truth);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #000000;
+    --color-emerald-truth: #1a5c3f;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+
+
+
+
