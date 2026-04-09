@@ -1,142 +1,248 @@
 # Public Money Mirror
 
-**Wo landet dein Steuergeld? Wer entscheidet das? Was kannst du tun?**
+**Follow the flow. Every euro has a story.**
 
-> **Live:** [mikelninh.github.io/Public-Money-Mirror](https://mikelninh.github.io/Public-Money-Mirror/)
-
-€489 Mrd Bundeshaushalt — durchleuchtet, bewertet, in deiner Hand. Nicht noch ein Daten-Dashboard. Ein Demokratie-Werkzeug.
-
----
-
-## Was kann PMM?
-
-### Verstehen
-- **30 Themen-Lookup** — Tippe "Tierschutz", "Rente" oder "Klima". Sofort sehen: wer zuständig ist, was versprochen wurde, wer Lobby macht, welches Land es besser macht. 6 Kategorien: Soziales, Wirtschaft, Umwelt, Staat & Recht, Infrastruktur, Gesellschaft.
-- **Lebenssituation** — Elternteil, Student:in, Rentner:in, Angestellt, Selbstständig, Arbeitsuchend. Der Haushalt aus DEINER Perspektive.
-- **Bundeshaushalt 2018–2025** — Echte Einzelpläne mit Live-API (bundeshaushalt.de). 24h-Cache, Offline-Fallback.
-- **Wirkungsketten** — Lobby → Partei → Haushalt → Dein Leben. 4 dokumentierte Ketten.
-- **Live-Steuerzähler** — €15.497 pro Sekunde. Sieh in Echtzeit zu.
-
-### Bewerten
-- **Politik-Zeugnis** — Koalitionsvertrag vs. Realität. 7 Fächer, 25 Versprechen, Note 1-6. Transparente Methodik + "So verbessert ihr eure Note".
-- **MdB Transparenz-Index** — 28 kuratierte + **Live-Suche für 180.000+ Politiker:innen**. 5 Faktoren, 0-100 Punkte. Ehrliche Confidence-Level: 📡 Live / ✏️ Geschätzt / ? Keine Daten.
-- **KorruptionsTracker** — 5 Tabs: Lobby×Politik-Korrelationen, Skandale, Drehtür (7 Fälle), Parteispenden-Ranking, Karenzzeit-Analyse.
-- **Verschwendungstracker** — 7 Fälle, €25+ Mrd Schaden.
-- **Parteienvergleich** — Matrix, Radar-Chart, Dot-Plot, Mini-Wahlkompass (6 Fragen).
-
-### Lernen
-- **Globale Vorbilder** — 15+ Länder: Schweden (Rente), Estland (Digital), Finnland (Schulessen), Wien (Wohnen), Dänemark (Klima). Mit Zahlen und Quellen.
-- **Tierrechte** — 763 Mio Tiere/Jahr, Lobby-Ungleichgewicht, 5 internationale Vorbilder, Win-Win-Win Vision, konkrete Aktionen.
-- **Bürger-Vorschläge** — Eigene Ideen einreichen, über die besten abstimmen.
-
-### Handeln
-- **Kampagnen** — 4 aktive Kampagnen mit fertigen Briefen und **Antwort-Tracker**: "31 von 34 MdBs schweigen."
-- **MdB-Brief-Generator** — 3 vorformulierte Briefe mit Quellen.
-- **Budget-Simulator** — Verschiebe €489 Mrd. "Das entspricht 333 Schulneubauten."
-- **Bürgersignal** — Transparenz-Forderungen.
-
-### Gamification
-- **Demokratie-Profil** — 22 Achievements, 6 Levels, Streaks, 30 tägliche Fakten.
-- **Echte Belohnungen** — Demokratie-Ausweis (75 Pkt), Unterstützer:innen-Wand (150), eigene Kampagnen erstellen (250), PMM Sticker-Pack per Post (400).
-- **Gemeinsame Ziele** — 100 Briefe → Transparenzbericht. 1.000 Unterstützer → Bundestags-Petition. 5.000 Profile → Town Hall mit MdB.
-
----
-
-## Datenquellen
-
-| Quelle | Daten | Zugang |
-|--------|-------|--------|
-| [bundeshaushalt.de](https://www.bundeshaushalt.de) | Bundeshaushalt 2012-2025 | Live-API |
-| [Lobbyregister Bundestag](https://www.lobbyregister.bundestag.de) | 6.760+ Organisationen | Live-API |
-| [abgeordnetenwatch.de](https://www.abgeordnetenwatch.de) | 180.000+ Politiker:innen | Live-API (CC0) |
-| [donation.watch](https://donation.watch/en/germany) | Parteispenden 2022-2025 | Referenz |
-| [LobbyControl](https://www.lobbycontrol.de) | Drehtür-Fälle | Referenz |
-| [Bundesrechnungshof](https://www.bundesrechnungshof.de) | Prüfberichte | Statisch |
-| OECD, Eurostat, EFSA, FAO, WHO | Internationale Vergleiche | Referenz |
-
----
-
-## Tech Stack
-
-- **React 18** + **Vite 5** — Frontend mit Code-Splitting
-- **Tailwind CSS 4** — Light/Dark Theme
-- **Framer Motion 11** — Animationen
-- **GitHub Pages** — Auto-Deploy via GitHub Actions
-- Kein Backend — API-Fallbacks auf statische Daten
-
----
+Public Money Mirror identifies savings and anomalies in public spending, powers success-fee recoveries for governments, and offers enterprise/API licenses and freemium consumer subscriptions.
 
 ## Quick Start
 
+### Prerequisites
+
+- Docker & Docker Compose
+- Python 3.11+ (for local development)
+- Node.js 20+ (for web frontend)
+
+### Development Setup
+
+1. **Clone and setup**:
 ```bash
-git clone https://github.com/mikelninh/Public-Money-Mirror.git
-cd Public-Money-Mirror
-npm install
-npm run dev
+git clone <repo-url>
+cd public-money-mirror
+cp .env.sample .env
+# Edit .env with your configuration
 ```
 
----
+2. **Start services**:
+```bash
+make dev
+```
 
-## Projektstruktur
+This starts:
+- Backend API at `http://localhost:8000`
+- Streamlit dashboard at `http://localhost:8501`
+- Next.js public web at `http://localhost:3000`
+- Postgres database at `localhost:5432`
+- Redis at `localhost:6379`
+- Nginx proxy at `http://localhost:80`
+
+3. **Seed data**:
+```bash
+make seed
+```
+
+4. **Generate demo recovery kit**:
+```bash
+make demo_kit
+```
+
+### API Endpoints
+
+#### Health & Auth
+- `GET /health` - Health check
+- `POST /auth/login` - Login (returns JWT)
+- `POST /auth/signup` - Signup
+- `GET /auth/me` - Current user info
+
+#### Data & Insights
+- `GET /cases?limit=&min_score=&min_euro=` - List ranked cases
+- `GET /cases/{id}` - Get case details
+- `GET /cases/{id}/evidence` - Get case evidence
+- `GET /stories/latest?limit=3` - Get latest story cards
+- `GET /benchmarks/unit_price?cpv=&region=&year=` - Get benchmarks
+- `GET /entities/search?q=` - Search entities
+
+#### Recovery & Billing
+- `POST /recovery_kits/{case_id}` - Generate recovery kit
+- `POST /invoices/success_fee` - Create success fee invoice
+
+#### Consumer
+- `GET /alerts` - User's alerts
+- `POST /alerts` - Create alert
+- `GET /premium/status` - Premium subscription status
+
+#### Enterprise/API
+- `GET /api/v1/risk_score?supplier_id=` - Supplier risk score
+- `GET /api/v1/cases/export.csv` - Export cases CSV
+
+### Sample cURL
+
+```bash
+# Login
+curl -X POST http://localhost:8000/auth/login \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=admin@pmm.local&password=admin123"
+
+# Get cases
+curl http://localhost:8000/cases?limit=10&min_score=50
+
+# Get latest stories
+curl http://localhost:8000/stories/latest?limit=3
+
+# Generate recovery kit (requires auth)
+curl -X POST http://localhost:8000/recovery_kits/1 \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"include_benchmarks": true, "include_alternatives": true}'
+```
+
+### Makefile Commands
+
+- `make dev` - Start development environment
+- `make test` - Run tests
+- `make fmt` - Format code (black, ruff)
+- `make lint` - Lint code (ruff, mypy)
+- `make seed` - Seed synthetic data
+- `make demo_kit` - Generate demo recovery kit
+- `make clean` - Clean up containers
+- `make build` - Build Docker images
+
+### Environment Variables
+
+See `.env.sample` for all configuration options. Key variables:
+
+- `DATABASE_URL` - Postgres connection string
+- `REDIS_URL` - Redis connection string
+- `SECRET_KEY` - JWT secret key
+- `STRIPE_SECRET_KEY` - Stripe secret key
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook secret
+
+### User Roles
+
+- `admin` - Full access
+- `analyst` - Can create cases, recovery kits, invoices
+- `gov_client` - Read-only + request recovery kits
+- `consumer` - Public site access + premium alerts
+
+### Project Structure
 
 ```
 src/
-├── api/                        # 4 Live-API-Clients
-│   ├── bundeshaushalt.js       # BMF Budget-API (24h Cache)
-│   ├── lobbyregister.js        # Lobbyregister Bundestag
-│   ├── bundestag.js            # MdB-Scoring
-│   └── politikerSuche.js       # Live-Suche 180k+ Politiker
-│
-├── components/                 # 35 React-Komponenten
-│   ├── Hero, Navbar, ThemeToggle
-│   ├── LifeSituation, PersonalImpact
-│   ├── ThemenLookup (30 Themen, 6 Kategorien)
-│   ├── FeatureGrid (4 Gruppen: Verstehen/Bewerten/Lernen/Handeln)
-│   ├── BudgetStream, BudgetFacts, CategoryCard
-│   ├── ImpactChains, PartyCompare, LobbyTracker
-│   ├── KorruptionsTracker (5 Tabs)
-│   ├── ScandalTracker, PolitikZeugnis, MdBZeugnis
-│   ├── VorbilderGlobal, TierrechteSektion
-│   ├── BudgetSimulator, Kampagnen, BriefGenerator
-│   ├── VotingInterface, TaxTicker, ShareCard
-│   └── DemokratieProfil (Gamification)
-│
-├── data/                       # 9 Daten-Dateien
-│   ├── themen.js (30 Themen), kampagnen.js (4 Kampagnen)
-│   ├── korruption.js, mdbScores.js (28 MdBs)
-│   ├── vorbilder.js, tierrechte.js
-│   ├── lifeImpact.js, zeugnis.js, partyData.js
-│   └── gamification.js (22 Achievements, 30 Daily Facts)
-│
-└── data.js                     # Bundeshaushalt 2018-2025
+├── backend/          # FastAPI backend
+│   └── app/
+│       ├── models/   # SQLModel ORM models
+│       ├── schemas/  # Pydantic schemas
+│       ├── routers/  # API routes
+│       └── services/ # Business logic
+├── etl/              # Prefect ETL flows
+│   └── flows/        # Data ingestion flows
+├── analytics/        # Analytics & ML
+│   ├── features/     # Feature engineering
+│   └── models/       # Case ranking models
+├── frontend_streamlit/  # Operator dashboard
+└── web_public/       # Next.js public site
+
+scripts/              # Utility scripts
+docs/                 # Documentation
+deploy/               # Docker & deployment configs
 ```
 
----
+## Features
 
-## UX-Architektur
+### Anomaly Detection
 
-**Landing** (sofort sichtbar):
-1. Hero → Lebenssituation → Themen-Lookup → Feature-Grid
+- **Price outliers**: Robust z-score using MAD (Median Absolute Deviation)
+- **Single-bidder risk**: Detects low-competition tenders
+- **Bid rotation**: Collusion heuristic using n-gram entropy
+- **Time overruns**: Planned vs. actual delivery dates
+- **Supplier dependency**: HHI (Herfindahl-Hirschman Index) concentration
 
-**Deep Dive** (nach Klick):
-- Haushalt → Fakten → Wirkungsketten → Parteien → Lobby → Projekte → Verschwendung → Korruption → Zeugnis → MdB-Index → Vorbilder → Tierrechte → Simulator → Kampagnen → Brief → Bürgersignal
+### Case Ranking
 
-**Gamification** (immer sichtbar):
-- Floating Punkte-Counter → Profil-Panel → Achievements → Rewards → Gemeinsame Ziele
+- Weighted ensemble scoring (0-100)
+- EUR potential estimation with conservative shrinkage
+- Explainability blob with top features and rationale
+- Risk tags for quick categorization
 
----
+### Recovery Kits
 
-## Mitmachen
+- Benchmark analysis with percentile breakdowns
+- Alternative supplier suggestions
+- Draft renegotiation letters
+- PDF export for government clients
 
-- **Kampagnen** — Neue Forderungen mit Vorbildern und Briefen
-- **Themen** — Datensätze für weitere Policy-Bereiche
-- **MdBs** — Automatisierung für alle 736 Bundestagsabgeordneten
-- **Backend** — Persistenz für Vorschläge, Kampagnen, Profile
-- **Barrierefreiheit** — WCAG 2.1 AA
-- **Daten-Verifizierung** — Faktencheck durch Community
+### Monetization
 
----
+1. **Success Fees (B2G)**: 15-25% of realised savings
+2. **Enterprise/API Licenses (B2B)**: Access to risk scores, CSV exports
+3. **Premium Subscriptions (B2C)**: €4.99/month for alerts & dossiers
 
-## Lizenz
+## Data Sources
 
-MIT — Offene Daten für eine offene Demokratie.
+- **OpenSpending (Germany)**: Budget aggregates
+- **Bundeshaushalt**: Federal budget CSVs
+- **EU TED**: Public procurement notices (Tenders Electronic Daily)
+
+## Testing
+
+```bash
+make test
+```
+
+Runs pytest with coverage for:
+- Unit tests (anomaly detection, entity resolution)
+- API tests (FastAPI TestClient)
+- Integration tests
+
+## CI/CD
+
+GitHub Actions runs on PR:
+- Tests
+- Linting (ruff, black)
+- Type checking (mypy)
+
+On `main` branch:
+- Builds and pushes Docker images
+
+## Documentation
+
+- `docs/README.md` - General documentation
+- `docs/PILOT_MOU_TEMPLATE.md` - Success-fee pilot MoU template
+- `docs/SUCCESS_FEE_TERMS.md` - Success fee terms & definitions
+- `docs/PRIVACY_SECURITY.md` - Privacy & security controls
+- `docs/ARCHITECTURE.md` - System architecture diagrams
+
+## License
+
+Proprietary - All rights reserved
+
+## Support
+
+For questions or issues, contact: support@publicmoneymirror.com
+# Public-Money-Mirror
+
+## Ökosystem — Digitale Demokratie
+
+Dieses Projekt ist Teil eines Open-Source-Ökosystems für digitale Demokratie:
+
+| Projekt | Frage | Link |
+|---------|-------|------|
+| **FairEint** | Was sollte Deutschland anders machen? | [GitHub](https://github.com/mikelninh/faireint) · [Live](https://mikelninh.github.io/faireint/) |
+| **GitLaw** | Was steht im Gesetz? | [GitHub](https://github.com/mikelninh/gitlaw) · [Live](https://mikelninh.github.io/gitlaw/) |
+| **Public Money Mirror** | Wohin fließt das Steuergeld? | [GitHub](https://github.com/mikelninh/Public-Money-Mirror) |
+| **SafeVoice** | Wer wird online angegriffen? | [GitHub](https://github.com/mikelninh/safevoice) |
+
+Alle Projekte: [github.com/mikelninh](https://github.com/mikelninh) · Unterstützen: [Ko-fi](https://ko-fi.com/mikel777) · [GitHub Sponsors](https://github.com/sponsors/mikelninh)
+
+
+## Ökosystem — Digitale Demokratie
+
+Dieses Projekt ist Teil eines Open-Source-Ökosystems für digitale Demokratie:
+
+| Projekt | Frage | Link |
+|---------|-------|------|
+| **FairEint** | Was sollte Deutschland anders machen? | [GitHub](https://github.com/mikelninh/faireint) · [Live](https://mikelninh.github.io/faireint/) |
+| **GitLaw** | Was steht im Gesetz? | [GitHub](https://github.com/mikelninh/gitlaw) · [Live](https://mikelninh.github.io/gitlaw/) |
+| **Public Money Mirror** | Wohin fließt das Steuergeld? | [GitHub](https://github.com/mikelninh/Public-Money-Mirror) |
+| **SafeVoice** | Wer wird online angegriffen? | [GitHub](https://github.com/mikelninh/safevoice) |
+
+Alle Projekte: [github.com/mikelninh](https://github.com/mikelninh) · Unterstützen: [Ko-fi](https://ko-fi.com/mikel777) · [GitHub Sponsors](https://github.com/sponsors/mikelninh)
